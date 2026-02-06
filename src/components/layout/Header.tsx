@@ -13,9 +13,9 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
           <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xl">B</span>
+            <span className="text-white font-bold text-xl">C</span>
           </div>
-          <span className="text-2xl font-bold">BILFIRMA</span>
+          <span className="text-2xl font-bold">Car Dealer</span>
         </Link>
 
         {/* Desktop Menu */}

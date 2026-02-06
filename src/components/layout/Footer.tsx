@@ -10,9 +10,9 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">B</span>
+                <span className="text-white font-bold">C</span>
               </div>
-              <span className="text-white font-bold text-xl">BILFIRMA</span>
+              <span className="text-white font-bold text-xl">Car Dealer</span>
             </div>
             <p className="text-sm">
               Trygg och enkel bilaffär med kvalitetskontrollerade bilar.
@@ -43,7 +43,7 @@ export default function Footer() {
             <h3 className="text-white font-semibold mb-4">Kontakt</h3>
             <div className="space-y-2 text-sm">
               <p>Telefon: 070-000 00 00</p>
-              <p>E-post: info@bilfirma.se</p>
+              <p>E-post: info@cardealer.se</p>
               <p>Öppettider: Mån-Fre 09-18</p>
             </div>
           </div>
@@ -65,7 +65,7 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="pt-8 border-t border-gray-800 text-center text-sm">
-          <p>© 2026 Bilfirma AB. Alla rättigheter förbehållna.</p>
+          <p>© 2026 Car Dealer AB. Alla rättigheter förbehållna.</p>
         </div>
       </div>
     </footer>

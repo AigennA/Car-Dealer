@@ -7,7 +7,7 @@ import Footer from "@/components/layout/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Bilfirma | Premium Bilhandel",
+  title: "Car Dealer | Premium Bilhandel",
   description: "Hitta din nästa bil – tryggt och enkelt",
 };
 
