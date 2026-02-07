@@ -76,7 +76,7 @@ export default function HomePage() {
 
               <Link
                 href="/bilar"
-                className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primaryDark transition font-medium text-center flex items-center justify-center gap-2"
+                className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition font-medium text-center flex items-center justify-center gap-2"
               >
                 <span>SÖK</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -146,7 +146,7 @@ export default function HomePage() {
           <div className="text-center">
             <Link
               href="/bilar"
-              className="inline-block bg-primary text-white px-8 py-3 rounded-xl font-semibold hover:bg-primaryDark transition"
+              className="inline-block bg-primary text-white px-8 py-3 rounded-xl font-semibold hover:bg-primary-dark transition"
             >
               Se alla bilar →
             </Link>
