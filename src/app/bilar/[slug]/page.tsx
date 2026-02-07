@@ -87,7 +87,7 @@ export default async function CarDetailPage({
               </div>
 
               <div className="mt-6 space-y-3">
-                <PrimaryButtonLink href={`/boka/${car.id}`}>
+                <PrimaryButtonLink href="/kontakt">
                   Boka provkörning
                 </PrimaryButtonLink>
 
@@ -154,7 +154,7 @@ export default async function CarDetailPage({
                       <div className="text-primary font-bold">
                         {c.price.toLocaleString()} kr
                       </div>
-                      <Link href={`/bilar/${c.id}`} className="text-primary hover:underline text-sm">
+                      <Link href={`/bilar/${c.slug}`} className="text-primary hover:underline text-sm">
                         Visa
                       </Link>
                     </div>
