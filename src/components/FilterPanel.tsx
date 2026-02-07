@@ -63,7 +63,7 @@ export default function FilterPanel({
           placeholder="Märke, modell..."
           value={filters.search}
           onChange={(e) => updateFilter("search", e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
         />
       </div>
 
@@ -76,7 +76,7 @@ export default function FilterPanel({
           id="filter-make"
           value={filters.make}
           onChange={(e) => updateFilter("make", e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="">Alla märken</option>
           {makes.map((make) => (
@@ -96,7 +96,7 @@ export default function FilterPanel({
           id="filter-fuel"
           value={filters.fuel}
           onChange={(e) => updateFilter("fuel", e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="">Alla bränslen</option>
           {fuels.map((fuel) => (
@@ -116,7 +116,7 @@ export default function FilterPanel({
           id="filter-transmission"
           value={filters.transmission}
           onChange={(e) => updateFilter("transmission", e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="">Alla</option>
           {transmissions.map((t) => (
@@ -136,7 +136,7 @@ export default function FilterPanel({
           id="filter-body"
           value={filters.body}
           onChange={(e) => updateFilter("body", e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="">Alla karosser</option>
           {bodyTypes.map((body) => (
@@ -158,14 +158,14 @@ export default function FilterPanel({
             placeholder="Min"
             value={filters.priceMin || ""}
             onChange={(e) => updateFilter("priceMin", Number(e.target.value))}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <input
             type="number"
             placeholder="Max"
             value={filters.priceMax || ""}
             onChange={(e) => updateFilter("priceMax", Number(e.target.value))}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </div>
@@ -181,14 +181,14 @@ export default function FilterPanel({
             placeholder="Från"
             value={filters.yearMin || ""}
             onChange={(e) => updateFilter("yearMin", Number(e.target.value))}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <input
             type="number"
             placeholder="Till"
             value={filters.yearMax || ""}
             onChange={(e) => updateFilter("yearMax", Number(e.target.value))}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </div>
@@ -203,7 +203,7 @@ export default function FilterPanel({
           placeholder="t.ex. 10000"
           value={filters.mileageMax || ""}
           onChange={(e) => updateFilter("mileageMax", Number(e.target.value))}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
         />
       </div>
     </div>
