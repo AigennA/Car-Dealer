@@ -1,5 +1,13 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Car Dealer - Premium Bilhandel
+
+Modern bir araba satış web sitesi. Next.js, React ve Tailwind CSS ile geliştirilmiştir.
+
+### 🚀 Demo
+
+Site GitHub Pages'de yayında: [https://AigennA.github.io/Car-Dealer/](https://AigennA.github.io/Car-Dealer/)
+
 ## Getting Started
 
 First, run the development server:
@@ -34,3 +42,22 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Deploy on GitHub Pages
+
+Bu proje GitHub Pages için yapılandırılmıştır. Detaylı deployment bilgileri için [DEPLOYMENT.md](./DEPLOYMENT.md) dosyasına bakın.
+
+### Hızlı Deployment
+
+1. Repository Settings > Pages > Source: **GitHub Actions** seçin
+2. `main` branch'e push yapın
+3. GitHub Actions otomatik olarak deploy edecek
+
+## Özellikler
+
+- 🚗 Araba listeleme ve detay sayfaları
+- 🔍 Gelişmiş filtreleme ve arama
+- 📱 Responsive tasarım
+- ⚡ Statik site generation ile hızlı yükleme
+- 🎨 Modern UI/UX tasarımı
+
