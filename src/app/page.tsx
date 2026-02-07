@@ -64,14 +64,30 @@ export default function HomePage() {
                 <option>Volvo</option>
                 <option>BMW</option>
                 <option>Audi</option>
+                <option>Mercedes-Benz</option>
+                <option>Volkswagen</option>
+                <option>Tesla</option>
+                <option>Toyota</option>
+                <option>Kia</option>
               </select>
 
               <select className="border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary">
                 <option>Välj modell</option>
+                <option>Alla modeller</option>
+                <option>SUV</option>
+                <option>Sedan</option>
+                <option>Kombi</option>
+                <option>Halvkombi</option>
               </select>
 
               <select className="border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary">
                 <option>Välj plats</option>
+                <option>Stockholm</option>
+                <option>Göteborg</option>
+                <option>Malmö</option>
+                <option>Uppsala</option>
+                <option>Västerås</option>
+                <option>Örebro</option>
               </select>
 
               <Link
