@@ -60,16 +60,16 @@ export default function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-gray-900 border-t border-gray-800">
           <nav className="flex flex-col py-4">
-            <Link href="/" className="px-4 py-3 hover:bg-gray-800">
+            <Link href="/" className="px-4 py-3 hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>
               Hem
             </Link>
-            <Link href="/bilar" className="px-4 py-3 hover:bg-gray-800">
+            <Link href="/bilar" className="px-4 py-3 hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>
               Inventering
             </Link>
-            <Link href="/finansiering" className="px-4 py-3 hover:bg-gray-800">
+            <Link href="/finansiering" className="px-4 py-3 hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>
               Tjänster
             </Link>
-            <Link href="/kontakt" className="px-4 py-3 hover:bg-gray-800">
+            <Link href="/kontakt" className="px-4 py-3 hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>
               Kontakt
             </Link>
           </nav>
