@@ -6,6 +6,8 @@ import { useState } from "react";
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const handleNavClick = () => setMobileMenuOpen(false);
+
   return (
     <header className="bg-black text-white sticky top-0 z-50 border-b border-gray-800">
       <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
@@ -60,16 +62,16 @@ export default function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-gray-900 border-t border-gray-800">
           <nav className="flex flex-col py-4">
-            <Link href="/" className="px-4 py-3 hover:bg-gray-800">
+            <Link href="/" className="px-4 py-3 hover:bg-gray-800" onClick={handleNavClick}>
               Hem
             </Link>
-            <Link href="/bilar" className="px-4 py-3 hover:bg-gray-800">
+            <Link href="/bilar" className="px-4 py-3 hover:bg-gray-800" onClick={handleNavClick}>
               Inventering
             </Link>
-            <Link href="/finansiering" className="px-4 py-3 hover:bg-gray-800">
+            <Link href="/finansiering" className="px-4 py-3 hover:bg-gray-800" onClick={handleNavClick}>
               Tjänster
             </Link>
-            <Link href="/kontakt" className="px-4 py-3 hover:bg-gray-800">
+            <Link href="/kontakt" className="px-4 py-3 hover:bg-gray-800" onClick={handleNavClick}>
               Kontakt
             </Link>
           </nav>
