@@ -38,7 +38,7 @@ export default function Header() {
         <div className="hidden md:flex items-center gap-4">
           <Link
             href="/bilar"
-            className="bg-primary text-white px-6 py-2.5 rounded-lg hover:bg-primaryDark transition font-medium"
+            className="bg-primary text-white px-6 py-2.5 rounded-lg hover:bg-primary-dark transition font-medium"
           >
             Se lager
           </Link>

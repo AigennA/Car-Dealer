@@ -33,7 +33,7 @@ export default function FilterPanel() {
           </select>
         </div>
 
-        <button className="w-full mt-4 bg-primary text-white py-2 rounded-xl hover:bg-primaryDark">
+        <button className="w-full mt-4 bg-primary text-white py-2 rounded-xl hover:bg-primary-dark">
           Uppdatera
         </button>
       </div>

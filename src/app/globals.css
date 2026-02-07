@@ -10,6 +10,12 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Custom colors for Car Dealer */
+  --color-primary: #0099cc;
+  --color-primary-dark: #007aa3;
+  --color-navy: #1a202c;
+  --color-surface: #f7fafc;
 }
 
 @media (prefers-color-scheme: dark) {
