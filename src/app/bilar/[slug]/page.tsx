@@ -3,13 +3,19 @@ import Badge from "@/components/ui/Badge";
 import PrimaryButtonLink from "@/components/ui/PrimaryButtonLink";
 import Link from "next/link";
 
+export function generateStaticParams() {
+  return cars.map((car) => ({
+    slug: car.slug,
+  }));
+}
+
 export default async function CarDetailPage({
   params,
 }: {
    params: { slug: string };
 }) {
   const { slug } = await params;
-  const car = cars.find((c) => c.id === slug);
+  const car = cars.find((c) => c.slug === slug);
 
   if (!car) {
     return (
