@@ -1,12 +1,12 @@
 export default function FilterPanel() {
   return (
     <aside className="bg-white rounded-2xl p-5 shadow-sm">
-      <h2 className="font-semibold text-navy mb-4">Filter</h2>
+      <h2 className="font-bold text-navy mb-4">Filter</h2>
 
-      <div className="space-y-4 text-sm">
+      <div className="space-y-4">
         <div>
-          <label className="block mb-1">Märke</label>
-          <select className="w-full border rounded-lg px-3 py-2" title="Välj märke">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Märke</label>
+          <select className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary" title="Välj märke">
             <option>Alla</option>
             <option>Volvo</option>
             <option>BMW</option>
@@ -15,8 +15,8 @@ export default function FilterPanel() {
         </div>
 
         <div>
-          <label className="block mb-1">Bränsle</label>
-          <select className="w-full border rounded-lg px-3 py-2" title="Välj bränsle">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Bränsle</label>
+          <select className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary" title="Välj bränsle">
             <option>Alla</option>
             <option>Bensin</option>
             <option>Diesel</option>
@@ -25,8 +25,8 @@ export default function FilterPanel() {
         </div>
 
         <div>
-          <label className="block mb-1">Växellåda</label>
-          <select className="w-full border rounded-lg px-3 py-2" title="Välj växellåda">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Växellåda</label>
+          <select className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary" title="Välj växellåda">
             <option>Alla</option>
             <option>Automat</option>
             <option>Manuell</option>
