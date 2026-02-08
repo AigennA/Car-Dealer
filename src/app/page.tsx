@@ -61,14 +61,22 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <select className="border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary">
                 <option>Välj märke</option>
-                <option>Volvo</option>
-                <option>BMW</option>
                 <option>Audi</option>
+                <option>BMW</option>
+                <option>Ford</option>
+                <option>Hyundai</option>
+                <option>Jaguar</option>
+                <option>Kia</option>
+                <option>Lexus</option>
+                <option>Mazda</option>
                 <option>Mercedes-Benz</option>
-                <option>Volkswagen</option>
+                <option>MINI</option>
+                <option>Polestar</option>
+                <option>Porsche</option>
                 <option>Tesla</option>
                 <option>Toyota</option>
-                <option>Kia</option>
+                <option>Volkswagen</option>
+                <option>Volvo</option>
               </select>
 
               <select className="border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary">
