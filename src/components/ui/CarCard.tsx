@@ -8,13 +8,13 @@ type Props = {
 export default function CarCard({ car }: Props) {
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition">
-      <div className="aspect-[4/3] bg-gray-100 relative overflow-hidden">
+      <Link href={`/bilar/${car.slug}`} className="block aspect-[4/3] bg-gray-100 relative overflow-hidden cursor-pointer">
         <img
           src={car.images[0]}
           alt={`${car.make} ${car.model}`}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
         />
-      </div>
+      </Link>
 
       <div className="p-5">
         {car.featured && (
@@ -23,9 +23,11 @@ export default function CarCard({ car }: Props) {
           </div>
         )}
 
-        <h3 className="font-semibold text-lg text-navy mb-1">
-          {car.make} {car.model}
-        </h3>
+        <Link href={`/bilar/${car.slug}`} className="block">
+          <h3 className="font-semibold text-lg text-navy mb-1 hover:text-primary transition-colors cursor-pointer">
+            {car.make} {car.model}
+          </h3>
+        </Link>
 
         <p className="text-sm text-gray-600 mb-3">
           {car.year} • {car.mileage.toLocaleString("sv-SE")} mil • {car.fuel} •{" "}
