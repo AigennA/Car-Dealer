@@ -170,9 +170,21 @@ export default function KontaktPage() {
         {/* Map Section */}
         <div className="bg-white rounded-xl p-8 shadow-sm">
           <h2 className="text-2xl font-bold text-navy mb-6">Hitta till oss</h2>
-          <div className="bg-gray-200 rounded-lg h-96 flex items-center justify-center">
-            <p className="text-gray-500">Karta (integration kommer snart)</p>
+          <div className="rounded-lg overflow-hidden h-96 border border-gray-200">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2034.8586469344943!2d18.063159076707843!3d59.32932877463129!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x465f9d5e77f45a4d%3A0x4019078290e7c40!2sStockholm%2C%20Sweden!5e0!3m2!1sen!2s!4v1707427200000!5m2!1sen!2s"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Karta över vår bilhandel"
+            ></iframe>
           </div>
+          <p className="text-sm text-gray-500 mt-4 text-center">
+            Vi ligger centralt i Stockholm med bra kommunikationer. Välkommen till vår showroom!
+          </p>
         </div>
       </div>
     </section>
