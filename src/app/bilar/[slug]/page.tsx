@@ -2,6 +2,7 @@ import { cars } from "@/lib/cars";
 import Badge from "@/components/ui/Badge";
 import PrimaryButtonLink from "@/components/ui/PrimaryButtonLink";
 import Link from "next/link";
+import CarCreditCalculator from "@/components/CarCreditCalculator";
 
 export function generateStaticParams() {
   return cars.map((car) => ({
@@ -131,6 +132,11 @@ export default async function CarDetailPage({
               ))}
             </ul>
           </div>
+        </div>
+
+        {/* Credit Calculator Section */}
+        <div className="mt-8">
+          <CarCreditCalculator carPrice={car.price} />
         </div>
 
         {/* Similar cars */}

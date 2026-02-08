@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CreditCalculator from "@/components/CreditCalculator";
 
 export default function FinansieringPage() {
   return (
@@ -151,57 +152,7 @@ export default function FinansieringPage() {
         </div>
 
         {/* Financing Calculator */}
-        <div className="bg-gradient-to-br from-primary to-[#0099CC] rounded-xl p-8 md:p-12 text-white mb-12">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-4 text-center">Räkna på ditt billån</h2>
-            <p className="text-center mb-8 opacity-90">
-              Beräkna din månadskostnad snabbt och enkelt
-            </p>
-
-            <div className="bg-white/10 backdrop-blur rounded-xl p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Bilens pris</label>
-                <input
-                  type="number"
-                  placeholder="250 000"
-                  className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Kontantinsats</label>
-                <input
-                  type="number"
-                  placeholder="50 000"
-                  className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Lånetid (månader)</label>
-                <select className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white/50">
-                  <option value="24">24 månader</option>
-                  <option value="36">36 månader</option>
-                  <option value="48">48 månader</option>
-                  <option value="60">60 månader</option>
-                  <option value="72">72 månader</option>
-                  <option value="84">84 månader</option>
-                </select>
-              </div>
-
-              <button
-                type="button"
-                className="w-full bg-white text-primary px-6 py-3 rounded-lg hover:bg-gray-100 transition font-medium"
-              >
-                Beräkna månadskostnad
-              </button>
-            </div>
-
-            <p className="text-center text-sm mt-6 opacity-75">
-              * Detta är endast en indikativ beräkning. Exakt pris och villkor fastställs vid ansökan.
-            </p>
-          </div>
-        </div>
+        <CreditCalculator />
 
         {/* CTA Section */}
         <div className="bg-white rounded-xl p-8 shadow-sm text-center">
