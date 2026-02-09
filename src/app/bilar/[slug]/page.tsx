@@ -147,12 +147,14 @@ export default async function CarDetailPage({
               .filter((c) => c.id !== car.id)
               .map((c) => (
                 <div key={c.id} className="bg-white rounded-2xl shadow-sm p-5">
-                  <div className="aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden">
-                    <img src={c.images[0]} alt={c.title} className="w-full h-full object-cover" />
-                  </div>
+                  <Link href={`/bilar/${c.slug}`} className="block aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden cursor-pointer">
+                    <img src={c.images[0]} alt={c.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                  </Link>
 
                   <div className="mt-4">
-                    <div className="font-semibold text-navy">{c.title}</div>
+                    <Link href={`/bilar/${c.slug}`} className="block">
+                      <div className="font-semibold text-navy hover:text-primary transition-colors cursor-pointer">{c.title}</div>
+                    </Link>
                     <div className="text-sm text-gray-600 mt-1">
                       {c.year} • {c.mileage.toLocaleString()} mil
                     </div>
