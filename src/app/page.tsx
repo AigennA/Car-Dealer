@@ -59,7 +59,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="bg-white rounded-2xl shadow-2xl p-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <select className="border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary">
+              <select className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
                 <option>Välj märke</option>
                 <option>Audi</option>
                 <option>BMW</option>
@@ -79,7 +79,7 @@ export default function HomePage() {
                 <option>Volvo</option>
               </select>
 
-              <select className="border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary">
+              <select className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
                 <option>Välj modell</option>
                 <option>Alla modeller</option>
                 <option>SUV</option>
@@ -88,7 +88,7 @@ export default function HomePage() {
                 <option>Halvkombi</option>
               </select>
 
-              <select className="border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary">
+              <select className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
                 <option>Välj plats</option>
                 <option>Stockholm</option>
                 <option>Göteborg</option>
