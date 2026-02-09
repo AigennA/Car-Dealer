@@ -2,11 +2,11 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Car Dealer - Premium Bilhandel
 
-Modern bir araba satış web sitesi. Next.js, React ve Tailwind CSS ile geliştirilmiştir.
+Modern car sales website built with Next.js, React and Tailwind CSS.
 
 ### 🚀 Demo
 
-Site GitHub Pages'de yayında: [https://AigennA.github.io/Car-Dealer/](https://AigennA.github.io/Car-Dealer/)
+Live site on GitHub Pages: [https://AigennA.github.io/Car-Dealer/](https://AigennA.github.io/Car-Dealer/)
 
 ## Getting Started
 
@@ -45,19 +45,19 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Deploy on GitHub Pages
 
-Bu proje GitHub Pages için yapılandırılmıştır. Detaylı deployment bilgileri için [DEPLOYMENT.md](./DEPLOYMENT.md) dosyasına bakın.
+This project is configured for GitHub Pages deployment.
 
-### Hızlı Deployment
+### Quick Deployment
 
-1. Repository Settings > Pages > Source: **GitHub Actions** seçin
-2. `main` branch'e push yapın
-3. GitHub Actions otomatik olarak deploy edecek
+1. Go to Repository Settings > Pages > Source: Select **GitHub Actions**
+2. Push to `main` branch
+3. GitHub Actions will automatically deploy
 
-## Özellikler
+## Features
 
-- 🚗 Araba listeleme ve detay sayfaları
-- 🔍 Gelişmiş filtreleme ve arama
-- 📱 Responsive tasarım
-- ⚡ Statik site generation ile hızlı yükleme
-- 🎨 Modern UI/UX tasarımı
+- 🚗 Car listing and detail pages
+- 🔍 Advanced filtering and search
+- 📱 Responsive design
+- ⚡ Fast loading with static site generation
+- 🎨 Modern UI/UX design
 
