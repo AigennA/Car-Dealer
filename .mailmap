@@ -1,0 +1,5 @@
+# This file maps commit authors to a single identity
+# Format: Proper Name <proper@email.xx> Commit Name <commit@email.xx>
+
+Aygen <107804812+AigennA@users.noreply.github.com> copilot-swe-agent[bot] <198982749+Copilot@users.noreply.github.com>
+Aygen <107804812+AigennA@users.noreply.github.com>
