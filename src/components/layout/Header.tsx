@@ -49,7 +49,7 @@ export default function Header() {
         {/* Mobile Menu Button */}
         <button
           type="button"
-          className="md:hidden text-white hover:text-primary hover:bg-gray-800 transition-colors duration-200 p-2 rounded-lg"
+          className="md:hidden text-white hover:text-primary hover:bg-gray-800 active:bg-gray-700 focus-visible:ring-2 focus-visible:ring-primary transition-colors duration-200 p-2 rounded-lg"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
