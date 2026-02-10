@@ -129,7 +129,7 @@ export default function HomePage() {
             <div className="text-center">
               <div className="text-5xl mb-4">💰</div>
               <h3 className="text-xl font-bold text-navy mb-2">
-                Finansiering & leasing
+                Finansiering & Leasing
               </h3>
               <p className="text-gray-600">
                 Flexibla finansieringsmöjligheter anpassade efter dina behov
@@ -139,7 +139,7 @@ export default function HomePage() {
             <div className="text-center">
               <div className="text-5xl mb-4">🔁</div>
               <h3 className="text-xl font-bold text-navy mb-2">
-                Inbyte & garanti
+                Inbyte & Garanti
               </h3>
               <p className="text-gray-600">
                 Byt in din gamla bil och få trygg garanti på din nya
