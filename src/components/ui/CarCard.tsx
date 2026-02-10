@@ -20,7 +20,7 @@ export default function CarCard({ car }: Props) {
         />
         {car.featured && (
           <div className="absolute top-4 left-4 bg-gradient-to-r from-primary to-[#00BFFF] text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-lg backdrop-blur-sm">
-            <span aria-hidden="true">⭐</span> Featured
+            <span aria-hidden="true">⭐</span> Utvald
           </div>
         )}
       </Link>
