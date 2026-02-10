@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 // GET single car
 export async function GET(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
   const car = carStorage.getById(id);
@@ -25,7 +25,7 @@ export async function GET(
 // PUT - Update a car
 export async function PUT(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await context.params;
@@ -76,7 +76,7 @@ export async function PUT(
 // DELETE a car
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
   const deletedCar = carStorage.delete(id);
