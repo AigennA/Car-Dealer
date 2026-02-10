@@ -65,6 +65,7 @@ export async function PUT(
     
     return NextResponse.json(updatedCar);
   } catch (error) {
+    console.error("Failed to update car:", error);
     return NextResponse.json(
       { error: "Failed to update car" },
       { status: 400 }

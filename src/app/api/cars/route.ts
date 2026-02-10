@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json(newCar, { status: 201 });
   } catch (error) {
+    console.error("Failed to create car:", error);
     return NextResponse.json(
       { error: "Failed to create car" },
       { status: 400 }
