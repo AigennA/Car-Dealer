@@ -1,20 +1,51 @@
-<img width="1855" height="896" alt="image" src="https://github.com/user-attachments/assets/695f8c3a-460e-4cf4-9764-0cce4a424981" />
-
-
-
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Car Dealer - Premium Bilhandel
+# Car Dealer - Premium Bilhandel
 
 Modern car sales website built with Next.js, React and Tailwind CSS.
 
-### 🚀 Demo
+![Car Dealer Website](https://github.com/user-attachments/assets/695f8c3a-460e-4cf4-9764-0cce4a424981)
 
-Live site on GitHub Pages: [https://AigennA.github.io/Car-Dealer/](https://AigennA.github.io/Car-Dealer/)
+## 🚀 Live Demo
 
-## Getting Started
+Visit the live site: [https://AigennA.github.io/Car-Dealer/](https://AigennA.github.io/Car-Dealer/)
 
-First, run the development server:
+## ✨ Features
+
+- 🚗 **Car Listings** - Browse through a curated selection of premium vehicles
+- 🔍 **Advanced Search** - Filter by brand, model, and location
+- 📱 **Responsive Design** - Optimized for all devices
+- ⚡ **Fast Performance** - Built with Next.js for optimal speed
+- 🎨 **Modern UI/UX** - Clean and intuitive interface
+- 🔧 **Admin Panel** - CRUD operations for managing vehicle inventory
+
+## 🛠️ Technology Stack
+
+- **Framework:** Next.js 16
+- **UI Library:** React 19
+- **Styling:** Tailwind CSS 4
+- **Language:** TypeScript
+- **Deployment:** GitHub Pages
+
+## 📋 Getting Started
+
+### Prerequisites
+
+- Node.js 20.x or higher
+- npm, yarn, pnpm, or bun
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/AigennA/Car-Dealer.git
+cd Car-Dealer
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Run the development server:
 
 ```bash
 npm run dev
@@ -26,80 +57,82 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Building for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+The static site will be generated in the `out` directory.
 
-To learn more about Next.js, take a look at the following resources:
+## 📦 Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+Car-Dealer/
+├── src/
+│   ├── app/              # Next.js app directory
+│   │   ├── page.tsx      # Homepage
+│   │   ├── bilar/        # Car listings
+│   │   ├── admin/        # Admin panel
+│   │   └── ...
+│   ├── components/       # React components
+│   └── lib/             # Utility functions and data
+├── public/              # Static assets
+└── scripts/             # Build scripts
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🔧 Admin Panel
 
-## Deploy on Vercel
+The application includes an admin interface for managing car listings at `/admin`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Features:
+- View all vehicles in a sortable table
+- Add new vehicles with detailed information
+- Edit existing vehicles
+- Delete vehicles from inventory
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-## Deploy on GitHub Pages
-
-This project is configured for GitHub Pages deployment.
-
-### Quick Deployment
-
-1. Go to Repository Settings > Pages > Source: Select **GitHub Actions**
-2. Push to `main` branch
-3. GitHub Actions will automatically deploy
-
-## Features
-
-- 🚗 Car listing and detail pages
-- 🔍 Advanced filtering and search
-- 📱 Responsive design
-- ⚡ Fast loading with static site generation
-- 🎨 Modern UI/UX design
-- 🔧 **NEW: Admin Panel with CRUD Operations**
-  - Create, Read, Update, and Delete vehicles
-  - Business owners can manage their inventory
-  - Accessible at `/admin` route
-
-## Admin Panel
-
-The application now includes an admin interface for managing car listings. Business owners can:
-
-- **View all vehicles** in a sortable table
-- **Add new vehicles** with detailed information
-- **Edit existing vehicles** to update details
-- **Delete vehicles** from the inventory
-
-### Accessing the Admin Panel
-
-Navigate to `/admin` or click the "Admin" link in the navigation menu.
-
-### API Endpoints
-
-The admin panel uses the following REST API endpoints:
-
+### API Endpoints:
 - `GET /api/cars` - List all cars
 - `POST /api/cars` - Create a new car
 - `GET /api/cars/[id]` - Get a single car
 - `PUT /api/cars/[id]` - Update a car
 - `DELETE /api/cars/[id]` - Delete a car
 
-### Development vs Production
+**Note:** Admin panel and API routes require a Node.js server environment. For static deployment (GitHub Pages), these features are not available.
 
-**Note:** The CRUD functionality requires a server environment to run. In development mode (`npm run dev`), all features work perfectly. For static deployment (GitHub Pages), the admin panel and API routes will not function as they require a Node.js server.
+## 🚀 Deployment
 
-For production use with CRUD functionality, deploy to:
-- Vercel (recommended)
+### GitHub Pages (Current)
+
+This project is configured for GitHub Pages deployment.
+
+**Setup:**
+1. Go to Repository Settings > Pages > Source
+2. Select **GitHub Actions**
+3. Push to `main` branch
+4. GitHub Actions will automatically build and deploy
+
+The site will be available at: `https://[username].github.io/Car-Dealer/`
+
+### Alternative Platforms
+
+For full functionality including admin panel and API routes, deploy to:
+- **Vercel** (recommended for Next.js)
 - Railway
-- Heroku
+- Heroku  
 - Any Node.js hosting platform
 
+## 📝 License
 
+This project is available for educational and personal use.
+
+## 👤 Author
+
+**AigennA**
+- GitHub: [@AigennA](https://github.com/AigennA)
+
+---
+
+Built with ❤️ using Next.js
