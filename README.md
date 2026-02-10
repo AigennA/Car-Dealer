@@ -1,7 +1,11 @@
 <img width="1855" height="896" alt="image" src="https://github.com/user-attachments/assets/695f8c3a-460e-4cf4-9764-0cce4a424981" />
 
 > **📢 Important for GitHub Pages Users:**
-> If your website shows only this README instead of the actual site, you need to configure GitHub Pages to use "GitHub Actions" as the deployment source. See the [Deploy on GitHub Pages](#deploy-on-github-pages) section below for detailed instructions.
+> If your website shows only this README instead of the actual site, you need to configure GitHub Pages to use "GitHub Actions" as the deployment source. 
+> 
+> **[📖 Read the detailed deployment guide →](DEPLOYMENT.md)**
+> 
+> Quick fix: Go to Settings → Pages → Source → Select "GitHub Actions"
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
