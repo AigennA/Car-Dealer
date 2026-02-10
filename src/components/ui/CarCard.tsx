@@ -20,7 +20,7 @@ export default function CarCard({ car }: Props) {
         />
         {car.featured && (
           <div className="absolute top-4 left-4 bg-gradient-to-r from-primary to-[#00BFFF] text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-lg backdrop-blur-sm">
-            <span role="img" aria-label="Featured">⭐</span> Featured
+            <span aria-hidden="true">⭐</span> Featured
           </div>
         )}
       </Link>
@@ -34,15 +34,15 @@ export default function CarCard({ car }: Props) {
 
         <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600 mb-4">
           <span className="inline-flex items-center gap-1">
-            <span role="img" aria-label="Year" className="text-gray-400">📅</span> {car.year}
+            <span aria-hidden="true" className="text-gray-400">📅</span> {car.year}
           </span>
           <span className="text-gray-300">•</span>
           <span className="inline-flex items-center gap-1">
-            <span role="img" aria-label="Mileage" className="text-gray-400">🛣️</span> {car.mileage.toLocaleString("sv-SE")} mil
+            <span aria-hidden="true" className="text-gray-400">🛣️</span> {car.mileage.toLocaleString("sv-SE")} mil
           </span>
           <span className="text-gray-300">•</span>
           <span className="inline-flex items-center gap-1">
-            <span role="img" aria-label="Fuel type" className="text-gray-400">⛽</span> {car.fuel}
+            <span aria-hidden="true" className="text-gray-400">⛽</span> {car.fuel}
           </span>
         </div>
 
