@@ -41,6 +41,31 @@ h1, h2, h3, h4, h5, h6 {
 /* Logo styling with premium font */
 .logo-text {
   font-family: var(--font-heading), serif;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.02em;
   font-weight: 700;
+}
+
+/* Premium logo enhancements */
+.logo-text-main {
+  font-family: var(--font-heading), serif;
+  letter-spacing: 0.05em;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #ffffff 0%, #e6e6e6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 8px rgba(0, 153, 204, 0.3);
+  filter: drop-shadow(0 2px 4px rgba(0, 153, 204, 0.2));
+}
+
+.logo-icon {
+  background: linear-gradient(135deg, #0099cc 0%, #007aa3 100%);
+  box-shadow: 0 4px 12px rgba(0, 153, 204, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.logo-icon:hover {
+  box-shadow: 0 6px 16px rgba(0, 153, 204, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }

@@ -13,11 +13,11 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="w-10 h-10 logo-icon rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-xl logo-text">C</span>
           </div>
-          <span className="text-2xl font-bold logo-text">Car Dealer</span>
+          <span className="text-2xl logo-text-main">Car Dealer</span>
         </Link>
 
         {/* Desktop Menu */}
