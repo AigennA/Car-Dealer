@@ -10,6 +10,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
   --font-heading: var(--font-playfair);
+  --font-logo: var(--font-bebas);
   
   /* Custom colors for Car Dealer */
   --color-primary: #0099cc;
@@ -38,25 +39,26 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.01em;
 }
 
-/* Logo styling with premium font */
+/* Logo styling with unique display font */
 .logo-text {
-  font-family: var(--font-heading), serif;
-  letter-spacing: 0.02em;
-  font-weight: 700;
+  font-family: var(--font-logo), sans-serif;
+  letter-spacing: 0.05em;
+  font-weight: 400;
 }
 
-/* Premium logo enhancements */
+/* Unique logo styling with distinctive font */
 .logo-text-main {
-  font-family: var(--font-heading), serif;
-  letter-spacing: 0.05em;
-  font-weight: 800;
+  font-family: var(--font-logo), sans-serif;
+  letter-spacing: 0.08em;
+  font-weight: 400;
   text-transform: uppercase;
   color: #ffffff;
-  background: linear-gradient(135deg, #ffffff 0%, #e6e6e6 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #0099cc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 2px 4px rgba(0, 153, 204, 0.2));
+  filter: drop-shadow(0 2px 6px rgba(0, 153, 204, 0.4));
+  transition: all 0.3s ease;
 }
 
 .logo-icon {
@@ -70,4 +72,10 @@ h1, h2, h3, h4, h5, h6 {
 .group:focus-visible .logo-icon {
   box-shadow: 0 6px 16px rgba(0, 153, 204, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transform: translateY(-1px);
+}
+
+.group:hover .logo-text-main,
+.group:focus-visible .logo-text-main {
+  filter: drop-shadow(0 3px 8px rgba(0, 153, 204, 0.6));
+  transform: scale(1.02);
 }
