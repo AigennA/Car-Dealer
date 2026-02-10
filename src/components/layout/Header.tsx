@@ -36,6 +36,9 @@ export default function Header() {
           <Link href="/kontakt" className="hover:text-primary transition font-medium">
             Kontakt
           </Link>
+          <Link href="/admin" className="hover:text-primary transition font-medium">
+            Admin
+          </Link>
         </nav>
 
         {/* Right Actions */}
@@ -75,6 +78,9 @@ export default function Header() {
             </Link>
             <Link href="/kontakt" className="px-4 py-3 hover:bg-gray-800 font-medium" onClick={handleNavClick}>
               Kontakt
+            </Link>
+            <Link href="/admin" className="px-4 py-3 hover:bg-gray-800 font-medium" onClick={handleNavClick}>
+              Admin
             </Link>
           </nav>
         </div>
