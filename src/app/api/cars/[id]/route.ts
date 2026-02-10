@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { carStorage } from "@/lib/storage";
 import { type Car } from "@/lib/cars";
 
+export const dynamic = "force-dynamic";
+
 // GET single car
 export async function GET(
   request: NextRequest,

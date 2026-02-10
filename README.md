@@ -64,4 +64,42 @@ This project is configured for GitHub Pages deployment.
 - 📱 Responsive design
 - ⚡ Fast loading with static site generation
 - 🎨 Modern UI/UX design
+- 🔧 **NEW: Admin Panel with CRUD Operations**
+  - Create, Read, Update, and Delete vehicles
+  - Business owners can manage their inventory
+  - Accessible at `/admin` route
+
+## Admin Panel
+
+The application now includes an admin interface for managing car listings. Business owners can:
+
+- **View all vehicles** in a sortable table
+- **Add new vehicles** with detailed information
+- **Edit existing vehicles** to update details
+- **Delete vehicles** from the inventory
+
+### Accessing the Admin Panel
+
+Navigate to `/admin` or click the "Admin" link in the navigation menu.
+
+### API Endpoints
+
+The admin panel uses the following REST API endpoints:
+
+- `GET /api/cars` - List all cars
+- `POST /api/cars` - Create a new car
+- `GET /api/cars/[id]` - Get a single car
+- `PUT /api/cars/[id]` - Update a car
+- `DELETE /api/cars/[id]` - Delete a car
+
+### Development vs Production
+
+**Note:** The CRUD functionality requires a server environment to run. In development mode (`npm run dev`), all features work perfectly. For static deployment (GitHub Pages), the admin panel and API routes will not function as they require a Node.js server.
+
+For production use with CRUD functionality, deploy to:
+- Vercel (recommended)
+- Railway
+- Heroku
+- Any Node.js hosting platform
+
 
