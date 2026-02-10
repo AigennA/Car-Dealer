@@ -10,9 +10,9 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">C</span>
+                <span className="text-white font-bold logo-text">C</span>
               </div>
-              <span className="text-white font-bold text-xl">Car Dealer</span>
+              <span className="text-white font-bold text-xl logo-text">Car Dealer</span>
             </div>
             <p className="text-sm">
               Safe and simple car deals with quality-checked vehicles.
