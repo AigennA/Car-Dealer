@@ -5,7 +5,9 @@
   "scripts": {
     "predev": "node scripts/clean-lock.js",
     "dev": "next dev",
+    "prebuild": "node scripts/prepare-build.js",
     "build": "next build",
+    "postbuild": "node scripts/postbuild.js",
     "start": "next start",
     "lint": "eslint"
   },

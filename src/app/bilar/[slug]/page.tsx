@@ -13,7 +13,7 @@ export function generateStaticParams() {
 export default async function CarDetailPage({
   params,
 }: {
-   params: { slug: string };
+   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
   const car = cars.find((c) => c.slug === slug);
