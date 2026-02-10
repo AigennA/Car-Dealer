@@ -19,7 +19,7 @@ export default function CarCard({ car }: Props) {
       <div className="p-5">
         {car.featured && (
           <div className="inline-block bg-primary text-white text-xs px-2 py-1 rounded-full mb-2">
-            Utvald
+            Featured
           </div>
         )}
 
@@ -43,7 +43,7 @@ export default function CarCard({ car }: Props) {
             href={`/bilar/${car.slug}`}
             className="text-sm text-primary hover:underline"
           >
-            Visa detaljer →
+            View details →
           </Link>
         </div>
       </div>
