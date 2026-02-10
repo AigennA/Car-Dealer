@@ -8,11 +8,11 @@ export default function Footer() {
 
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+            <div className="flex items-center gap-2 mb-4 group">
+              <div className="w-8 h-8 logo-icon rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold logo-text">C</span>
               </div>
-              <span className="text-white font-bold text-xl logo-text">Car Dealer</span>
+              <span className="text-white font-bold text-xl logo-text-main">Car Dealer</span>
             </div>
             <p className="text-sm">
               Säkra och enkla bilaffärer med kvalitetskontrollerade fordon.
