@@ -12,7 +12,7 @@ export default function Footer() {
               <div className="w-8 h-8 logo-icon rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold logo-text">C</span>
               </div>
-              <span className="text-white font-bold text-xl logo-text" style={{ letterSpacing: '0.05em', fontWeight: 800, textTransform: 'uppercase' }}>Car Dealer</span>
+              <span className="text-white font-bold text-xl logo-text-main">Car Dealer</span>
             </div>
             <p className="text-sm">
               Säkra och enkla bilaffärer med kvalitetskontrollerade fordon.
