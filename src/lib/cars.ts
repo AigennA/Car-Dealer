@@ -215,7 +215,7 @@ export const cars: Car[] = [
     bodyType: "Kombi",
     color: "Blå",
     price: 269900,
-    images: ["https://images.unsplash.com/photo-1552519507-0b63f22e8ee4?w=800&h=600&fit=crop"],
+    images: ["https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=800&h=600&fit=crop"],
     featured: false,
     description: "Rymlig och praktisk familjebil med moderna säkerhetssystem. Bekväm på alla resor.",
     features: ["Discover Pro", "Area View", "ACC", "LED Plus", "Elbaklucka", "Drag"],
