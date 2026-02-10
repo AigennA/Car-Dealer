@@ -56,6 +56,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 This project is configured for GitHub Pages deployment using GitHub Actions.
 
+> **📖 Having issues? [Read the complete deployment guide →](DEPLOYMENT.md)**
+
 ### ⚠️ IMPORTANT: Initial Setup Required
 
 **If you see only README text on your GitHub Pages site**, you need to configure the Pages settings:
