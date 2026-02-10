@@ -51,6 +51,7 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.05em;
   font-weight: 800;
   text-transform: uppercase;
+  color: #ffffff;
   background: linear-gradient(135deg, #ffffff 0%, #e6e6e6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -64,8 +65,9 @@ h1, h2, h3, h4, h5, h6 {
   transition: all 0.3s ease;
 }
 
-.logo-icon:hover,
-.logo-icon:focus-visible {
+/* Group hover for interactive logo link */
+.group:hover .logo-icon,
+.group:focus-visible .logo-icon {
   box-shadow: 0 6px 16px rgba(0, 153, 204, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transform: translateY(-1px);
 }
