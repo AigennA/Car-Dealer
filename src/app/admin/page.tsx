@@ -1,0 +1,521 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { Car } from "@/lib/cars";
+import Link from "next/link";
+
+export default function AdminPage() {
+  const [cars, setCars] = useState<Car[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editingCar, setEditingCar] = useState<Car | null>(null);
+
+  useEffect(() => {
+    fetchCars();
+  }, []);
+
+  const fetchCars = async () => {
+    try {
+      const response = await fetch("/api/cars");
+      const data = await response.json();
+      setCars(data);
+    } catch (error) {
+      console.error("Failed to fetch cars:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Är du säker på att du vill ta bort denna bil?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/cars/${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        fetchCars();
+      } else {
+        alert("Kunde inte ta bort bilen");
+      }
+    } catch (error) {
+      console.error("Failed to delete car:", error);
+      alert("Ett fel uppstod");
+    }
+  };
+
+  const handleEdit = (car: Car) => {
+    setEditingCar(car);
+    setShowForm(true);
+  };
+
+  const handleAdd = () => {
+    setEditingCar(null);
+    setShowForm(true);
+  };
+
+  const handleFormClose = () => {
+    setShowForm(false);
+    setEditingCar(null);
+    fetchCars();
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-surface flex items-center justify-center">
+        <div className="text-xl text-gray-600">Laddar...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-surface">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-navy">Admin Panel</h1>
+              <p className="text-gray-600 mt-1">Hantera dina bilar</p>
+            </div>
+            <div className="flex gap-3">
+              <Link
+                href="/"
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+              >
+                Tillbaka till sidan
+              </Link>
+              <button
+                onClick={handleAdd}
+                className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition font-medium"
+              >
+                + Lägg till bil
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Cars List */}
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b">
+                <tr>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                    Bil
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                    År
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                    Miltal
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                    Pris
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                    Bränsle
+                  </th>
+                  <th className="px-6 py-4 text-right text-sm font-semibold text-gray-900">
+                    Åtgärder
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {cars.map((car) => (
+                  <tr key={car.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={car.images[0]}
+                          alt={car.title}
+                          className="w-16 h-12 object-cover rounded"
+                        />
+                        <div>
+                          <div className="font-medium text-gray-900">
+                            {car.make} {car.model}
+                          </div>
+                          <div className="text-sm text-gray-500">{car.color}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      {car.year}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      {car.mileage.toLocaleString()} mil
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      {car.price.toLocaleString()} kr
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      {car.fuel}
+                    </td>
+                    <td className="px-6 py-4 text-right text-sm">
+                      <button
+                        onClick={() => handleEdit(car)}
+                        className="text-primary hover:text-primary-dark font-medium mr-4"
+                      >
+                        Redigera
+                      </button>
+                      <button
+                        onClick={() => handleDelete(car.id)}
+                        className="text-red-600 hover:text-red-800 font-medium"
+                      >
+                        Ta bort
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {cars.length === 0 && (
+          <div className="bg-white rounded-xl shadow-sm p-12 text-center">
+            <p className="text-gray-600 mb-4">Inga bilar än. Lägg till din första bil!</p>
+            <button
+              onClick={handleAdd}
+              className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition font-medium"
+            >
+              + Lägg till bil
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Form Modal */}
+      {showForm && (
+        <CarFormModal
+          car={editingCar}
+          onClose={handleFormClose}
+        />
+      )}
+    </div>
+  );
+}
+
+function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }) {
+  const [formData, setFormData] = useState({
+    make: car?.make || "",
+    model: car?.model || "",
+    year: car?.year?.toString() || "",
+    mileage: car?.mileage?.toString() || "",
+    fuel: car?.fuel || "Bensin",
+    transmission: car?.transmission || "Automat",
+    drivetrain: car?.drivetrain || "FWD",
+    body: car?.body || "Sedan",
+    bodyType: car?.bodyType || "Sedan",
+    color: car?.color || "",
+    price: car?.price?.toString() || "",
+    description: car?.description || "",
+    features: car?.features?.join(", ") || "",
+    images: car?.images?.join(", ") || "",
+    featured: car?.featured || false,
+  });
+
+  const [saving, setSaving] = useState(false);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value, type } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+
+    try {
+      const payload = {
+        ...formData,
+        features: formData.features.split(",").map((f) => f.trim()).filter(Boolean),
+        images: formData.images.split(",").map((i) => i.trim()).filter(Boolean),
+      };
+
+      const url = car ? `/api/cars/${car.id}` : "/api/cars";
+      const method = car ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        onClose();
+      } else {
+        alert("Kunde inte spara bilen");
+      }
+    } catch (error) {
+      console.error("Failed to save car:", error);
+      alert("Ett fel uppstod");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
+          <h2 className="text-2xl font-bold text-navy">
+            {car ? "Redigera bil" : "Lägg till ny bil"}
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700 text-2xl"
+          >
+            ×
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Märke *
+              </label>
+              <input
+                type="text"
+                name="make"
+                value={formData.make}
+                onChange={handleChange}
+                required
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Modell *
+              </label>
+              <input
+                type="text"
+                name="model"
+                value={formData.model}
+                onChange={handleChange}
+                required
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Årsmodell *
+              </label>
+              <input
+                type="number"
+                name="year"
+                value={formData.year}
+                onChange={handleChange}
+                required
+                min="1900"
+                max="2030"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Miltal *
+              </label>
+              <input
+                type="number"
+                name="mileage"
+                value={formData.mileage}
+                onChange={handleChange}
+                required
+                min="0"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Pris (kr) *
+              </label>
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                required
+                min="0"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Färg *
+              </label>
+              <input
+                type="text"
+                name="color"
+                value={formData.color}
+                onChange={handleChange}
+                required
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Bränsle *
+              </label>
+              <select
+                name="fuel"
+                value={formData.fuel}
+                onChange={handleChange}
+                required
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="Bensin">Bensin</option>
+                <option value="Diesel">Diesel</option>
+                <option value="El">El</option>
+                <option value="Hybrid">Hybrid</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Växellåda *
+              </label>
+              <select
+                name="transmission"
+                value={formData.transmission}
+                onChange={handleChange}
+                required
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="Automat">Automat</option>
+                <option value="Manuell">Manuell</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Drivning *
+              </label>
+              <select
+                name="drivetrain"
+                value={formData.drivetrain}
+                onChange={handleChange}
+                required
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="FWD">FWD (Framhjulsdrift)</option>
+                <option value="RWD">RWD (Bakhjulsdrift)</option>
+                <option value="AWD">AWD (Fyrhjulsdrift)</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Karosstyp *
+              </label>
+              <select
+                name="body"
+                value={formData.body}
+                onChange={handleChange}
+                required
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+                <option value="Kombi">Kombi</option>
+                <option value="Halvkombi">Halvkombi</option>
+                <option value="Coupé">Coupé</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Beskrivning *
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+              rows={3}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Utrustning (kommaseparerad)
+            </label>
+            <textarea
+              name="features"
+              value={formData.features}
+              onChange={handleChange}
+              rows={2}
+              placeholder="LED-strålkastare, Navigation, Panoramatak"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Bild-URL (kommaseparerad)
+            </label>
+            <input
+              type="text"
+              name="images"
+              value={formData.images}
+              onChange={handleChange}
+              placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+
+          <div className="mt-4">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="featured"
+                checked={formData.featured}
+                onChange={handleChange}
+                className="w-4 h-4 text-primary focus:ring-primary"
+              />
+              <span className="text-sm font-medium text-gray-700">
+                Utvald bil (visas på startsidan)
+              </span>
+            </label>
+          </div>
+
+          <div className="mt-6 flex gap-3 justify-end">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+            >
+              Avbryt
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition font-medium disabled:opacity-50"
+            >
+              {saving ? "Sparar..." : car ? "Uppdatera" : "Lägg till"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
