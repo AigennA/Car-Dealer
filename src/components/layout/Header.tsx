@@ -22,16 +22,16 @@ export default function Header() {
 
         {/* Desktop Menu */}
         <nav className="hidden md:flex items-center gap-8">
-          <Link href="/" className="hover:text-primary transition">
+          <Link href="/" className="hover:text-primary transition font-medium">
             Home
           </Link>
-          <Link href="/bilar" className="hover:text-primary transition">
+          <Link href="/bilar" className="hover:text-primary transition font-medium">
             Inventory
           </Link>
-          <Link href="/finansiering" className="hover:text-primary transition">
+          <Link href="/finansiering" className="hover:text-primary transition font-medium">
             Services
           </Link>
-          <Link href="/kontakt" className="hover:text-primary transition">
+          <Link href="/kontakt" className="hover:text-primary transition font-medium">
             Contact
           </Link>
         </nav>
@@ -49,7 +49,7 @@ export default function Header() {
         {/* Mobile Menu Button */}
         <button
           type="button"
-          className="md:hidden text-white"
+          className="md:hidden text-white hover:text-primary transition-colors duration-200"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -62,16 +62,16 @@ export default function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-gray-900 border-t border-gray-800">
           <nav className="flex flex-col py-4">
-            <Link href="/" className="px-4 py-3 hover:bg-gray-800" onClick={handleNavClick}>
+            <Link href="/" className="px-4 py-3 hover:bg-gray-800 font-medium" onClick={handleNavClick}>
               Home
             </Link>
-            <Link href="/bilar" className="px-4 py-3 hover:bg-gray-800" onClick={handleNavClick}>
+            <Link href="/bilar" className="px-4 py-3 hover:bg-gray-800 font-medium" onClick={handleNavClick}>
               Inventory
             </Link>
-            <Link href="/finansiering" className="px-4 py-3 hover:bg-gray-800" onClick={handleNavClick}>
+            <Link href="/finansiering" className="px-4 py-3 hover:bg-gray-800 font-medium" onClick={handleNavClick}>
               Services
             </Link>
-            <Link href="/kontakt" className="px-4 py-3 hover:bg-gray-800" onClick={handleNavClick}>
+            <Link href="/kontakt" className="px-4 py-3 hover:bg-gray-800 font-medium" onClick={handleNavClick}>
               Contact
             </Link>
           </nav>
