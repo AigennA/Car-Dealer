@@ -1,7 +1,3 @@
-<img width="1855" height="896" alt="image" src="https://github.com/user-attachments/assets/695f8c3a-460e-4cf4-9764-0cce4a424981" />
-
-
-
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Car Dealer - Premium Bilhandel
