@@ -15,9 +15,9 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
           <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xl" style={{ fontFamily: 'var(--font-montserrat)' }}>C</span>
+            <span className="text-white font-bold text-xl logo-text">C</span>
           </div>
-          <span className="text-2xl font-bold" style={{ fontFamily: 'var(--font-montserrat)', letterSpacing: '-0.02em' }}>Car Dealer</span>
+          <span className="text-2xl font-bold logo-text">Car Dealer</span>
         </Link>
 
         {/* Desktop Menu */}
