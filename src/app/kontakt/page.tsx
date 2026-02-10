@@ -14,11 +14,11 @@ export default function KontaktPage() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
+        <div className="grid lg:grid-cols-[40%_1fr] md:grid-cols-2 gap-8 mb-12">
           {/* Contact Form */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
+          <div className="bg-white rounded-xl p-5 shadow-sm">
             <h2 className="text-xl font-bold text-navy mb-4">Skicka ett meddelande</h2>
-            <form className="space-y-3">
+            <form className="space-y-2.5">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                   Namn
@@ -27,7 +27,7 @@ export default function KontaktPage() {
                   type="text"
                   id="name"
                   name="name"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Ditt namn"
                 />
               </div>
@@ -40,7 +40,7 @@ export default function KontaktPage() {
                   type="email"
                   id="email"
                   name="email"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="din@email.se"
                 />
               </div>
@@ -53,7 +53,7 @@ export default function KontaktPage() {
                   type="tel"
                   id="phone"
                   name="phone"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="070-000 00 00"
                 />
               </div>
@@ -65,7 +65,7 @@ export default function KontaktPage() {
                 <select
                   id="subject"
                   name="subject"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="">Välj ämne</option>
                   <option value="köpa">Jag vill köpa en bil</option>
@@ -84,7 +84,7 @@ export default function KontaktPage() {
                   id="message"
                   name="message"
                   rows={4}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Skriv ditt meddelande här..."
                 />
               </div>
