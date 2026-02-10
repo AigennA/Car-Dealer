@@ -23,16 +23,16 @@ export default function Header() {
         {/* Desktop Menu */}
         <nav className="hidden md:flex items-center gap-8">
           <Link href="/" className="hover:text-primary transition">
-            Hem
+            Home
           </Link>
           <Link href="/bilar" className="hover:text-primary transition">
-            Inventering
+            Inventory
           </Link>
           <Link href="/finansiering" className="hover:text-primary transition">
-            Tjänster
+            Services
           </Link>
           <Link href="/kontakt" className="hover:text-primary transition">
-            Kontakt
+            Contact
           </Link>
         </nav>
 
@@ -42,7 +42,7 @@ export default function Header() {
             href="/bilar"
             className="bg-primary text-white px-6 py-2.5 rounded-lg hover:bg-primary-dark transition font-medium"
           >
-            Se lager
+            View Inventory
           </Link>
         </div>
 
@@ -63,16 +63,16 @@ export default function Header() {
         <div className="md:hidden bg-gray-900 border-t border-gray-800">
           <nav className="flex flex-col py-4">
             <Link href="/" className="px-4 py-3 hover:bg-gray-800" onClick={handleNavClick}>
-              Hem
+              Home
             </Link>
             <Link href="/bilar" className="px-4 py-3 hover:bg-gray-800" onClick={handleNavClick}>
-              Inventering
+              Inventory
             </Link>
             <Link href="/finansiering" className="px-4 py-3 hover:bg-gray-800" onClick={handleNavClick}>
-              Tjänster
+              Services
             </Link>
             <Link href="/kontakt" className="px-4 py-3 hover:bg-gray-800" onClick={handleNavClick}>
-              Kontakt
+              Contact
             </Link>
           </nav>
         </div>

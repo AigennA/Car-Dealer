@@ -4,8 +4,8 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "Car Dealer | Premium Bilhandel",
-  description: "Hitta din nästa bil – tryggt och enkelt",
+  title: "Car Dealer | Premium Car Sales",
+  description: "Find your next car – safe and simple",
 };
 
 export default function RootLayout({
@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="sv">
+    <html lang="en">
       <body className="font-sans">
         <Header />
         <main>{children}</main>

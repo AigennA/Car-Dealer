@@ -25,18 +25,18 @@ export default function HomePage() {
             {/* Left Content */}
             <div className="text-white">
               <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                HITTA DIN
+                FIND YOUR
                 <br />
-                NÄSTA BIL
+                NEXT CAR
               </h1>
               <p className="text-xl md:text-2xl mb-8 opacity-90">
-                Låt oss hjälpa dig att hitta din nästa bil!
+                Let us help you find your next car!
               </p>
               <Link
                 href="/bilar"
                 className="inline-flex items-center gap-2 text-white font-medium hover:gap-4 transition-all"
               >
-                <span>Utforska mer</span>
+                <span>Explore more</span>
                 <span>→</span>
               </Link>
             </div>
@@ -60,7 +60,7 @@ export default function HomePage() {
           <div className="bg-white rounded-2xl shadow-2xl p-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <select className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
-                <option>Välj märke</option>
+                <option>Select brand</option>
                 <option>Audi</option>
                 <option>BMW</option>
                 <option>Ford</option>
@@ -80,16 +80,16 @@ export default function HomePage() {
               </select>
 
               <select className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
-                <option>Välj modell</option>
-                <option>Alla modeller</option>
+                <option>Select model</option>
+                <option>All models</option>
                 <option>SUV</option>
                 <option>Sedan</option>
-                <option>Kombi</option>
-                <option>Halvkombi</option>
+                <option>Station wagon</option>
+                <option>Hatchback</option>
               </select>
 
               <select className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
-                <option>Välj plats</option>
+                <option>Select location</option>
                 <option>Stockholm</option>
                 <option>Göteborg</option>
                 <option>Malmö</option>
@@ -102,7 +102,7 @@ export default function HomePage() {
                 href="/bilar"
                 className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition font-medium text-center flex items-center justify-center gap-2"
               >
-                <span>SÖK</span>
+                <span>SEARCH</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
@@ -119,30 +119,30 @@ export default function HomePage() {
             <div className="text-center">
               <div className="text-5xl mb-4">✓</div>
               <h3 className="text-xl font-bold text-navy mb-2">
-                Kvalitetskontrollerade bilar
+                Quality Checked Cars
               </h3>
               <p className="text-gray-600">
-                Alla bilar genomgår noggrann besiktning innan försäljning
+                All cars undergo thorough inspection before sale
               </p>
             </div>
 
             <div className="text-center">
               <div className="text-5xl mb-4">💰</div>
               <h3 className="text-xl font-bold text-navy mb-2">
-                Finans & leasing
+                Finance & Leasing
               </h3>
               <p className="text-gray-600">
-                Flexibla finansieringsmöjligheter anpassade efter dina behov
+                Flexible financing options tailored to your needs
               </p>
             </div>
 
             <div className="text-center">
               <div className="text-5xl mb-4">🔁</div>
               <h3 className="text-xl font-bold text-navy mb-2">
-                Inbyte & garanti
+                Trade-in & Warranty
               </h3>
               <p className="text-gray-600">
-                Byt in din gamla bil och få trygg garanti på din nya
+                Trade in your old car and get secure warranty on your new one
               </p>
             </div>
           </div>
@@ -154,10 +154,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-navy mb-4">
-              Utvalda bilar
+              Featured Cars
             </h2>
             <p className="text-lg text-gray-600">
-              Handplockade bilar från vårt lager
+              Hand-picked cars from our inventory
             </p>
           </div>
 
@@ -172,7 +172,7 @@ export default function HomePage() {
               href="/bilar"
               className="inline-block bg-primary text-white px-8 py-3 rounded-xl font-semibold hover:bg-primary-dark transition"
             >
-              Se alla bilar →
+              View all cars →
             </Link>
           </div>
         </div>
@@ -182,7 +182,7 @@ export default function HomePage() {
       <section className="bg-white py-16">
         <div className="max-w-5xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-navy mb-8 text-center">
-            Varför välja oss?
+            Why choose us?
           </h2>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -190,10 +190,10 @@ export default function HomePage() {
               <div className="text-primary text-2xl">✓</div>
               <div>
                 <h3 className="font-semibold text-lg text-navy mb-1">
-                  Transparent prissättning
+                  Transparent Pricing
                 </h3>
                 <p className="text-gray-600">
-                  Inga dolda avgifter eller överraskningar
+                  No hidden fees or surprises
                 </p>
               </div>
             </div>
@@ -202,10 +202,10 @@ export default function HomePage() {
               <div className="text-primary text-2xl">✓</div>
               <div>
                 <h3 className="font-semibold text-lg text-navy mb-1">
-                  Personlig service
+                  Personal Service
                 </h3>
                 <p className="text-gray-600">
-                  Vi hjälper dig genom hela köpprocessen
+                  We guide you through the entire buying process
                 </p>
               </div>
             </div>
@@ -214,10 +214,10 @@ export default function HomePage() {
               <div className="text-primary text-2xl">✓</div>
               <div>
                 <h3 className="font-semibold text-lg text-navy mb-1">
-                  Flexibla lösningar
+                  Flexible Solutions
                 </h3>
                 <p className="text-gray-600">
-                  Anpassade finansierings- och försäkringslösningar
+                  Customized financing and insurance solutions
                 </p>
               </div>
             </div>
@@ -226,10 +226,10 @@ export default function HomePage() {
               <div className="text-primary text-2xl">✓</div>
               <div>
                 <h3 className="font-semibold text-lg text-navy mb-1">
-                  Trygg affär
+                  Secure Deal
                 </h3>
                 <p className="text-gray-600">
-                  Garanti och öppet köp på alla bilar
+                  Warranty and return policy on all cars
                 </p>
               </div>
             </div>
