@@ -3,6 +3,7 @@ import Badge from "@/components/ui/Badge";
 import PrimaryButtonLink from "@/components/ui/PrimaryButtonLink";
 import Link from "next/link";
 import CarCreditCalculator from "@/components/CarCreditCalculator";
+import ImageGallery from "@/components/ui/ImageGallery";
 
 export function generateStaticParams() {
   return cars.map((car) => ({
@@ -43,28 +44,7 @@ export default async function CarDetailPage({
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_0.6fr] gap-8">
           {/* Left: Gallery */}
-          <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-            <div className="aspect-[16/10] bg-gray-100">
-              <img
-                src={car.images[0]}
-                alt={car.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <div className="p-5 border-t">
-              <div className="flex gap-3 overflow-x-auto">
-                {car.images.map((img) => (
-                  <img
-                    key={img}
-                    src={img}
-                    alt={car.title}
-                    className="h-20 w-32 object-cover rounded-xl border bg-gray-50"
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+          <ImageGallery images={car.images} title={car.title} />
 
           {/* Right: Sticky summary */}
           <aside className="lg:sticky lg:top-24 h-fit">
