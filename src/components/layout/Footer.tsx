@@ -15,36 +15,36 @@ export default function Footer() {
               <span className="text-white font-bold text-xl logo-text">Car Dealer</span>
             </div>
             <p className="text-sm">
-              Safe and simple car deals with quality-checked vehicles.
+              Säkra och enkla bilaffärer med kvalitetskontrollerade fordon.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-white font-semibold mb-4">Snabblänkar</h3>
             <div className="space-y-2 text-sm">
               <Link href="/bilar" className="block hover:text-primary transition">
-                Inventory
+                Lager
               </Link>
               <Link href="/finansiering" className="block hover:text-primary transition">
-                Financing
+                Finansiering
               </Link>
               <Link href="/inbyte" className="block hover:text-primary transition">
-                Trade-in
+                Inbyte
               </Link>
               <Link href="/om-oss" className="block hover:text-primary transition">
-                About Us
+                Om oss
               </Link>
             </div>
           </div>
 
           {/* Contact */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Contact</h3>
+            <h3 className="text-white font-semibold mb-4">Kontakt</h3>
             <div className="space-y-2 text-sm">
-              <p>Phone: 070-000 00 00</p>
-              <p>Email: info@cardealer.se</p>
-              <p>Hours: Mon-Fri 09-18</p>
+              <p>Telefon: 070-000 00 00</p>
+              <p>E-post: info@cardealer.se</p>
+              <p>Öppettider: Mån-Fre 09-18</p>
             </div>
           </div>
 
@@ -53,10 +53,10 @@ export default function Footer() {
             <h3 className="text-white font-semibold mb-4">Information</h3>
             <div className="space-y-2 text-sm">
               <Link href="/villkor" className="block hover:text-primary transition">
-                Terms
+                Villkor
               </Link>
               <Link href="/integritet" className="block hover:text-primary transition">
-                Privacy Policy
+                Integritetspolicy
               </Link>
             </div>
           </div>
@@ -65,7 +65,7 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="pt-8 border-t border-gray-800 text-center text-sm">
-          <p>© 2026 Car Dealer AB. All rights reserved.</p>
+          <p>© 2026 Car Dealer AB. Alla rättigheter förbehållna.</p>
         </div>
       </div>
     </footer>
