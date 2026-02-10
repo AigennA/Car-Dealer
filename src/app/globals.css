@@ -9,7 +9,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
-  --font-heading: var(--font-montserrat);
+  --font-heading: var(--font-playfair);
   
   /* Custom colors for Car Dealer */
   --color-primary: #0099cc;
@@ -33,13 +33,14 @@ body {
 
 /* Premium typography */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading), sans-serif;
+  font-family: var(--font-heading), serif;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
-/* Logo styling */
+/* Logo styling with premium font */
 .logo-text {
-  font-family: var(--font-heading), sans-serif;
-  letter-spacing: -0.02em;
+  font-family: var(--font-heading), serif;
+  letter-spacing: -0.01em;
+  font-weight: 700;
 }
