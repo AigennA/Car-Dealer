@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "node -e \"try { require('fs').rmSync('.next/dev/lock', { force: true }); } catch (e) {}\"",
+    "predev": "node scripts/clean-lock.js",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
