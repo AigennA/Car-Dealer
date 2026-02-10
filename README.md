@@ -1,6 +1,7 @@
 <img width="1855" height="896" alt="image" src="https://github.com/user-attachments/assets/695f8c3a-460e-4cf4-9764-0cce4a424981" />
 
-
+> **📢 Important for GitHub Pages Users:**
+> If your website shows only this README instead of the actual site, you need to configure GitHub Pages to use "GitHub Actions" as the deployment source. See the [Deploy on GitHub Pages](#deploy-on-github-pages) section below for detailed instructions.
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
@@ -49,13 +50,36 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Deploy on GitHub Pages
 
-This project is configured for GitHub Pages deployment.
+This project is configured for GitHub Pages deployment using GitHub Actions.
+
+### ⚠️ IMPORTANT: Initial Setup Required
+
+**If you see only README text on your GitHub Pages site**, you need to configure the Pages settings:
+
+1. Go to your repository on GitHub.com
+2. Click **Settings** tab
+3. Click **Pages** in the left sidebar
+4. Under **Build and deployment**:
+   - **Source**: Select **GitHub Actions** (NOT "Deploy from a branch")
+5. Save the settings
+6. Push to `main` branch or manually trigger the workflow
+7. Wait for the deployment to complete (check Actions tab)
+8. Visit your site: https://[your-username].github.io/Car-Dealer/
 
 ### Quick Deployment
 
-1. Go to Repository Settings > Pages > Source: Select **GitHub Actions**
-2. Push to `main` branch
-3. GitHub Actions will automatically deploy
+Once configured, deployment is automatic:
+1. Push changes to `main` branch
+2. GitHub Actions will build and deploy automatically
+3. Check the Actions tab to monitor deployment progress
+
+### Troubleshooting
+
+**Problem**: Website shows README content instead of the actual site
+**Solution**: Make sure Pages source is set to "GitHub Actions" (see setup instructions above)
+
+**Problem**: 404 errors on page routes
+**Solution**: The build process automatically handles this - just ensure the deployment completed successfully
 
 ## Features
 
