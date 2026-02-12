@@ -12,8 +12,13 @@ function getAccounts(): { username: string; password: string }[] {
   if (typeof window === "undefined") return [DEFAULT_ACCOUNT];
   try {
     const data = localStorage.getItem(ACCOUNTS_KEY);
-    const accounts = data ? JSON.parse(data) : [];
-    return accounts.length > 0 ? accounts : [DEFAULT_ACCOUNT];
+    const saved: { username: string; password: string }[] = data ? JSON.parse(data) : [];
+    // Always ensure default account is in the list
+    if (!saved.some((a) => a.username === DEFAULT_ACCOUNT.username)) {
+      saved.unshift(DEFAULT_ACCOUNT);
+      localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(saved));
+    }
+    return saved.length > 0 ? saved : [DEFAULT_ACCOUNT];
   } catch {
     return [DEFAULT_ACCOUNT];
   }
@@ -21,7 +26,7 @@ function getAccounts(): { username: string; password: string }[] {
 
 function saveAccount(username: string, password: string): boolean {
   const accounts = getAccounts();
-  if (accounts.some((a) => a.username === username)) return false;
+  if (accounts.some((a) => a.username.toLowerCase() === username.toLowerCase())) return false;
   accounts.push({ username, password });
   localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
   return true;
@@ -91,7 +96,7 @@ export default function AdminPage() {
       return;
     }
     const accounts = getAccounts();
-    const account = accounts.find((a) => a.username === user);
+    const account = accounts.find((a) => a.username.toLowerCase() === user.toLowerCase());
     if (account && account.password === passwordInput) {
       setAuthenticated(true);
       setUsername(user);
