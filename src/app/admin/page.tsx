@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { type Car } from "@/lib/cars";
 import { getAllCars, addCar, updateCar, deleteCar } from "@/lib/clientStorage";
 import Link from "next/link";
@@ -54,13 +54,13 @@ export default function AdminPage() {
     }
   }, []);
 
-  const loadCars = () => {
+  const loadCars = useCallback(() => {
     setCars(getAllCars());
-  };
+  }, []);
 
   useEffect(() => {
     if (authenticated) loadCars();
-  }, [authenticated]);
+  }, [authenticated, loadCars]);
 
   const handleDelete = (id: string) => {
     if (!confirm("Är du säker på att du vill ta bort denna bil?")) return;
