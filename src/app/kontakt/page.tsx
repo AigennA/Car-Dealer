@@ -27,7 +27,7 @@ export default function KontaktPage() {
                   type="text"
                   id="name"
                   name="name"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                   placeholder="Ditt namn"
                 />
               </div>
@@ -40,7 +40,7 @@ export default function KontaktPage() {
                   type="email"
                   id="email"
                   name="email"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                   placeholder="din@email.se"
                 />
               </div>
@@ -53,7 +53,7 @@ export default function KontaktPage() {
                   type="tel"
                   id="phone"
                   name="phone"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                   placeholder="070-000 00 00"
                 />
               </div>
@@ -65,7 +65,7 @@ export default function KontaktPage() {
                 <select
                   id="subject"
                   name="subject"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                 >
                   <option value="">Välj ämne</option>
                   <option value="köpa">Jag vill köpa en bil</option>
@@ -84,7 +84,7 @@ export default function KontaktPage() {
                   id="message"
                   name="message"
                   rows={4}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                   placeholder="Skriv ditt meddelande här..."
                 />
               </div>
