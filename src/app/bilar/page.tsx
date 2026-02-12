@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { type Car } from "@/lib/cars";
 import { getAllCars } from "@/lib/clientStorage";
@@ -21,6 +21,21 @@ const initialFilters: Filters = {
 };
 
 export default function CarsPage() {
+  return (
+    <Suspense fallback={
+      <section className="bg-surface min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 py-12">
+          <h1 className="text-3xl font-bold text-navy mb-8">Våra bilar</h1>
+          <div className="text-center py-12 text-gray-600">Laddar bilar...</div>
+        </div>
+      </section>
+    }>
+      <CarsPageContent />
+    </Suspense>
+  );
+}
+
+function CarsPageContent() {
   const searchParams = useSearchParams();
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
