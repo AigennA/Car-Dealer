@@ -29,7 +29,7 @@ export default function KontaktPage() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 mb-12">
           {/* Contact Form */}
           <div className="bg-white rounded-xl p-8 shadow-sm">
             <h2 className="text-xl font-bold text-navy mb-4">Skicka ett meddelande</h2>
