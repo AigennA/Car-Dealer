@@ -26,7 +26,6 @@ export default function CarsPage() {
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<Filters>(() => ({
     ...initialFilters,
-    search: searchParams.get("search") || "",
     make: searchParams.get("make") || "",
     bodyType: searchParams.get("bodyType") || "",
     fuel: searchParams.get("fuel") || "",
