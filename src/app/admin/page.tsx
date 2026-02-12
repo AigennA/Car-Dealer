@@ -54,13 +54,13 @@ export default function AdminPage() {
     }
   }, []);
 
-  useEffect(() => {
-    if (authenticated) loadCars();
-  }, [authenticated]);
-
   const loadCars = () => {
     setCars(getAllCars());
   };
+
+  useEffect(() => {
+    if (authenticated) loadCars();
+  }, [authenticated]);
 
   const handleDelete = (id: string) => {
     if (!confirm("Är du säker på att du vill ta bort denna bil?")) return;
