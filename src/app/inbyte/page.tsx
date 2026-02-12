@@ -106,7 +106,7 @@ export default function InbytePage() {
                   type="text"
                   id="name"
                   name="name"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                   placeholder="Ditt namn"
                 />
               </div>
@@ -119,7 +119,7 @@ export default function InbytePage() {
                   type="email"
                   id="email"
                   name="email"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                   placeholder="din@email.se"
                 />
               </div>
@@ -132,7 +132,7 @@ export default function InbytePage() {
                   type="tel"
                   id="phone"
                   name="phone"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                   placeholder="070-000 00 00"
                 />
               </div>
@@ -145,7 +145,7 @@ export default function InbytePage() {
                   type="text"
                   id="brand"
                   name="brand"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                   placeholder="t.ex. Volvo"
                 />
               </div>
@@ -158,7 +158,7 @@ export default function InbytePage() {
                   type="text"
                   id="model"
                   name="model"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                   placeholder="t.ex. V90"
                 />
               </div>
@@ -171,7 +171,7 @@ export default function InbytePage() {
                   type="text"
                   id="year"
                   name="year"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                   placeholder="t.ex. 2020"
                 />
               </div>
@@ -184,7 +184,7 @@ export default function InbytePage() {
                   type="text"
                   id="mileage"
                   name="mileage"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                   placeholder="t.ex. 50000 km"
                 />
               </div>
@@ -197,7 +197,7 @@ export default function InbytePage() {
                   id="message"
                   name="message"
                   rows={4}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                   placeholder="Beskriv bilens skick, utrustning mm..."
                 />
               </div>

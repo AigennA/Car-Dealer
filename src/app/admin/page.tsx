@@ -292,7 +292,7 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
                 value={formData.make}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
               />
             </div>
 
@@ -306,7 +306,7 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
                 value={formData.model}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
               />
             </div>
 
@@ -322,7 +322,7 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
                 required
                 min="1900"
                 max="2030"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
               />
             </div>
 
@@ -337,7 +337,7 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
                 onChange={handleChange}
                 required
                 min="0"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
               />
             </div>
 
@@ -352,7 +352,7 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
                 onChange={handleChange}
                 required
                 min="0"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
               />
             </div>
 
@@ -366,7 +366,7 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
                 value={formData.color}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
               />
             </div>
 
@@ -379,7 +379,7 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
                 value={formData.fuel}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
               >
                 <option value="Bensin">Bensin</option>
                 <option value="Diesel">Diesel</option>
@@ -397,7 +397,7 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
                 value={formData.transmission}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
               >
                 <option value="Automat">Automat</option>
                 <option value="Manuell">Manuell</option>
@@ -413,7 +413,7 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
                 value={formData.drivetrain}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
               >
                 <option value="FWD">FWD (Framhjulsdrift)</option>
                 <option value="RWD">RWD (Bakhjulsdrift)</option>
@@ -430,7 +430,7 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
                 value={formData.body}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
               >
                 <option value="Sedan">Sedan</option>
                 <option value="SUV">SUV</option>
@@ -451,7 +451,7 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
               onChange={handleChange}
               required
               rows={3}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
             />
           </div>
 
@@ -465,7 +465,7 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
               onChange={handleChange}
               rows={2}
               placeholder="LED-strålkastare, Navigation, Panoramatak"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
             />
           </div>
 
@@ -479,7 +479,7 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
               value={formData.images}
               onChange={handleChange}
               placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
             />
           </div>
 
