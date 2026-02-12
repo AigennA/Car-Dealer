@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { type Car } from "@/lib/cars";
+import { getAllCars } from "@/lib/clientStorage";
 import CarCard from "@/components/ui/CarCard";
 import FilterPanel, { Filters } from "@/components/FilterPanel";
 
@@ -32,11 +33,8 @@ export default function CarsPage() {
   const [sortBy, setSortBy] = useState("relevant");
 
   useEffect(() => {
-    fetch("/api/cars")
-      .then((res) => res.json())
-      .then((data) => setCars(data))
-      .catch(() => setCars([]))
-      .finally(() => setLoading(false));
+    setCars(getAllCars());
+    setLoading(false);
   }, []);
 
   // Filter cars

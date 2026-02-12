@@ -1,61 +1,47 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Car } from "@/lib/cars";
+import { type Car } from "@/lib/cars";
+import { getAllCars, addCar, updateCar, deleteCar } from "@/lib/clientStorage";
 import Link from "next/link";
 
 const ADMIN_PASSWORD = "admin123";
 
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [authError, setAuthError] = useState(false);
   const [cars, setCars] = useState<Car[]>([]);
-  const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingCar, setEditingCar] = useState<Car | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const saved = sessionStorage.getItem("admin_auth");
-      if (saved === "true") setAuthenticated(true);
+      const savedUser = sessionStorage.getItem("admin_user");
+      if (saved === "true" && savedUser) {
+        setAuthenticated(true);
+        setUsername(savedUser);
+      }
     }
   }, []);
 
   useEffect(() => {
-    if (authenticated) fetchCars();
+    if (authenticated) loadCars();
   }, [authenticated]);
 
-  const fetchCars = async () => {
-    try {
-      const response = await fetch("/api/cars");
-      const data = await response.json();
-      setCars(data);
-    } catch (error) {
-      console.error("Failed to fetch cars:", error);
-    } finally {
-      setLoading(false);
-    }
+  const loadCars = () => {
+    setCars(getAllCars());
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Är du säker på att du vill ta bort denna bil?")) {
-      return;
-    }
-
-    try {
-      const response = await fetch(`/api/cars/${id}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        fetchCars();
-      } else {
-        alert("Kunde inte ta bort bilen");
-      }
-    } catch (error) {
-      console.error("Failed to delete car:", error);
-      alert("Ett fel uppstod");
+  const handleDelete = (id: string) => {
+    if (!confirm("Är du säker på att du vill ta bort denna bil?")) return;
+    const deleted = deleteCar(id);
+    if (deleted) {
+      loadCars();
+    } else {
+      alert("Denna bil kan inte tas bort (statisk data).");
     }
   };
 
@@ -72,18 +58,29 @@ export default function AdminPage() {
   const handleFormClose = () => {
     setShowForm(false);
     setEditingCar(null);
-    fetchCars();
+    loadCars();
   };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (passwordInput === ADMIN_PASSWORD) {
+      const user = username.trim() || "Admin";
       setAuthenticated(true);
+      setUsername(user);
       sessionStorage.setItem("admin_auth", "true");
+      sessionStorage.setItem("admin_user", user);
       setAuthError(false);
     } else {
       setAuthError(true);
     }
+  };
+
+  const handleLogout = () => {
+    setAuthenticated(false);
+    setUsername("");
+    setPasswordInput("");
+    sessionStorage.removeItem("admin_auth");
+    sessionStorage.removeItem("admin_user");
   };
 
   if (!authenticated) {
@@ -92,6 +89,19 @@ export default function AdminPage() {
         <div className="bg-white rounded-xl shadow-sm p-8 max-w-sm w-full">
           <h1 className="text-2xl font-bold text-navy mb-6 text-center">Admin Login</h1>
           <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+                Användarnamn
+              </label>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
+                placeholder="Ditt namn"
+              />
+            </div>
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                 Lösenord
@@ -110,7 +120,7 @@ export default function AdminPage() {
             )}
             <button
               type="submit"
-              className="w-full bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition font-medium"
+              className="w-full bg-primary text-white px-6 py-2 rounded-lg hover:brightness-90 transition font-medium"
             >
               Logga in
             </button>
@@ -123,14 +133,6 @@ export default function AdminPage() {
     );
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-surface flex items-center justify-center">
-        <div className="text-xl text-gray-600">Laddar...</div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-surface">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -139,18 +141,26 @@ export default function AdminPage() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
               <h1 className="text-3xl font-bold text-navy">Admin Panel</h1>
-              <p className="text-gray-600 mt-1">Hantera dina bilar</p>
+              <p className="text-gray-600 mt-1">
+                Inloggad som <span className="font-medium text-navy">{username}</span>
+              </p>
             </div>
             <div className="flex gap-3">
               <Link
                 href="/"
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-gray-700"
               >
                 Tillbaka till sidan
               </Link>
               <button
+                onClick={handleLogout}
+                className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition font-medium"
+              >
+                Logga ut
+              </button>
+              <button
                 onClick={handleAdd}
-                className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition font-medium"
+                className="bg-primary text-white px-6 py-2 rounded-lg hover:brightness-90 transition font-medium cursor-pointer"
               >
                 + Lägg till bil
               </button>
@@ -217,13 +227,13 @@ export default function AdminPage() {
                     <td className="px-6 py-4 text-right text-sm">
                       <button
                         onClick={() => handleEdit(car)}
-                        className="text-primary hover:text-primary-dark font-medium mr-4"
+                        className="text-primary hover:underline font-medium mr-4"
                       >
                         Redigera
                       </button>
                       <button
                         onClick={() => handleDelete(car.id)}
-                        className="text-red-600 hover:text-red-800 font-medium"
+                        className="text-red-600 hover:underline font-medium"
                       >
                         Ta bort
                       </button>
@@ -240,7 +250,7 @@ export default function AdminPage() {
             <p className="text-gray-600 mb-4">Inga bilar än. Lägg till din första bil!</p>
             <button
               onClick={handleAdd}
-              className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition font-medium"
+              className="bg-primary text-white px-6 py-2 rounded-lg hover:brightness-90 transition font-medium cursor-pointer"
             >
               + Lägg till bil
             </button>
@@ -289,33 +299,49 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
 
     try {
-      const payload = {
-        ...formData,
-        features: formData.features.split(",").map((f) => f.trim()).filter(Boolean),
-        images: formData.images.split(",").map((i) => i.trim()).filter(Boolean),
+      const features = formData.features.split(",").map((f) => f.trim()).filter(Boolean);
+      const images = formData.images.split(",").map((i) => i.trim()).filter(Boolean);
+      const make = formData.make.trim();
+      const model = formData.model.trim();
+      const slug = `${make}-${model}-${formData.year}`
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, "");
+
+      const carData: Car = {
+        id: car?.id || `custom-${Date.now()}`,
+        slug: car?.slug || slug,
+        make,
+        model,
+        title: `${make} ${model}`,
+        year: parseInt(formData.year),
+        mileage: parseInt(formData.mileage),
+        fuel: formData.fuel,
+        transmission: formData.transmission,
+        drivetrain: formData.drivetrain,
+        bodyType: formData.bodyType,
+        color: formData.color.trim(),
+        price: parseInt(formData.price),
+        images: images.length > 0
+          ? images
+          : ["https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&h=600&fit=crop"],
+        featured: formData.featured,
+        description: formData.description.trim(),
+        features,
       };
 
-      const url = car ? `/api/cars/${car.id}` : "/api/cars";
-      const method = car ? "PUT" : "POST";
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        onClose();
+      if (car) {
+        updateCar(car.id, carData);
       } else {
-        alert("Kunde inte spara bilen");
+        addCar(carData);
       }
+
+      onClose();
     } catch (error) {
       console.error("Failed to save car:", error);
       alert("Ett fel uppstod");
@@ -325,7 +351,7 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
           <h2 className="text-2xl font-bold text-navy">
@@ -333,9 +359,9 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 text-2xl"
+            className="text-gray-500 hover:text-gray-700 text-2xl cursor-pointer"
           >
-            ×
+            &times;
           </button>
         </div>
 
@@ -561,14 +587,14 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+              className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition cursor-pointer"
             >
               Avbryt
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition font-medium disabled:opacity-50"
+              className="bg-primary text-white px-6 py-2 rounded-lg hover:brightness-90 transition font-medium disabled:opacity-50 cursor-pointer"
             >
               {saving ? "Sparar..." : car ? "Uppdatera" : "Lägg till"}
             </button>
