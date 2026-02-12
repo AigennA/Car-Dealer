@@ -305,13 +305,13 @@ export default function AdminPage() {
                     <td className="px-6 py-4 text-right text-sm">
                       <button
                         onClick={() => handleEdit(car)}
-                        className="text-primary hover:underline font-medium mr-4"
+                        className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark hover:shadow-lg transition-all duration-200 font-medium mr-3"
                       >
                         Redigera
                       </button>
                       <button
                         onClick={() => handleDelete(car.id)}
-                        className="text-red-600 hover:underline font-medium"
+                        className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 hover:shadow-lg transition-all duration-200 font-medium"
                       >
                         Ta bort
                       </button>
