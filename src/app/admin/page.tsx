@@ -5,13 +5,35 @@ import { type Car } from "@/lib/cars";
 import { getAllCars, addCar, updateCar, deleteCar } from "@/lib/clientStorage";
 import Link from "next/link";
 
-const ADMIN_PASSWORD = "admin123";
+const ACCOUNTS_KEY = "car_dealer_accounts";
+const DEFAULT_ACCOUNT = { username: "admin", password: "admin123" };
+
+function getAccounts(): { username: string; password: string }[] {
+  if (typeof window === "undefined") return [DEFAULT_ACCOUNT];
+  try {
+    const data = localStorage.getItem(ACCOUNTS_KEY);
+    const accounts = data ? JSON.parse(data) : [];
+    return accounts.length > 0 ? accounts : [DEFAULT_ACCOUNT];
+  } catch {
+    return [DEFAULT_ACCOUNT];
+  }
+}
+
+function saveAccount(username: string, password: string): boolean {
+  const accounts = getAccounts();
+  if (accounts.some((a) => a.username === username)) return false;
+  accounts.push({ username, password });
+  localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
+  return true;
+}
 
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [username, setUsername] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
-  const [authError, setAuthError] = useState(false);
+  const [authError, setAuthError] = useState("");
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [registerSuccess, setRegisterSuccess] = useState("");
   const [cars, setCars] = useState<Car[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingCar, setEditingCar] = useState<Car | null>(null);
@@ -63,15 +85,42 @@ export default function AdminPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (passwordInput === ADMIN_PASSWORD) {
-      const user = username.trim() || "Admin";
+    const user = username.trim();
+    if (!user) {
+      setAuthError("Ange ett användarnamn.");
+      return;
+    }
+    const accounts = getAccounts();
+    const account = accounts.find((a) => a.username === user);
+    if (account && account.password === passwordInput) {
       setAuthenticated(true);
       setUsername(user);
       sessionStorage.setItem("admin_auth", "true");
       sessionStorage.setItem("admin_user", user);
-      setAuthError(false);
+      setAuthError("");
     } else {
-      setAuthError(true);
+      setAuthError("Fel användarnamn eller lösenord.");
+    }
+  };
+
+  const handleRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    const user = username.trim();
+    if (!user) {
+      setAuthError("Ange ett användarnamn.");
+      return;
+    }
+    if (passwordInput.length < 4) {
+      setAuthError("Lösenordet måste vara minst 4 tecken.");
+      return;
+    }
+    const success = saveAccount(user, passwordInput);
+    if (success) {
+      setRegisterSuccess("Konto skapat! Du kan nu logga in.");
+      setIsRegistering(false);
+      setAuthError("");
+    } else {
+      setAuthError("Användarnamnet finns redan.");
     }
   };
 
@@ -87,8 +136,17 @@ export default function AdminPage() {
     return (
       <div className="min-h-screen bg-surface flex items-center justify-center">
         <div className="bg-white rounded-xl shadow-sm p-8 max-w-sm w-full">
-          <h1 className="text-2xl font-bold text-navy mb-6 text-center">Admin Login</h1>
-          <form onSubmit={handleLogin} className="space-y-4">
+          <h1 className="text-2xl font-bold text-navy mb-6 text-center">
+            {isRegistering ? "Skapa konto" : "Admin Login"}
+          </h1>
+
+          {registerSuccess && !isRegistering && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4 text-green-800 text-sm text-center">
+              {registerSuccess}
+            </div>
+          )}
+
+          <form onSubmit={isRegistering ? handleRegister : handleLogin} className="space-y-4">
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
                 Användarnamn
@@ -97,9 +155,9 @@ export default function AdminPage() {
                 type="text"
                 id="username"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => { setUsername(e.target.value); setAuthError(""); }}
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
-                placeholder="Ditt namn"
+                placeholder="Ditt användarnamn"
               />
             </div>
             <div>
@@ -110,23 +168,38 @@ export default function AdminPage() {
                 type="password"
                 id="password"
                 value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
+                onChange={(e) => { setPasswordInput(e.target.value); setAuthError(""); }}
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                 placeholder="Ange lösenord"
               />
             </div>
             {authError && (
-              <p className="text-red-600 text-sm">Fel lösenord. Försök igen.</p>
+              <p className="text-red-600 text-sm">{authError}</p>
             )}
             <button
               type="submit"
-              className="w-full bg-primary text-white px-6 py-2 rounded-lg hover:brightness-90 transition font-medium"
+              className="w-full bg-primary text-white px-6 py-2 rounded-lg hover:brightness-90 transition font-medium cursor-pointer"
             >
-              Logga in
+              {isRegistering ? "Skapa konto" : "Logga in"}
             </button>
           </form>
+
+          <div className="mt-4 text-center">
+            <button
+              type="button"
+              onClick={() => {
+                setIsRegistering(!isRegistering);
+                setAuthError("");
+                setRegisterSuccess("");
+              }}
+              className="text-sm text-primary hover:underline cursor-pointer"
+            >
+              {isRegistering ? "Har du redan ett konto? Logga in" : "Skapa nytt konto"}
+            </button>
+          </div>
+
           <p className="text-xs text-gray-500 mt-4 text-center">
-            Demo: lösenord är &quot;admin123&quot;
+            Demo: användarnamn &quot;admin&quot;, lösenord &quot;admin123&quot;
           </p>
         </div>
       </div>
@@ -154,7 +227,7 @@ export default function AdminPage() {
               </Link>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition font-medium"
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium cursor-pointer"
               >
                 Logga ut
               </button>
