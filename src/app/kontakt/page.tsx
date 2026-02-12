@@ -29,9 +29,9 @@ export default function KontaktPage() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-[40%_1fr] md:grid-cols-2 gap-8 mb-12">
+        <div className="grid lg:grid-cols-2 gap-8 mb-12">
           {/* Contact Form */}
-          <div className="bg-white rounded-xl p-5 shadow-sm">
+          <div className="bg-white rounded-xl p-8 shadow-sm">
             <h2 className="text-xl font-bold text-navy mb-4">Skicka ett meddelande</h2>
 
             {submitted ? (
@@ -47,7 +47,7 @@ export default function KontaktPage() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-2.5">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                     Namn *
