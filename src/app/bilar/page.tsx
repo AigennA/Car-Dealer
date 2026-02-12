@@ -72,8 +72,18 @@ export default function CarsPage() {
         return sorted.sort((a, b) => b.price - a.price);
       case "year-desc":
         return sorted.sort((a, b) => b.year - a.year);
+      case "year-asc":
+        return sorted.sort((a, b) => a.year - b.year);
       case "mileage-asc":
         return sorted.sort((a, b) => a.mileage - b.mileage);
+      case "mileage-desc":
+        return sorted.sort((a, b) => b.mileage - a.mileage);
+      case "name-asc":
+        return sorted.sort((a, b) => a.title.localeCompare(b.title, "sv"));
+      case "name-desc":
+        return sorted.sort((a, b) => b.title.localeCompare(a.title, "sv"));
+      case "newest":
+        return sorted.sort((a, b) => Number(b.id.replace("custom-", "")) - Number(a.id.replace("custom-", "")));
       default:
         return sorted.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
     }
@@ -128,10 +138,15 @@ export default function CarsPage() {
                   className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="relevant">Mest relevant</option>
-                  <option value="price-asc">Pris: lågt till högt</option>
-                  <option value="price-desc">Pris: högt till lågt</option>
+                  <option value="newest">Nyast inlagda</option>
+                  <option value="price-asc">Pris: lägst först</option>
+                  <option value="price-desc">Pris: högst först</option>
                   <option value="year-desc">Årsmodell: nyast först</option>
-                  <option value="mileage-asc">Lägst miltal</option>
+                  <option value="year-asc">Årsmodell: äldst först</option>
+                  <option value="mileage-asc">Miltal: lägst först</option>
+                  <option value="mileage-desc">Miltal: högst först</option>
+                  <option value="name-asc">Namn: A-Ö</option>
+                  <option value="name-desc">Namn: Ö-A</option>
                 </select>
               </div>
             </div>
