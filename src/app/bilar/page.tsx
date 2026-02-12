@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { cars } from "@/lib/cars";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { type Car } from "@/lib/cars";
 import CarCard from "@/components/ui/CarCard";
 import FilterPanel, { Filters } from "@/components/FilterPanel";
 
@@ -10,7 +11,7 @@ const initialFilters: Filters = {
   make: "",
   fuel: "",
   transmission: "",
-  body: "",
+  bodyType: "",
   priceMin: 0,
   priceMax: 0,
   yearMin: 0,
@@ -19,13 +20,28 @@ const initialFilters: Filters = {
 };
 
 export default function CarsPage() {
-  const [filters, setFilters] = useState<Filters>(initialFilters);
+  const searchParams = useSearchParams();
+  const [cars, setCars] = useState<Car[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState<Filters>(() => ({
+    ...initialFilters,
+    make: searchParams.get("make") || "",
+    bodyType: searchParams.get("bodyType") || "",
+    fuel: searchParams.get("fuel") || "",
+  }));
   const [sortBy, setSortBy] = useState("relevant");
+
+  useEffect(() => {
+    fetch("/api/cars")
+      .then((res) => res.json())
+      .then((data) => setCars(data))
+      .catch(() => setCars([]))
+      .finally(() => setLoading(false));
+  }, []);
 
   // Filter cars
   const filteredCars = useMemo(() => {
     return cars.filter((car) => {
-      // Search
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
         const matchesSearch =
@@ -33,39 +49,23 @@ export default function CarsPage() {
           car.model.toLowerCase().includes(searchLower);
         if (!matchesSearch) return false;
       }
-
-      // Make
       if (filters.make && car.make !== filters.make) return false;
-
-      // Fuel
       if (filters.fuel && car.fuel !== filters.fuel) return false;
-
-      // Transmission
       if (filters.transmission && car.transmission !== filters.transmission)
         return false;
-
-      // Body
-      if (filters.body && car.body !== filters.body) return false;
-
-      // Price
+      if (filters.bodyType && car.bodyType !== filters.bodyType) return false;
       if (filters.priceMin && car.price < filters.priceMin) return false;
       if (filters.priceMax && car.price > filters.priceMax) return false;
-
-      // Year
       if (filters.yearMin && car.year < filters.yearMin) return false;
       if (filters.yearMax && car.year > filters.yearMax) return false;
-
-      // Mileage
       if (filters.mileageMax && car.mileage > filters.mileageMax) return false;
-
       return true;
     });
-  }, [filters]);
+  }, [cars, filters]);
 
   // Sort cars
   const sortedCars = useMemo(() => {
     const sorted = [...filteredCars];
-
     switch (sortBy) {
       case "price-asc":
         return sorted.sort((a, b) => a.price - b.price);
@@ -84,13 +84,23 @@ export default function CarsPage() {
     setFilters(initialFilters);
   };
 
+  if (loading) {
+    return (
+      <section className="bg-surface min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 py-12">
+          <h1 className="text-3xl font-bold text-navy mb-8">Våra bilar</h1>
+          <div className="text-center py-12 text-gray-600">Laddar bilar...</div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="bg-surface min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold text-navy mb-8">Våra bilar</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8">
-          {/* Filter Panel */}
           <aside>
             <FilterPanel
               filters={filters}
@@ -99,9 +109,7 @@ export default function CarsPage() {
             />
           </aside>
 
-          {/* Main Content */}
           <div>
-            {/* Sort Bar */}
             <div className="bg-white rounded-xl p-4 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
               <div className="text-sm text-gray-600">
                 <span className="font-semibold text-navy">
@@ -121,15 +129,14 @@ export default function CarsPage() {
                   className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="relevant">Mest relevant</option>
-                  <option value="price-asc">Pris: lågt → högt</option>
-                  <option value="price-desc">Pris: högt → lågt</option>
+                  <option value="price-asc">Pris: lågt till högt</option>
+                  <option value="price-desc">Pris: högt till lågt</option>
                   <option value="year-desc">Årsmodell: nyast först</option>
                   <option value="mileage-asc">Lägst miltal</option>
                 </select>
               </div>
             </div>
 
-            {/* Cars Grid */}
             {sortedCars.length > 0 ? (
               <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {sortedCars.map((car) => (

@@ -1,6 +1,17 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 
 export default function InbytePage() {
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmitted(true);
+    e.currentTarget.reset();
+  };
+
   return (
     <section className="bg-surface min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -97,7 +108,21 @@ export default function InbytePage() {
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           <div className="bg-white rounded-xl p-8 shadow-sm">
             <h2 className="text-2xl font-bold text-navy mb-6">Begär värdering</h2>
-            <form className="space-y-4">
+
+            {submitted ? (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+                <p className="text-green-800 font-medium mb-2">Tack för din förfrågan!</p>
+                <p className="text-green-700 text-sm">Vi återkommer med en värdering inom 24 timmar.</p>
+                <button
+                  type="button"
+                  onClick={() => setSubmitted(false)}
+                  className="mt-4 text-primary hover:underline text-sm"
+                >
+                  Skicka en ny förfrågan
+                </button>
+              </div>
+            ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                   Namn
@@ -209,6 +234,7 @@ export default function InbytePage() {
                 Begär värdering
               </button>
             </form>
+            )}
           </div>
 
           {/* Additional Info */}

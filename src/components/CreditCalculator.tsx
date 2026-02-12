@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { calculateMonthlyPayment as calcPayment } from "@/lib/finance";
 
 export default function CreditCalculator() {
   const [carPrice, setCarPrice] = useState<number>(250000);
@@ -9,28 +10,13 @@ export default function CreditCalculator() {
   const [monthlyPayment, setMonthlyPayment] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
 
-  const calculateMonthlyPayment = () => {
-    // Interest rate (example: 3.95% annual)
-    const annualRate = 0.0395;
-    const monthlyRate = annualRate / 12;
-    
-    // Loan amount
+  const handleCalculate = () => {
     const loanAmount = carPrice - downPayment;
-    
     if (loanAmount <= 0) {
       alert("Kontantinsatsen måste vara mindre än bilens pris");
       return;
     }
-    
-    // Calculate monthly payment using the formula for annuity loans
-    // M = P * (r * (1 + r)^n) / ((1 + r)^n - 1)
-    // where M = monthly payment, P = principal, r = monthly rate, n = number of payments
-    const monthlyPaymentCalc = 
-      loanAmount * 
-      (monthlyRate * Math.pow(1 + monthlyRate, loanTerm)) / 
-      (Math.pow(1 + monthlyRate, loanTerm) - 1);
-    
-    setMonthlyPayment(Math.round(monthlyPaymentCalc));
+    setMonthlyPayment(calcPayment(loanAmount, loanTerm));
     setShowResult(true);
   };
 
@@ -83,7 +69,7 @@ export default function CreditCalculator() {
 
           <button
             type="button"
-            onClick={calculateMonthlyPayment}
+            onClick={handleCalculate}
             className="w-full bg-white text-primary px-6 py-3 rounded-lg hover:bg-gray-100 transition font-medium"
           >
             Beräkna månadskostnad

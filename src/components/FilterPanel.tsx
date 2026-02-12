@@ -12,7 +12,7 @@ export interface Filters {
   make: string;
   fuel: string;
   transmission: string;
-  body: string;
+  bodyType: string;
   priceMin: number;
   priceMax: number;
   yearMin: number;
@@ -129,19 +129,19 @@ export default function FilterPanel({
 
       {/* Kaross */}
       <div className="mb-6">
-        <label htmlFor="filter-body" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="filter-bodyType" className="block text-sm font-medium text-gray-700 mb-2">
           Kaross
         </label>
         <select
-          id="filter-body"
-          value={filters.body}
-          onChange={(e) => updateFilter("body", e.target.value)}
+          id="filter-bodyType"
+          value={filters.bodyType}
+          onChange={(e) => updateFilter("bodyType", e.target.value)}
           className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="">Alla karosser</option>
-          {bodyTypes.map((body) => (
-            <option key={body} value={body}>
-              {body}
+          {bodyTypes.map((bt) => (
+            <option key={bt} value={bt}>
+              {bt}
             </option>
           ))}
         </select>

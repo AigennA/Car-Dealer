@@ -33,12 +33,17 @@ export default async function CarDetailPage({
     );
   }
 
+  // Find similar cars: same body type or fuel, excluding current car, max 3
+  const similarCars = cars
+    .filter((c) => c.id !== car.id && (c.bodyType === car.bodyType || c.fuel === car.fuel))
+    .slice(0, 3);
+
   return (
     <section className="bg-surface min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-10">
         <div className="mb-6">
           <Link href="/bilar" className="text-sm text-primary hover:underline">
-            ← Tillbaka
+            &larr; Tillbaka
           </Link>
         </div>
 
@@ -72,13 +77,6 @@ export default async function CarDetailPage({
                   Boka provkörning
                 </PrimaryButtonLink>
 
-                <button
-                  type="button"
-                  className="w-full border border-primary text-primary px-5 py-3 rounded-xl hover:bg-primary hover:text-white transition font-medium"
-                >
-                  Spara som favorit
-                </button>
-
                 <Link
                   href="/kontakt"
                   className="block text-center text-sm text-gray-700 hover:text-primary"
@@ -106,7 +104,7 @@ export default async function CarDetailPage({
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-gray-700">
               {car.features.map((f) => (
                 <li key={f} className="flex items-start gap-2">
-                  <span className="text-primary mt-0.5">•</span>
+                  <span className="text-primary mt-0.5">&bull;</span>
                   <span>{f}</span>
                 </li>
               ))}
@@ -120,12 +118,11 @@ export default async function CarDetailPage({
         </div>
 
         {/* Similar cars */}
-        <div className="mt-12">
-          <h2 className="text-xl font-bold text-navy mb-4">Liknande bilar</h2>
-          <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
-            {cars
-              .filter((c) => c.id !== car.id)
-              .map((c) => (
+        {similarCars.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-xl font-bold text-navy mb-4">Liknande bilar</h2>
+            <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+              {similarCars.map((c) => (
                 <div key={c.id} className="bg-white rounded-2xl shadow-sm p-5">
                   <Link href={`/bilar/${c.slug}`} className="block aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden cursor-pointer">
                     <img src={c.images[0]} alt={c.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
@@ -136,7 +133,7 @@ export default async function CarDetailPage({
                       <div className="font-semibold text-navy hover:text-primary transition-colors cursor-pointer">{c.title}</div>
                     </Link>
                     <div className="text-sm text-gray-600 mt-1">
-                      {c.year} • {c.mileage.toLocaleString()} mil
+                      {c.year} &bull; {c.mileage.toLocaleString()} mil
                     </div>
                     <div className="flex items-center justify-between mt-3">
                       <div className="text-primary font-bold">
@@ -149,8 +146,9 @@ export default async function CarDetailPage({
                   </div>
                 </div>
               ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

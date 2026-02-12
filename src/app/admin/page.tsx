@@ -4,15 +4,27 @@ import { useState, useEffect } from "react";
 import { Car } from "@/lib/cars";
 import Link from "next/link";
 
+const ADMIN_PASSWORD = "admin123";
+
 export default function AdminPage() {
+  const [authenticated, setAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [authError, setAuthError] = useState(false);
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingCar, setEditingCar] = useState<Car | null>(null);
 
   useEffect(() => {
-    fetchCars();
+    if (typeof window !== "undefined") {
+      const saved = sessionStorage.getItem("admin_auth");
+      if (saved === "true") setAuthenticated(true);
+    }
   }, []);
+
+  useEffect(() => {
+    if (authenticated) fetchCars();
+  }, [authenticated]);
 
   const fetchCars = async () => {
     try {
@@ -62,6 +74,54 @@ export default function AdminPage() {
     setEditingCar(null);
     fetchCars();
   };
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (passwordInput === ADMIN_PASSWORD) {
+      setAuthenticated(true);
+      sessionStorage.setItem("admin_auth", "true");
+      setAuthError(false);
+    } else {
+      setAuthError(true);
+    }
+  };
+
+  if (!authenticated) {
+    return (
+      <div className="min-h-screen bg-surface flex items-center justify-center">
+        <div className="bg-white rounded-xl shadow-sm p-8 max-w-sm w-full">
+          <h1 className="text-2xl font-bold text-navy mb-6 text-center">Admin Login</h1>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                Lösenord
+              </label>
+              <input
+                type="password"
+                id="password"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
+                placeholder="Ange lösenord"
+              />
+            </div>
+            {authError && (
+              <p className="text-red-600 text-sm">Fel lösenord. Försök igen.</p>
+            )}
+            <button
+              type="submit"
+              className="w-full bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition font-medium"
+            >
+              Logga in
+            </button>
+          </form>
+          <p className="text-xs text-gray-500 mt-4 text-center">
+            Demo: lösenord är &quot;admin123&quot;
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -208,7 +268,6 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
     fuel: car?.fuel || "Bensin",
     transmission: car?.transmission || "Automat",
     drivetrain: car?.drivetrain || "FWD",
-    body: car?.body || "Sedan",
     bodyType: car?.bodyType || "Sedan",
     color: car?.color || "",
     price: car?.price?.toString() || "",
@@ -426,8 +485,8 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
                 Karosstyp *
               </label>
               <select
-                name="body"
-                value={formData.body}
+                name="bodyType"
+                value={formData.bodyType}
                 onChange={handleChange}
                 required
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"

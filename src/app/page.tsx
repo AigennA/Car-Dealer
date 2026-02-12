@@ -1,9 +1,12 @@
 import Link from "next/link";
-import { cars } from "@/lib/cars";
+import { cars, getUniqueMakes, getUniqueFuels, getUniqueBodyTypes } from "@/lib/cars";
 import CarCard from "@/components/ui/CarCard";
 
 export default function HomePage() {
   const featuredCars = cars.filter((car) => car.featured).slice(0, 3);
+  const makes = getUniqueMakes();
+  const fuels = getUniqueFuels();
+  const bodyTypes = getUniqueBodyTypes();
 
   return (
     <>
@@ -57,58 +60,40 @@ export default function HomePage() {
       {/* Search Bar */}
       <section className="relative z-20 -mt-16">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="bg-white rounded-2xl shadow-2xl p-8">
+          <form action="/bilar" method="get" className="bg-white rounded-2xl shadow-2xl p-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <select className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
-                <option>Välj märke</option>
-                <option>Audi</option>
-                <option>BMW</option>
-                <option>Ford</option>
-                <option>Hyundai</option>
-                <option>Jaguar</option>
-                <option>Kia</option>
-                <option>Lexus</option>
-                <option>Mazda</option>
-                <option>Mercedes-Benz</option>
-                <option>MINI</option>
-                <option>Polestar</option>
-                <option>Porsche</option>
-                <option>Tesla</option>
-                <option>Toyota</option>
-                <option>Volkswagen</option>
-                <option>Volvo</option>
+              <select name="make" className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
+                <option value="">Välj märke</option>
+                {makes.map((m) => (
+                  <option key={m} value={m}>{m}</option>
+                ))}
               </select>
 
-              <select className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
-                <option>Välj modell</option>
-                <option>Alla modeller</option>
-                <option>SUV</option>
-                <option>Sedan</option>
-                <option>Kombi</option>
-                <option>Halvkombi</option>
+              <select name="bodyType" className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
+                <option value="">Välj kaross</option>
+                {bodyTypes.map((bt) => (
+                  <option key={bt} value={bt}>{bt}</option>
+                ))}
               </select>
 
-              <select className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
-                <option>Välj ort</option>
-                <option>Stockholm</option>
-                <option>Göteborg</option>
-                <option>Malmö</option>
-                <option>Uppsala</option>
-                <option>Västerås</option>
-                <option>Örebro</option>
+              <select name="fuel" className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
+                <option value="">Välj bränsle</option>
+                {fuels.map((f) => (
+                  <option key={f} value={f}>{f}</option>
+                ))}
               </select>
 
-              <Link
-                href="/bilar"
+              <button
+                type="submit"
                 className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition font-medium text-center flex items-center justify-center gap-2"
               >
                 <span>SÖK</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-              </Link>
+              </button>
             </div>
-          </div>
+          </form>
         </div>
       </section>
 

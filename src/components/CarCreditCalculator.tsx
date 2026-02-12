@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { calculateMonthlyPayment } from "@/lib/finance";
 
 interface CarCreditCalculatorProps {
   carPrice: number;
@@ -12,33 +13,20 @@ export default function CarCreditCalculator({ carPrice }: CarCreditCalculatorPro
   const [monthlyPayment, setMonthlyPayment] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
 
-  const calculateMonthlyPayment = () => {
-    // Interest rate (example: 3.95% annual)
-    const annualRate = 0.0395;
-    const monthlyRate = annualRate / 12;
-    
-    // Loan amount
+  const handleCalculate = () => {
     const loanAmount = carPrice - downPayment;
-    
     if (loanAmount <= 0) {
       alert("Kontantinsatsen måste vara mindre än bilens pris");
       return;
     }
-    
-    // Calculate monthly payment using the formula for annuity loans
-    const monthlyPaymentCalc = 
-      loanAmount * 
-      (monthlyRate * Math.pow(1 + monthlyRate, loanTerm)) / 
-      (Math.pow(1 + monthlyRate, loanTerm) - 1);
-    
-    setMonthlyPayment(Math.round(monthlyPaymentCalc));
+    setMonthlyPayment(calculateMonthlyPayment(loanAmount, loanTerm));
     setShowResult(true);
   };
 
   return (
     <div className="bg-white rounded-2xl shadow-sm p-6">
       <h2 className="text-lg font-semibold text-navy mb-4">Beräkna finansiering</h2>
-      
+
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -65,7 +53,7 @@ export default function CarCreditCalculator({ carPrice }: CarCreditCalculatorPro
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Lånetid
           </label>
-          <select 
+          <select
             value={loanTerm}
             onChange={(e) => setLoanTerm(Number(e.target.value))}
             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
@@ -81,7 +69,7 @@ export default function CarCreditCalculator({ carPrice }: CarCreditCalculatorPro
 
         <button
           type="button"
-          onClick={calculateMonthlyPayment}
+          onClick={handleCalculate}
           className="w-full bg-primary text-white px-4 py-3 rounded-lg hover:bg-primary-dark transition font-medium"
         >
           Beräkna månadskostnad
@@ -96,7 +84,7 @@ export default function CarCreditCalculator({ carPrice }: CarCreditCalculatorPro
               </p>
               <p className="text-sm text-gray-600">per månad i {loanTerm} månader</p>
             </div>
-            
+
             <div className="mt-4 pt-4 border-t border-gray-200 space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-600">Totalt att låna:</span>
