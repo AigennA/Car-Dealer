@@ -271,19 +271,19 @@ export default function AdminPage() {
                 {cars.map((car) => (
                   <tr key={car.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
+                      <Link href={`/bilar/${car.slug}`} className="flex items-center gap-3 group">
                         <img
                           src={car.images[0]}
                           alt={car.title}
                           className="w-16 h-12 object-cover rounded"
                         />
                         <div>
-                          <div className="font-medium text-gray-900">
+                          <div className="font-medium text-gray-900 group-hover:text-primary transition-colors">
                             {car.make} {car.model}
                           </div>
                           <div className="text-sm text-gray-500">{car.color}</div>
                         </div>
-                      </div>
+                      </Link>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
                       {car.year}
