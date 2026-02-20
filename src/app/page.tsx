@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { cars, getUniqueMakes, getUniqueFuels, getUniqueBodyTypes } from "@/lib/cars";
 import CarCard from "@/components/ui/CarCard";
+import CarHeroSVG from "@/components/ui/CarHeroSVG";
 
 export default function HomePage() {
   const featuredCars = cars.filter((car) => car.featured).slice(0, 3);
@@ -46,11 +47,7 @@ export default function HomePage() {
 
             {/* Right - Car Image */}
             <div className="relative">
-              <img
-                src="https://images.unsplash.com/photo-1614200187524-dc4b892acf16?w=800&h=500&fit=crop"
-                alt="Premium bil"
-                className="w-full h-auto object-contain drop-shadow-2xl"
-              />
+              <CarHeroSVG className="w-full h-auto object-contain drop-shadow-2xl" />
             </div>
 
           </div>
