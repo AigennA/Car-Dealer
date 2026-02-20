@@ -1,7 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import { cars, getUniqueMakes, getUniqueFuels, getUniqueBodyTypes } from "@/lib/cars";
 import CarCard from "@/components/ui/CarCard";
-import CarHeroSVG from "@/components/ui/CarHeroSVG";
+import SearchForm from "@/components/ui/SearchForm";
 
 export default function HomePage() {
   const featuredCars = cars.filter((car) => car.featured).slice(0, 3);
@@ -47,7 +48,14 @@ export default function HomePage() {
 
             {/* Right - Car Image */}
             <div className="relative">
-              <CarHeroSVG className="w-full h-auto object-contain drop-shadow-2xl" />
+              <Image
+                src="https://images.unsplash.com/photo-1614200187524-dc4b892acf16?w=800&h=500&fit=crop"
+                alt="Premium bil"
+                width={800}
+                height={500}
+                className="w-full h-auto object-contain drop-shadow-2xl rounded-xl"
+                priority
+              />
             </div>
 
           </div>
@@ -57,40 +65,7 @@ export default function HomePage() {
       {/* Search Bar */}
       <section className="relative z-20 -mt-16">
         <div className="max-w-6xl mx-auto px-4">
-          <form action="/bilar" method="get" className="bg-white rounded-2xl shadow-2xl p-8">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <select name="make" className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
-                <option value="">Välj märke</option>
-                {makes.map((m) => (
-                  <option key={m} value={m}>{m}</option>
-                ))}
-              </select>
-
-              <select name="bodyType" className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
-                <option value="">Välj kaross</option>
-                {bodyTypes.map((bt) => (
-                  <option key={bt} value={bt}>{bt}</option>
-                ))}
-              </select>
-
-              <select name="fuel" className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
-                <option value="">Välj bränsle</option>
-                {fuels.map((f) => (
-                  <option key={f} value={f}>{f}</option>
-                ))}
-              </select>
-
-              <button
-                type="submit"
-                className="bg-primary text-white px-6 py-3 rounded-lg hover:brightness-90 transition font-medium text-center flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <span>SÖK</span>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </button>
-            </div>
-          </form>
+          <SearchForm makes={makes} bodyTypes={bodyTypes} fuels={fuels} />
         </div>
       </section>
 
