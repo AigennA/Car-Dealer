@@ -1,7 +1,7 @@
 import Link from "next/link";
+import Image from "next/image";
 import { cars, getUniqueMakes, getUniqueFuels, getUniqueBodyTypes } from "@/lib/cars";
 import CarCard from "@/components/ui/CarCard";
-import CarHeroSVG from "@/components/ui/CarHeroSVG";
 import SearchForm from "@/components/ui/SearchForm";
 
 export default function HomePage() {
@@ -48,7 +48,14 @@ export default function HomePage() {
 
             {/* Right - Car Image */}
             <div className="relative">
-              <CarHeroSVG className="w-full h-auto object-contain drop-shadow-2xl" />
+              <Image
+                src="https://images.unsplash.com/photo-1614200187524-dc4b892acf16?w=800&h=500&fit=crop"
+                alt="Premium bil"
+                width={800}
+                height={500}
+                className="w-full h-auto object-contain drop-shadow-2xl rounded-xl"
+                priority
+              />
             </div>
 
           </div>
