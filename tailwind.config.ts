@@ -15,8 +15,8 @@ const config: Config = {
         surface: "#f7fafc",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "sans-serif"],
-        heading: ["var(--font-playfair)", "serif"],
+        sans: ["var(--font-body)", "sans-serif"],
+        heading: ["var(--font-display)", "sans-serif"],
         logo: ["var(--font-bebas)", "sans-serif"],
       },
     },
