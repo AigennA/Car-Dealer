@@ -4,8 +4,32 @@ import { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { type Car } from "@/lib/cars";
 import { getAllCars } from "@/lib/clientStorage";
+import Image from "next/image";
 import CarCard from "@/components/ui/CarCard";
 import FilterPanel, { Filters } from "@/components/FilterPanel";
+import { CarIcon, ShieldCheckIcon, HandshakeIcon } from "@/components/ui/icons";
+
+/* Value-prop highlights shown above the listing (photo + coral icon + copy) */
+const VALUE_PROPS = [
+  {
+    Icon: CarIcon,
+    title: "Hemleverans",
+    text: "Vi kör hem din nya bil — var du än bor i Sverige.",
+    img: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800&h=500&fit=crop",
+  },
+  {
+    Icon: ShieldCheckIcon,
+    title: "Trygg garanti",
+    text: "Upp till 24 månaders garanti på alla bilar.",
+    img: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&h=500&fit=crop",
+  },
+  {
+    Icon: HandshakeIcon,
+    title: "Säker affär",
+    text: "Kvalitetskontroll, ångerrätt och transparent pris.",
+    img: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&h=500&fit=crop",
+  },
+];
 
 const initialFilters: Filters = {
   search: "",
@@ -122,6 +146,34 @@ function CarsPageContent() {
     <section className="bg-surface min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold text-navy mb-8">Våra bilar</h1>
+
+        {/* Value-prop highlights band — home delivery, warranty, trust */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+          {VALUE_PROPS.map(({ Icon, title, text, img }) => (
+            <article
+              key={title}
+              className="group relative h-40 rounded-2xl overflow-hidden shadow-sm"
+            >
+              <Image
+                src={img}
+                alt=""
+                fill
+                sizes="(max-width: 640px) 100vw, 33vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/45 to-transparent" />
+              <div className="absolute inset-0 p-5 flex flex-col justify-end text-white">
+                <span className="text-accent mb-1.5">
+                  <Icon className="w-7 h-7" />
+                </span>
+                <h3 className="font-heading font-semibold text-lg leading-tight">
+                  {title}
+                </h3>
+                <p className="text-sm text-white/85 leading-snug">{text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8">
           <aside>

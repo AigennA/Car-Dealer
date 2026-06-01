@@ -2,6 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import {
+  BoltIcon,
+  BanknotesIcon,
+  WrenchIcon,
+  CheckIcon,
+  PhoneIcon,
+} from "@/components/ui/icons";
 
 export default function InbytePage() {
   const [submitted, setSubmitted] = useState(false);
@@ -29,7 +36,7 @@ export default function InbytePage() {
         <div className="grid md:grid-cols-3 gap-8 mb-12">
           <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition text-center">
             <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-6">
-              <span className="text-primary text-3xl">⚡</span>
+              <BoltIcon className="w-8 h-8 text-primary" />
             </div>
             <h2 className="text-xl font-bold text-navy mb-4">Snabb värdering</h2>
             <p className="text-gray-600">
@@ -39,7 +46,7 @@ export default function InbytePage() {
 
           <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition text-center">
             <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-6">
-              <span className="text-primary text-3xl">💰</span>
+              <BanknotesIcon className="w-8 h-8 text-primary" />
             </div>
             <h2 className="text-xl font-bold text-navy mb-4">Rättvisa priser</h2>
             <p className="text-gray-600">
@@ -49,7 +56,7 @@ export default function InbytePage() {
 
           <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition text-center">
             <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-6">
-              <span className="text-primary text-3xl">🔧</span>
+              <WrenchIcon className="w-8 h-8 text-primary" />
             </div>
             <h2 className="text-xl font-bold text-navy mb-4">Alla märken</h2>
             <p className="text-gray-600">
@@ -244,7 +251,7 @@ export default function InbytePage() {
               
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
-                  <span className="text-primary text-2xl">✓</span>
+                  <CheckIcon className="w-6 h-6 shrink-0 text-primary mt-0.5" />
                   <div>
                     <h3 className="font-semibold text-navy mb-1">Snabb och enkel värdering</h3>
                     <p className="text-gray-600 text-sm">
@@ -254,7 +261,7 @@ export default function InbytePage() {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <span className="text-primary text-2xl">✓</span>
+                  <CheckIcon className="w-6 h-6 shrink-0 text-primary mt-0.5" />
                   <div>
                     <h3 className="font-semibold text-navy mb-1">Rättvisa priser</h3>
                     <p className="text-gray-600 text-sm">
@@ -264,7 +271,7 @@ export default function InbytePage() {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <span className="text-primary text-2xl">✓</span>
+                  <CheckIcon className="w-6 h-6 shrink-0 text-primary mt-0.5" />
                   <div>
                     <h3 className="font-semibold text-navy mb-1">Vi köper alla märken</h3>
                     <p className="text-gray-600 text-sm">
@@ -274,7 +281,7 @@ export default function InbytePage() {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <span className="text-primary text-2xl">✓</span>
+                  <CheckIcon className="w-6 h-6 shrink-0 text-primary mt-0.5" />
                   <div>
                     <h3 className="font-semibold text-navy mb-1">Smidig avveckling</h3>
                     <p className="text-gray-600 text-sm">
@@ -291,7 +298,10 @@ export default function InbytePage() {
                 Ring oss så hjälper vi dig med en snabb värdering över telefon
               </p>
               <div className="space-y-2">
-                <p className="font-semibold">📞 070-000 00 00</p>
+                <p className="font-semibold flex items-center gap-2">
+                  <PhoneIcon className="w-5 h-5 shrink-0" />
+                  <span>070-000 00 00</span>
+                </p>
                 <p className="text-sm opacity-90">Mån-Fre 09:00-18:00</p>
               </div>
             </div>

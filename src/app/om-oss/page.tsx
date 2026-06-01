@@ -1,4 +1,10 @@
 import Link from "next/link";
+import {
+  TargetIcon,
+  ShieldCheckIcon,
+  DiamondIcon,
+  StarOutlineIcon,
+} from "@/components/ui/icons";
 
 export default function OmOssPage() {
   return (
@@ -39,7 +45,7 @@ export default function OmOssPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center">
               <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <span className="text-primary text-3xl">🎯</span>
+                <TargetIcon className="w-8 h-8 text-primary" />
               </div>
               <h3 className="font-semibold text-navy mb-2">Kvalitet</h3>
               <p className="text-sm text-gray-600">
@@ -49,7 +55,7 @@ export default function OmOssPage() {
 
             <div className="text-center">
               <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <span className="text-primary text-3xl">🤝</span>
+                <ShieldCheckIcon className="w-8 h-8 text-primary" />
               </div>
               <h3 className="font-semibold text-navy mb-2">Trygghet</h3>
               <p className="text-sm text-gray-600">
@@ -59,7 +65,7 @@ export default function OmOssPage() {
 
             <div className="text-center">
               <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <span className="text-primary text-3xl">💎</span>
+                <DiamondIcon className="w-8 h-8 text-primary" />
               </div>
               <h3 className="font-semibold text-navy mb-2">Transparens</h3>
               <p className="text-sm text-gray-600">
@@ -69,7 +75,7 @@ export default function OmOssPage() {
 
             <div className="text-center">
               <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <span className="text-primary text-3xl">⭐</span>
+                <StarOutlineIcon className="w-8 h-8 text-primary" />
               </div>
               <h3 className="font-semibold text-navy mb-2">Service</h3>
               <p className="text-sm text-gray-600">
