@@ -184,6 +184,15 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Mini Loan Calculator — right after "Visa alla bilar" (Featured), above USP */}
+      <section className="bg-white py-16">
+        <div className="max-w-7xl 2xl:max-w-400 mx-auto px-4 2xl:px-16">
+          <div className="max-w-3xl mx-auto">
+            <MiniCreditCalculator />
+          </div>
+        </div>
+      </section>
+
       {/* USP Section */}
       <section className="bg-white py-16">
         <div className="max-w-7xl 2xl:max-w-400 mx-auto px-4 2xl:px-16">
@@ -223,15 +232,6 @@ export default function HomePage() {
                 Byt in din gamla bil och få trygg garanti på din nya
               </p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Mini Loan Calculator */}
-      <section className="bg-white py-16">
-        <div className="max-w-7xl 2xl:max-w-400 mx-auto px-4 2xl:px-16">
-          <div className="max-w-3xl mx-auto">
-            <MiniCreditCalculator />
           </div>
         </div>
       </section>

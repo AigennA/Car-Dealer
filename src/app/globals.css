@@ -219,6 +219,26 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* ── Logo road-lane stripes (dashes flow like a moving road) ──────────────── */
+
+@keyframes roadFlow {
+  to { stroke-dashoffset: -20; }  /* multiple of dash(5)+gap(5) → seamless loop */
+}
+
+.logo-road line {
+  animation: roadFlow 0.9s linear infinite;
+}
+/* slight desync between the two lanes for an organic feel */
+.logo-road line:nth-child(2) {
+  animation-duration: 1.15s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-road line {
+    animation: none;
+  }
+}
+
 /* ── Hero page-load reveal animations ─────────────────────────────────────── */
 
 @keyframes heroFadeRise {
