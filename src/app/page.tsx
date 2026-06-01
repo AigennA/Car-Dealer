@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { cars, getUniqueMakes, getUniqueFuels, getUniqueBodyTypes } from "@/lib/cars";
 import CarCard from "@/components/ui/CarCard";
+import MiniCreditCalculator from "@/components/MiniCreditCalculator";
 
 export default function HomePage() {
   const featuredCars = cars.filter((car) => car.featured).slice(0, 3);
@@ -130,6 +131,15 @@ export default function HomePage() {
                 Byt in din gamla bil och få trygg garanti på din nya
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Mini Loan Calculator */}
+      <section className="bg-white py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="max-w-3xl mx-auto">
+            <MiniCreditCalculator />
           </div>
         </div>
       </section>
