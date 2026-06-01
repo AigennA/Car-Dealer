@@ -4,6 +4,7 @@ import { cars, getUniqueMakes, getUniqueFuels, getUniqueBodyTypes } from "@/lib/
 import CarCard from "@/components/ui/CarCard";
 
 import MiniCreditCalculator from "@/components/MiniCreditCalculator";
+import HeroCarStrip from "@/components/HeroCarStrip";
 
 import SearchForm from "@/components/ui/SearchForm";
 import {
@@ -37,11 +38,11 @@ export default function HomePage() {
           breaks the content-box boundary — the compositional
           tension that distinguishes it from a plain 50/50 split.
         */}
-        <div className="max-w-7xl mx-auto px-6 md:px-10 py-24 md:py-28 w-full relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-6 items-center">
+        <div className="max-w-7xl 2xl:max-w-400 mx-auto px-4 sm:px-6 md:px-10 2xl:px-16 pt-6 sm:pt-8 md:pt-10 pb-24 md:pb-28 w-full relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-6 items-center">
 
             {/* ── Left / text column — 7 of 12 ── */}
-            <div className="md:col-span-7 text-white">
+            <div className="lg:col-span-7 text-white">
 
               {/* Eyebrow label */}
               <div className="hero-reveal hero-delay-0 inline-flex items-center gap-2 mb-6">
@@ -63,7 +64,7 @@ export default function HomePage() {
               </h1>
 
               {/* Lead paragraph */}
-              <p className="hero-reveal hero-delay-2 hero-lead text-lg md:text-xl mb-10 max-w-md">
+              <p className="hero-reveal hero-delay-2 hero-lead text-lg md:text-xl mb-6 max-w-md">
                 Bläddra bland hundratals handplockade bilar och hitta den
                 som passar dig — med trygg finansiering och garanti.
               </p>
@@ -100,7 +101,7 @@ export default function HomePage() {
               </div>
 
               {/* Trust micro-stats */}
-              <div className="hero-reveal hero-delay-4 hero-stats-row flex flex-wrap gap-6 mt-10 pt-8">
+              <div className="hero-reveal hero-delay-4 hero-stats-row flex flex-wrap gap-6 mt-6 pt-6">
                 {[
                   { value: "200+", label: "Bilar i lager" },
                   { value: "100%", label: "Garanterade" },
@@ -115,7 +116,7 @@ export default function HomePage() {
             </div>
 
             {/* ── Right / image column — 5 of 12, offset upward ── */}
-            <div className="md:col-span-5 relative flex justify-center md:justify-end md:-mt-12">
+            <div className="lg:col-span-5 relative flex justify-center lg:justify-end lg:-mt-12">
               {/*
                 .hero-image-frame adds two corner-bracket pseudo-elements:
                 accent (top-right) + white (bottom-left) — composing the
@@ -139,19 +140,53 @@ export default function HomePage() {
             </div>
 
           </div>
+
+          {/* Slowly auto-scrolling car thumbnail strip — fills the hero, gallery feel */}
+          <div className="hero-reveal hero-delay-img mt-8 lg:mt-12">
+            <HeroCarStrip />
+          </div>
         </div>
       </section>
 
       {/* Search Bar */}
       <section className="relative z-20 -mt-16">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-6xl 2xl:max-w-350 mx-auto px-4 2xl:px-16">
           <SearchForm makes={makes} bodyTypes={bodyTypes} fuels={fuels} />
+        </div>
+      </section>
+
+      {/* Featured Cars — moved above USP so cars appear right after the search bar */}
+      <section className="bg-surface pt-8 pb-16">
+        <div className="max-w-7xl 2xl:max-w-400 mx-auto px-4 2xl:px-16">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-navy mb-4">
+              Utvalda bilar
+            </h2>
+            <p className="text-lg text-gray-600">
+              Handplockade bilar från vårt lager
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {featuredCars.map((car) => (
+              <CarCard key={car.id} car={car} />
+            ))}
+          </div>
+
+          <div className="text-center">
+            <Link
+              href="/bilar"
+              className="inline-block bg-primary text-white px-8 py-3 rounded-xl font-semibold hover:bg-primary-dark transition"
+            >
+              Visa alla bilar →
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* USP Section */}
       <section className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl 2xl:max-w-400 mx-auto px-4 2xl:px-16">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="mb-4 flex justify-center">
@@ -192,38 +227,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured Cars */}
-      <section className="bg-surface py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-navy mb-4">
-              Utvalda bilar
-            </h2>
-            <p className="text-lg text-gray-600">
-              Handplockade bilar från vårt lager
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {featuredCars.map((car) => (
-              <CarCard key={car.id} car={car} />
-            ))}
-          </div>
-
-          <div className="text-center">
-            <Link
-              href="/bilar"
-              className="inline-block bg-primary text-white px-8 py-3 rounded-xl font-semibold hover:bg-primary-dark transition"
-            >
-              Visa alla bilar →
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* Mini Loan Calculator */}
       <section className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl 2xl:max-w-400 mx-auto px-4 2xl:px-16">
           <div className="max-w-3xl mx-auto">
             <MiniCreditCalculator />
           </div>
@@ -232,7 +238,7 @@ export default function HomePage() {
 
       {/* Why Choose Us */}
       <section className="bg-white py-16">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="max-w-5xl 2xl:max-w-350 mx-auto px-4 2xl:px-16">
           <h2 className="text-3xl font-bold text-navy mb-8 text-center">
             Varför välja oss?
           </h2>

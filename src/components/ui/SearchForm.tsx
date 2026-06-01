@@ -26,7 +26,7 @@ export default function SearchForm({ makes, bodyTypes, fuels }: SearchFormProps)
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-2xl p-8">
+    <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-2xl p-5 sm:p-8">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <select name="make" className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary">
           <option value="">Välj märke</option>

@@ -39,7 +39,7 @@ export default function Header() {
             </svg>
           </div>
           </div>
-          <span className="text-2xl logo-text-main">Car Dealer</span>
+          <span className="text-xl sm:text-2xl md:text-3xl logo-text-main">Car Dealer</span>
         </Link>
 
         {/* Desktop Menu */}
