@@ -42,3 +42,6 @@ next-env.d.ts
 
 # build scripts temp files
 /api.backup
+
+# design exploration / scratch (not part of the app)
+/design
