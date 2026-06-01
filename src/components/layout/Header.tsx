@@ -22,8 +22,8 @@ export default function Header() {
               <circle
                 className="logo-headlight"
                 cx="19.2"
-                cy="14.5"
-                r="1.2"
+                cy="14.3"
+                r="2"
                 fill="#ffd27a"
                 aria-hidden="true"
               />
@@ -31,8 +31,8 @@ export default function Header() {
               <circle
                 className="logo-taillight"
                 cx="4.8"
-                cy="14.5"
-                r="1.2"
+                cy="14.3"
+                r="2"
                 fill="#ff3b30"
                 aria-hidden="true"
               />

@@ -123,9 +123,9 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: inherit;       /* matches rounded-lg */
   background: linear-gradient(135deg, #006a8e 0%, #00557a 100%);
   /* Push behind the front face and shift so it peeks out bottom-right */
-  transform: translateZ(-4px) translateX(4px) translateY(4px);
+  transform: translateZ(-6px) translateX(5px) translateY(5px);
   /* Slight shadow so the edge reads as a separate surface */
-  box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.45);
+  box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.5);
   border-radius: 8px;
 }
 
@@ -176,20 +176,20 @@ h1, h2, h3, h4, h5, h6 {
 
 @keyframes lightBlink {
   0%, 100% { opacity: 1; }
-  50%       { opacity: 0.15; }
+  50%       { opacity: 0; }
 }
 
 .logo-headlight {
   fill: #ffd27a;
-  filter: drop-shadow(0 0 2px #ffd27a) drop-shadow(0 0 4px rgba(255, 210, 122, 0.8));
-  animation: lightBlink 1.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 3px #ffd27a) drop-shadow(0 0 7px rgba(255, 210, 122, 0.95));
+  animation: lightBlink 1s ease-in-out infinite;
 }
 
 .logo-taillight {
   fill: #ff3b30;
-  filter: drop-shadow(0 0 2px #ff3b30) drop-shadow(0 0 4px rgba(255, 59, 48, 0.8));
+  filter: drop-shadow(0 0 3px #ff3b30) drop-shadow(0 0 7px rgba(255, 59, 48, 0.95));
   /* Offset by half a cycle so front and rear alternate */
-  animation: lightBlink 1.4s ease-in-out infinite 0.7s;
+  animation: lightBlink 1s ease-in-out infinite 0.5s;
 }
 
 /* Intensify glow on logo hover */
