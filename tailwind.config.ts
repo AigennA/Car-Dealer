@@ -13,6 +13,8 @@ const config: Config = {
         "primary-dark": "#007aa3",
         navy: "#1a202c",
         surface: "#f7fafc",
+        accent: "#ff6535",
+        "accent-dark": "#e0521e",
       },
       fontFamily: {
         sans: ["var(--font-body)", "sans-serif"],

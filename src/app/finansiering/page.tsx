@@ -1,5 +1,15 @@
 import Link from "next/link";
 import CreditCalculator from "@/components/CreditCalculator";
+import {
+  BanknotesIcon,
+  CarIcon,
+  ArrowsRightLeftIcon,
+  ShieldIcon,
+  WrenchIcon,
+  ShieldCheckIcon,
+  DocumentTextIcon,
+  CheckIcon,
+} from "@/components/ui/icons";
 
 export default function FinansieringPage() {
   return (
@@ -19,28 +29,28 @@ export default function FinansieringPage() {
         <div className="grid md:grid-cols-3 gap-8 mb-12">
           <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition">
             <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
-              <span className="text-primary text-3xl">💰</span>
+              <BanknotesIcon className="w-8 h-8 text-primary" />
             </div>
             <h2 className="text-2xl font-bold text-navy mb-4">Finansiering</h2>
             <p className="text-gray-600 mb-4">
-              Vi hjälper dig att hitta den bästa finansieringslösningen för din situation. 
+              Vi hjälper dig att hitta den bästa finansieringslösningen för din situation.
               Flexibla villkor och konkurrensskraftiga räntor.
             </p>
             <ul className="space-y-2 text-sm text-gray-600">
               <li className="flex items-start gap-2">
-                <span className="text-primary">✓</span>
+                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
                 <span>Ränta från 3,95%</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-primary">✓</span>
+                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
                 <span>Lånetid upp till 84 månader</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-primary">✓</span>
+                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
                 <span>Snabbt beslut</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-primary">✓</span>
+                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
                 <span>Ingen kontantinsats krävs</span>
               </li>
             </ul>
@@ -48,28 +58,28 @@ export default function FinansieringPage() {
 
           <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition">
             <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
-              <span className="text-primary text-3xl">🚗</span>
+              <CarIcon className="w-8 h-8 text-primary" />
             </div>
             <h2 className="text-2xl font-bold text-navy mb-4">Privatleasing</h2>
             <p className="text-gray-600 mb-4">
-              Kör en ny bil utan stora engångskostnader. Allt ingår i en fast månadskostnad 
+              Kör en ny bil utan stora engångskostnader. Allt ingår i en fast månadskostnad
               med möjlighet att byta bil efter avtalstidens slut.
             </p>
             <ul className="space-y-2 text-sm text-gray-600">
               <li className="flex items-start gap-2">
-                <span className="text-primary">✓</span>
+                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
                 <span>Fast månadskostnad</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-primary">✓</span>
+                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
                 <span>Service och försäkring ingår</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-primary">✓</span>
+                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
                 <span>Flexibel körsträcka</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-primary">✓</span>
+                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
                 <span>Byt bil efter 24-48 månader</span>
               </li>
             </ul>
@@ -77,28 +87,28 @@ export default function FinansieringPage() {
 
           <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition">
             <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
-              <span className="text-primary text-3xl">🔁</span>
+              <ArrowsRightLeftIcon className="w-8 h-8 text-primary" />
             </div>
             <h2 className="text-2xl font-bold text-navy mb-4">Inbyte</h2>
             <p className="text-gray-600 mb-4">
-              Byt in din gamla bil hos oss och få en rättvis värdering. 
+              Byt in din gamla bil hos oss och få en rättvis värdering.
               Vi köper alla bilmärken och modeller.
             </p>
             <ul className="space-y-2 text-sm text-gray-600">
               <li className="flex items-start gap-2">
-                <span className="text-primary">✓</span>
+                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
                 <span>Snabb och enkel värdering</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-primary">✓</span>
+                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
                 <span>Rättvisa priser</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-primary">✓</span>
+                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
                 <span>Vi köper alla märken</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-primary">✓</span>
+                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
                 <span>Smidig avveckling</span>
               </li>
             </ul>
@@ -111,7 +121,7 @@ export default function FinansieringPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center">
               <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <span className="text-primary text-xl">🛡️</span>
+                <ShieldIcon className="w-5 h-5 text-primary" />
               </div>
               <h3 className="font-semibold text-navy mb-2">Försäkring</h3>
               <p className="text-sm text-gray-600">
@@ -121,7 +131,7 @@ export default function FinansieringPage() {
 
             <div className="text-center">
               <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <span className="text-primary text-xl">🔧</span>
+                <WrenchIcon className="w-5 h-5 text-primary" />
               </div>
               <h3 className="font-semibold text-navy mb-2">Service & Verkstad</h3>
               <p className="text-sm text-gray-600">
@@ -131,7 +141,7 @@ export default function FinansieringPage() {
 
             <div className="text-center">
               <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <span className="text-primary text-xl">✅</span>
+                <ShieldCheckIcon className="w-5 h-5 text-primary" />
               </div>
               <h3 className="font-semibold text-navy mb-2">Garanti</h3>
               <p className="text-sm text-gray-600">
@@ -141,7 +151,7 @@ export default function FinansieringPage() {
 
             <div className="text-center">
               <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <span className="text-primary text-xl">📋</span>
+                <DocumentTextIcon className="w-5 h-5 text-primary" />
               </div>
               <h3 className="font-semibold text-navy mb-2">Öppet Köp</h3>
               <p className="text-sm text-gray-600">

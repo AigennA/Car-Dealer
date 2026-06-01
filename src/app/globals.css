@@ -21,6 +21,9 @@
   --color-primary-dark: #007aa3;
   --color-navy: #1a202c;
   --color-surface: #f7fafc;
+  /* Warm accent — coral/amber, complementary to azur */
+  --color-accent: #ff6535;
+  --color-accent-dark: #e0521e;
 }
 
 body {
@@ -210,4 +213,257 @@ h1, h2, h3, h4, h5, h6 {
     animation: none;
     opacity: 1;
   }
+}
+
+/* ── Hero page-load reveal animations ─────────────────────────────────────── */
+
+@keyframes heroFadeRise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeScale {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/*
+  Utility classes for staggered hero entrance.
+  All animate opacity + transform only (GPU-composited).
+  Delays create the orchestrated stagger.
+*/
+.hero-reveal {
+  animation: heroFadeRise 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-reveal-scale {
+  animation: heroFadeScale 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-delay-0   { animation-delay:   0ms; }
+.hero-delay-1   { animation-delay:  80ms; }
+.hero-delay-2   { animation-delay: 160ms; }
+.hero-delay-3   { animation-delay: 260ms; }
+.hero-delay-4   { animation-delay: 360ms; }
+.hero-delay-img { animation-delay: 200ms; }
+
+/* Disable all hero entrance motion when user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero-reveal,
+  .hero-reveal-scale {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Hero section: gradient mesh background ──────────────────────────────── */
+
+/*
+  Layered radial-gradient mesh over a rich azur-to-navy base.
+  No external images — pure CSS, zero extra requests.
+  min-height ensures the -mt-16 search-bar overlap always has room.
+*/
+.hero-section {
+  background:
+    radial-gradient(ellipse 55% 45% at 88%  8%, rgba(255, 101,  53, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 70% at 78% 55%, rgba(  0, 191, 255, 0.55) 0%, transparent 65%),
+    radial-gradient(ellipse 80% 80% at 20% 60%, rgba(  0, 120, 180, 0.75) 0%, transparent 70%),
+    linear-gradient(135deg, #006fa6 0%, #0085bb 35%, #0099cc 60%, #00aadd 100%);
+  min-height: 680px;
+}
+
+/* ── Hero grain / noise overlay ─────────────────────────────────────────── */
+
+/*
+  Inline SVG feTurbulence noise rendered as a data-URI background.
+  Applied as a pseudo-element overlay on .hero-grain at low opacity
+  so we get atmospheric texture with zero extra network requests.
+*/
+.hero-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 300px 300px;
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+
+/* ── Hero accent blobs ───────────────────────────────────────────────────── */
+
+.hero-blob-accent {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+/* Top-left warm glow */
+.hero-blob-accent-tl {
+  top: -60px;
+  left: -40px;
+  width: 320px;
+  height: 320px;
+  background: rgba(255, 101, 53, 0.22);
+}
+
+/* Bottom-right depth layer */
+.hero-blob-accent-br {
+  bottom: -80px;
+  right: 5%;
+  width: 420px;
+  height: 280px;
+  background: rgba(0, 191, 255, 0.28);
+}
+
+/* ── Hero eyebrow line ───────────────────────────────────────────────────── */
+
+.hero-eyebrow-dash {
+  display: block;
+  height: 1px;
+  width: 2rem;  /* w-8 */
+  background: var(--color-accent);
+}
+
+.hero-eyebrow-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* ── Hero H1 display type ────────────────────────────────────────────────── */
+
+.hero-h1-line {
+  display: block;
+  font-size: clamp(3.2rem, 7.5vw, 6rem);
+  letter-spacing: -0.03em;
+}
+
+.hero-h1-line-1 {
+  line-height: 0.95;
+  font-weight: 800;  /* extrabold */
+}
+
+.hero-h1-line-2 {
+  line-height: 1.0;
+  font-weight: 600;  /* semibold */
+}
+
+.hero-h1-accent {
+  color: var(--color-accent);
+}
+
+/* ── Hero lead paragraph ─────────────────────────────────────────────────── */
+
+.hero-lead {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* ── Hero primary CTA (accent-filled) ───────────────────────────────────── */
+
+.hero-cta-primary {
+  background: var(--color-accent);
+}
+
+.hero-cta-primary:hover {
+  filter: brightness(1.1);
+  transform: scale(1.03);
+}
+
+.hero-cta-primary:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* ── Hero secondary ghost CTA ────────────────────────────────────────────── */
+
+.hero-cta-ghost:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* ── Hero stats divider ──────────────────────────────────────────────────── */
+
+.hero-stats-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.hero-stat-value {
+  letter-spacing: -0.02em;
+}
+
+.hero-stat-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Hero image frame ────────────────────────────────────────────────────── */
+
+.hero-image-frame {
+  position: relative;
+  max-width: 520px;
+  width: 100%;
+}
+
+/* Accent corner bracket — top-right */
+.hero-image-frame::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 64px;
+  height: 64px;
+  border-top: 3px solid var(--color-accent);
+  border-right: 3px solid var(--color-accent);
+  border-radius: 0 8px 0 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Azur corner bracket — bottom-left */
+.hero-image-frame::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: -10px;
+  width: 64px;
+  height: 64px;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.45);
+  border-left: 3px solid rgba(255, 255, 255, 0.45);
+  border-radius: 0 0 0 8px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ── Hero image glow (behind the car photo) ──────────────────────────────── */
+
+.hero-image-glow {
+  background: radial-gradient(ellipse 80% 60% at 50% 60%, rgba(0, 191, 255, 0.35) 0%, transparent 70%);
+  filter: blur(24px);
+  transform: translateY(12px) scale(0.95);
+  z-index: 0;
+}
+
+/* ── Hero image z-index ──────────────────────────────────────────────────── */
+
+.hero-image {
+  position: relative;
+  z-index: 2;
 }
