@@ -110,15 +110,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Mini Loan Calculator */}
-      <section className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <MiniCreditCalculator />
-          </div>
-        </div>
-      </section>
-
       {/* Featured Cars */}
       <section className="bg-surface py-16">
         <div className="max-w-7xl mx-auto px-4">
@@ -144,6 +135,15 @@ export default function HomePage() {
             >
               Visa alla bilar →
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Mini Loan Calculator */}
+      <section className="bg-white py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="max-w-3xl mx-auto">
+            <MiniCreditCalculator />
           </div>
         </div>
       </section>

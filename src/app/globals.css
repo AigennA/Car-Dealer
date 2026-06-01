@@ -76,3 +76,138 @@ h1, h2, h3, h4, h5, h6 {
   filter: drop-shadow(0 3px 8px rgba(0, 153, 204, 0.6));
   transform: scale(1.02);
 }
+
+/* ── 3-D logo chip (header only — footer logo-icon is intentionally flat) ── */
+
+/*
+  Technique:
+  1. logo-icon-wrap sets the CSS perspective (200px) so child transforms
+     produce genuine vanishing-point foreshortening at 40 px scale.
+  2. logo-icon uses transform-style:preserve-3d so its pseudo-elements live
+     in the same 3-D space.
+  3. ::before is the depth/edge face: same size, pushed back 4 px on Z and
+     offset +4 px on X/Y to simulate a bottom-right extrusion. Filled with
+     darker brand blue (#006a8e) and a slightly darker shadow so it reads as
+     the "side" of a thick chip.
+  4. ::after is the gloss sheen: a thin top-edge highlight (semi-transparent
+     white gradient, top 35 % of the face) that makes the surface look lit
+     from above — giving the impression of a convex, lacquered surface.
+  5. On hover the chip tilts rotateY(14deg) rotateX(-8deg) — this reveals
+     the edge face naturally and looks like a physical card being picked up.
+     Transition is 220 ms cubic-bezier, animating transform+opacity only.
+  6. All motion is disabled under prefers-reduced-motion; the static depth
+     face and sheen remain, so it still looks 3-D without moving.
+*/
+
+.logo-icon-wrap {
+  perspective: 200px;
+  /* Needs display so the perspective box wraps tightly around logo-icon */
+  display: inline-flex;
+}
+
+/* Upgrade logo-icon for 3-D */
+.logo-icon {
+  position: relative;
+  transform-style: preserve-3d;
+  /* Base translation so the extrusion extends outward, not inward */
+  transform: translateZ(0px);
+  transition: transform 220ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 220ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Depth / edge face — darker brand blue, offset bottom-right */
+.logo-icon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;       /* matches rounded-lg */
+  background: linear-gradient(135deg, #006a8e 0%, #00557a 100%);
+  /* Push behind the front face and shift so it peeks out bottom-right */
+  transform: translateZ(-4px) translateX(4px) translateY(4px);
+  /* Slight shadow so the edge reads as a separate surface */
+  box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.45);
+  border-radius: 8px;
+}
+
+/* Gloss sheen — top ~35 % of the face, white highlight */
+.logo-icon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.06) 35%,
+    transparent 36%
+  );
+  /* Sits just in front of the main face */
+  transform: translateZ(1px);
+  pointer-events: none;
+}
+
+/* Hover tilt — reveals the depth face on the right and bottom */
+.logo-icon-wrap:hover .logo-icon,
+.logo-icon-wrap:focus-within .logo-icon {
+  transform: rotateY(14deg) rotateX(-8deg) translateZ(2px);
+  box-shadow:
+    0 8px 20px rgba(0, 153, 204, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* Keep the existing group-level hover rules working alongside the 3-D tilt */
+.group:hover .logo-icon,
+.group:focus-visible .logo-icon {
+  box-shadow: 0 8px 20px rgba(0, 153, 204, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* Reduced-motion: keep static 3-D look (depth face + sheen) — no movement */
+@media (prefers-reduced-motion: reduce) {
+  .logo-icon {
+    transition: none;
+  }
+  .logo-icon-wrap:hover .logo-icon,
+  .logo-icon-wrap:focus-within .logo-icon {
+    transform: translateZ(0px);  /* no tilt */
+  }
+}
+
+/* ── Car logo light animations ─────────────────────────────────────────── */
+
+@keyframes lightBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.15; }
+}
+
+.logo-headlight {
+  fill: #ffd27a;
+  filter: drop-shadow(0 0 2px #ffd27a) drop-shadow(0 0 4px rgba(255, 210, 122, 0.8));
+  animation: lightBlink 1.4s ease-in-out infinite;
+}
+
+.logo-taillight {
+  fill: #ff3b30;
+  filter: drop-shadow(0 0 2px #ff3b30) drop-shadow(0 0 4px rgba(255, 59, 48, 0.8));
+  /* Offset by half a cycle so front and rear alternate */
+  animation: lightBlink 1.4s ease-in-out infinite 0.7s;
+}
+
+/* Intensify glow on logo hover */
+.group:hover .logo-headlight,
+.group:focus-visible .logo-headlight {
+  filter: drop-shadow(0 0 3px #ffd27a) drop-shadow(0 0 7px rgba(255, 210, 122, 1));
+}
+
+.group:hover .logo-taillight,
+.group:focus-visible .logo-taillight {
+  filter: drop-shadow(0 0 3px #ff3b30) drop-shadow(0 0 7px rgba(255, 59, 48, 1));
+}
+
+/* Respect prefers-reduced-motion — keep lights steady/on, no blinking */
+@media (prefers-reduced-motion: reduce) {
+  .logo-headlight,
+  .logo-taillight {
+    animation: none;
+    opacity: 1;
+  }
+}
