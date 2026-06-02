@@ -24,7 +24,7 @@ export default function HeroCarStrip() {
           <div key={`${t.id}-${i}`} className="hero-strip-item">
             {/* plain img: tiny decorative thumbnail, not worth next/image */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={t.src} alt="" loading="lazy" decoding="async" />
+            <img src={t.src} alt="" width={140} height={84} loading="lazy" decoding="async" />
           </div>
         ))}
       </div>
