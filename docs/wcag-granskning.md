@@ -33,6 +33,30 @@ och god praxis för privata e-handlare inför tillgänglighetsdirektivet, EAA, f
 | `heading-order` | moderate | 4 | 1.3.1 | `/bilar` hoppade från h1 till h3; admin likaså. | Rubriknivåer rättade; `CarCard` tar `headingLevel`-prop. |
 | `label` | critical | 2 | 1.3.1, 3.3.2 | Inmatningsfält i bilsidans kalkylator saknade etikett. | Etiketter tillagda (`useId`). |
 
+## Kontrasttest (utöver axe)
+
+axe-core kan **inte** bedöma kontrast för text på gradienter, på bilder eller intill
+pseudo-element – sådana element hamnar i "incomplete" och räknas inte som fel. På den här
+sajten gällde det ~60 element (hela hero-sektionen, logotypen, kalkylatorerna, CTA-rutorna).
+Därför finns två egna kontrasttester:
+
+| Test | Fil | Hur |
+|---|---|---|
+| **Designtokens** | `tests/unit/contrast.test.ts` | Läser färgerna direkt ur `@theme` i `globals.css` och kontrollerar varje par som används för text/UI (vit på primär, primär på vitt/surface, korall på svart, hover-färger, fokusringar) mot 4,5:1 resp. 3:1. Ändrar någon en färg så att den inte klarar AA fallerar testet. |
+| **Pixelbaserat** | `tests/e2e/contrast.spec.ts` | För varje element som axe inte kunde bedöma: all text görs genomskinlig, sidan fotograferas, och textfärgen (inkl. opacitet, eller varje färgstopp i gradienttext) blandas mot varje bakgrundspixel. Sämsta värdet (2:a percentilen) måste klara 4,5:1 (3:1 för stor text). Bilfoton ersätts med en **helt vit** bild – värsta fallet för vit text på foto. Körs på alla 10 sidor, desktop + mobil. |
+
+### Fel som det pixelbaserade testet hittade (och axe missade)
+
+| Element | Uppmätt | Krav | Åtgärd |
+|---|---|---|---|
+| Hero: ordet "BIL" (korall→gul gradient på blått) | **1,5:1** | 3:1 | Gradient i amber/crème (`#ffd27a`→`#fff1cf`), ≥ 3,5:1 |
+| Hero: ingress, statistiketiketter, sekundärknapp (vit på ljusblå del av gradienten, mobil) | 2,5–3,9:1 | 4,5:1 | Hero-gradienten mörkad: ljusaste punkt `#0077a8` (vit text 5,0:1); glöd-lager dämpade; vit text utan opacitet |
+| Hero: "Din nästa bil"-etikett | 4,47:1 | 4,5:1 | Korall-glöden bakom dämpad |
+| Startsidan: länken "Fullständig kalkyl" på korallton | 4,46:1 | 4,5:1 | `accent-darker` (#9a3412) |
+| Om oss: knapp med `bg-white/10` på blå gradient | 4,34:1 | 4,5:1 | `bg-black/20` |
+
+Efter åtgärd: **0 fel** i båda testerna.
+
 ## Manuell checklista (WCAG 2.2 AA)
 
 Status: ✅ uppfyllt · ⚠️ delvis / se kommentar · ➖ ej tillämpligt
@@ -46,7 +70,7 @@ Status: ✅ uppfyllt · ⚠️ delvis / se kommentar · ➖ ej tillämpligt
 | 1.3.2 Meningsfull ordningsföljd | ✅ | DOM-ordning = visuell ordning. |
 | 1.3.5 Identifiera inmatningens syfte | ✅ | `autocomplete="name/email/tel"` på kontakt- och inbytesformulär. |
 | 1.4.1 Användning av färg | ✅ | Aktiv menypunkt markeras med understrykning + `aria-current`, inte bara färg. Felaktiga fält har text + röd ram. |
-| 1.4.3 Kontrast (minimum) | ✅ | Se ovan. Hero-texten ligger på mörk del av gradienten; ingress och statistiketiketter höjda till 94 % / 88 % opacitet. |
+| 1.4.3 Kontrast (minimum) | ✅ | Se ovan: axe + token-test + pixelbaserat test av text på gradienter och bilder. |
 | 1.4.4 Ändra textstorlek | ✅ | Relativa enheter (rem). Täcks av omflödestestet nedan (320 px ≈ 400 % zoom av 1280 px). |
 | 1.4.10 Omflöde | ✅ | Ingen horisontell scroll vid 320 CSS-px på 7 sidor (automatiskt test). **Var ett fel före:** långa sammansatta ord i rubriker ("finansieringsmöjligheter") bröts inte – nu `hyphens: auto` + `overflow-wrap`. |
 | 1.4.11 Kontrast för icke-text | ✅ | Formulärfält har `gray-400`-ram (3:1 mot vitt); fokusring 3 px i primärfärg. |

@@ -184,7 +184,7 @@ export default function MiniCreditCalculator() {
           href="/finansiering"
           className="
             inline-flex items-center gap-1.5
-            text-sm font-semibold text-accent-dark
+            text-sm font-semibold text-accent-darker
             underline underline-offset-4 decoration-accent/50 hover:decoration-accent-dark
             transition-colors duration-150
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm

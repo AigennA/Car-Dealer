@@ -48,7 +48,7 @@ export till GitHub Pages).
 ```
 npm run lint        ✔ 0 fel, 0 varningar
 npm run typecheck   ✔
-npm test            ✔ 44 enhets-/komponenttester
-npm run test:e2e    ✔ 72 E2E-/WCAG-tester (desktop + mobil)
+npm test            ✔ 58 enhets-/komponenttester
+npm run test:e2e    ✔ 94 E2E-/WCAG-/kontrasttester (desktop + mobil)
 npm run build       ✔ 38 statiska sidor
 ```

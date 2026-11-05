@@ -4,11 +4,11 @@
             ┌───────────────┐
             │  Lighthouse   │  prestanda/SEO/bästa praxis-budgetar (CI)
             ├───────────────┤
-            │  E2E + axe    │  72 tester · Playwright · desktop + mobil
+            │  E2E + axe    │  94 tester · Playwright · desktop + mobil
             ├───────────────┤
             │ Komponenter   │  testing-library · tillgängliga namn, fel, flöden
             ├───────────────┤
-            │ Enhetstester  │  44 tester totalt (Vitest) · ren logik i src/lib
+            │ Enhetstester  │  58 tester totalt (Vitest) · ren logik i src/lib
             └───────────────┘
             Statisk analys: ESLint (next/core-web-vitals) + TypeScript strict
 ```
@@ -23,11 +23,13 @@
 | | | `validation.test.ts` | Kontaktformulärets regler och felmeddelanden |
 | | | `imageLoader.test.ts` | Unsplash-URL: bredd, format, kvalitet, bildförhållande |
 | | | `clientStorage.test.ts` | Lägg till/ändra/ta bort bilar, korrupt `localStorage`, att `useCars()` reagerar |
+| | | `contrast.test.ts` | Designtokens ur `globals.css` mot WCAG 4,5:1 / 3:1 |
 | Komponent | Vitest + Testing Library (jsdom) | `components.test.tsx` | `CarCard` (länknamn, formatering), `SearchForm` (etiketter, navigering), `ContactForm` (felsammanfattning, `aria-invalid`, förifyllning), `CarCreditCalculator` (inline-fel), `FilterPanel` (alla fält har namn) |
 | E2E | Playwright (Chromium) | `tests/e2e/user-flows.spec.ts` | Sök → lista, filter/sortering/tomt läge, bilsida → provkörning → förifyllt formulär, kontaktformulär, kalkylator, admin in/ut, omflöde vid 320 px |
 | | | `keyboard.spec.ts` | Hoppa-till-innehåll, synligt fokus, mobilmeny (Escape, fokus åter), `aria-current`, paus av bildband |
 | | | `structure.spec.ts` | `lang`, unika titlar, beskrivning, en `h1`, landmärken, JSON-LD, sitemap/robots, 404, fungerar utan JS |
 | Tillgänglighet | axe-core via Playwright | `a11y.spec.ts` | WCAG 2.2 A/AA + best practice på alla 10 sidor × 2 viewports, plus öppen meny och formulärfel |
+| Kontrast | Playwright + pngjs | `contrast.spec.ts` | Pixelbaserad kontrast för text på gradienter/bilder som axe inte kan bedöma (foton ersatta med vitt = värsta fall) |
 | Prestanda | Lighthouse CI | `lighthouserc.json` | Budgetar per kategori, LCP, CLS, TBT, JS-storlek |
 
 E2E-testerna ersätter Unsplash-bilder och Google Maps med lokala svar (`tests/e2e/fixtures.ts`)

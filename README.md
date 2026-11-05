@@ -27,8 +27,9 @@ Visit the live site: [https://AigennA.github.io/Car-Dealer/](https://AigennA.git
 | Lighthouse accessibility | 86–96 | **100** on every page |
 | Lighthouse performance (mobile, `/bilar`) | 79 (live site: 58) | **91** |
 | axe WCAG 2.2 AA violations | 237 | **0** |
+| Contrast failures on gradients/photos (pixel test) | 10 | **0** |
 | ESLint errors | 10 | **0** |
-| Automated tests | 0 | **44 unit + 72 E2E/a11y** |
+| Automated tests | 0 | **58 unit + 94 E2E/a11y/contrast** |
 
 Reports (Swedish): [docs/](docs/README.md) – Lighthouse, WCAG audit, heuristic evaluation, code review, test strategy.
 

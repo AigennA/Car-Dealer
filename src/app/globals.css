@@ -366,10 +366,12 @@ h1, h2, h3, h4, h5, h6 {
 */
 .hero-section {
   background:
-    radial-gradient(ellipse 55% 45% at 88%  8%, rgba(255, 101,  53, 0.18) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 70% at 78% 55%, rgba(  0, 191, 255, 0.55) 0%, transparent 65%),
-    radial-gradient(ellipse 80% 80% at 20% 60%, rgba(  0, 120, 180, 0.75) 0%, transparent 70%),
-    linear-gradient(135deg, #006fa6 0%, #0085bb 35%, #0099cc 60%, #00aadd 100%);
+    radial-gradient(ellipse 55% 45% at 88%  8%, rgba(255, 101,  53, 0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 70% at 78% 55%, rgba(  0, 191, 255, 0.12) 0%, transparent 65%),
+    radial-gradient(ellipse 80% 80% at 20% 60%, rgba(  0,  80, 125, 0.6) 0%, transparent 70%),
+    /* Deep azure: the brightest point (#0077a8) still gives white text 5:1.
+       Verified by tests/e2e/contrast.spec.ts (pixel-based, incl. gradients). */
+    linear-gradient(135deg, #00507a 0%, #005f8c 35%, #006b9c 60%, #0077a8 100%);
   /*
     Stacked (single-col) layout on phones/tablets: content grows naturally,
     min-height just prevents a flash of empty gradient before content loads.
@@ -420,7 +422,7 @@ h1, h2, h3, h4, h5, h6 {
   left: -40px;
   width: 320px;
   height: 320px;
-  background: rgba(255, 101, 53, 0.22);
+  background: rgba(255, 101, 53, 0.14);
 }
 
 /* Bottom-right depth layer */
@@ -429,7 +431,7 @@ h1, h2, h3, h4, h5, h6 {
   right: 5%;
   width: 420px;
   height: 280px;
-  background: rgba(0, 191, 255, 0.28);
+  background: rgba(0, 191, 255, 0.14);
 }
 
 /* ── Hero eyebrow line ───────────────────────────────────────────────────── */
@@ -575,14 +577,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-h1-accent {
-  /* animated coral → amber shimmer that sweeps across the key word */
+  /* warm amber → cream shimmer. Coral (#ff6535) was only 1.5:1 on the blue
+     hero; these stops stay >= 3.5:1 (large text needs 3:1). */
   background: linear-gradient(
     100deg,
-    #ff6535 0%,
-    #ff8a4d 28%,
-    #ffd27a 50%,
-    #ff8a4d 72%,
-    #ff6535 100%
+    #ffd27a 0%,
+    #ffe2a3 28%,
+    #fff1cf 50%,
+    #ffe2a3 72%,
+    #ffd27a 100%
   );
   background-size: 220% 100%;
   -webkit-background-clip: text;
@@ -607,7 +610,7 @@ h1, h2, h3, h4, h5, h6 {
 /* ── Hero lead paragraph ─────────────────────────────────────────────────── */
 
 .hero-lead {
-  color: rgba(255, 255, 255, 0.94);
+  color: #ffffff;
 }
 
 /* ── Hero primary CTA (accent-filled) ───────────────────────────────────── */
@@ -646,7 +649,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-stat-label {
-  color: rgba(255, 255, 255, 0.88);
+  color: #ffffff;
 }
 
 /* ── Hero image frame ────────────────────────────────────────────────────── */

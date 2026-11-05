@@ -139,7 +139,7 @@ export default function OmOssPage() {
             </Link>
             <Link
               href="/kontakt"
-              className="inline-block bg-white/10 text-white px-8 py-3 rounded-lg hover:bg-white/20 transition font-medium border border-white/30"
+              className="inline-block bg-black/20 text-white px-8 py-3 rounded-lg hover:bg-black/30 transition font-medium border border-white/30"
             >
               Kontakta oss
             </Link>
