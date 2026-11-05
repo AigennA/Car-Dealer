@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Unbounded:wght@400;700;800;900&display=swap');
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-body: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-display: 'Sora', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-bebas: 'Unbounded', 'Trebuchet MS', system-ui, sans-serif; /* logo wordmark — distinctive display face */
+  /* Font families are self-hosted by next/font (see app/layout.tsx) */
+  --font-body: var(--font-hanken), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: var(--font-sora), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-bebas: var(--font-unbounded), 'Trebuchet MS', system-ui, sans-serif; /* logo wordmark */
 }
 
 @theme inline {
@@ -17,13 +17,22 @@
   --font-logo: var(--font-bebas);
   
   /* Custom colors for Car Dealer */
-  --color-primary: #0099cc;
-  --color-primary-dark: #007aa3;
+  /* Brand azure, darkened from #0099cc so white text / text on white
+     passes WCAG 2.2 AA (5.0:1). The bright azure lives on as --color-primary-bright
+     for decorative use only (gradients, glows). */
+  --color-primary: #0077a8;
+  --color-primary-dark: #005f86;
+  --color-primary-bright: #0099cc;
   --color-navy: #1a202c;
   --color-surface: #f7fafc;
   /* Warm accent — coral/amber, complementary to azur */
-  --color-accent: #ff6535;
-  --color-accent-dark: #e0521e;
+  --color-accent: #ff6535;      /* decorative / on dark backgrounds only */
+  --color-accent-dark: #c2410c; /* text on white & filled buttons with white text (5.2:1) */
+  --color-accent-darker: #9a3412;
+}
+
+html {
+  scroll-padding-top: 6rem; /* sticky header must not cover focused/anchored content (WCAG 2.4.11) */
 }
 
 body {
@@ -34,11 +43,66 @@ body {
   overflow-x: hidden;
 }
 
+/* ── Accessibility primitives ─────────────────────────────────────────── */
+
+/* Skip link — visible only when focused (WCAG 2.4.1) */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: #1a202c;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+.skip-link:focus {
+  top: 1rem;
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Consistent, clearly visible keyboard focus everywhere (WCAG 2.4.7 / 2.4.13) */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.bg-black :where(a, button):focus-visible,
+footer :where(a, button):focus-visible {
+  outline-color: var(--color-accent);
+}
+
+/* Interactive elements get the pointer cursor (Tailwind 4 removed it for buttons) */
+:where(button, [role="button"], select, summary, label[for]) {
+  cursor: pointer;
+}
+:where(button:disabled) {
+  cursor: not-allowed;
+}
+
+/* Global reduced-motion safety net */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Modern typography */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   font-weight: 700;
   letter-spacing: -0.02em;
+  /* Swedish compound words ("finansieringsmöjligheter") must wrap on narrow
+     screens / 400 % zoom instead of causing horizontal scroll (WCAG 1.4.10) */
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 /* Logo styling with unique display font */
@@ -405,9 +469,38 @@ h1, h2, h3, h4, h5, h6 {
   animation: heroMarquee 55s linear infinite;
 }
 
-/* pause when the user hovers the strip */
-.hero-strip:hover .hero-strip-track {
+/* pause when the user hovers the strip or presses the pause button */
+.hero-strip:hover .hero-strip-track,
+.hero-strip.is-paused .hero-strip-track {
   animation-play-state: paused;
+}
+
+.hero-strip-toggle {
+  position: absolute;
+  right: 0.25rem;
+  bottom: -2.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: background-color 150ms ease;
+}
+.hero-strip-toggle:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+.hero-strip-toggle:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-strip-toggle {
+    display: none; /* nothing moves, so nothing to pause */
+  }
 }
 
 .hero-strip-item {
@@ -514,18 +607,20 @@ h1, h2, h3, h4, h5, h6 {
 /* ── Hero lead paragraph ─────────────────────────────────────────────────── */
 
 .hero-lead {
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.94);
 }
 
 /* ── Hero primary CTA (accent-filled) ───────────────────────────────────── */
 
 .hero-cta-primary {
-  background: var(--color-accent);
+  /* accent-dark keeps white label text at >= 4.5:1 */
+  background: var(--color-accent-dark);
+  box-shadow: 0 8px 24px rgba(194, 65, 12, 0.35);
 }
 
 .hero-cta-primary:hover {
-  filter: brightness(1.1);
-  transform: scale(1.03);
+  background: var(--color-accent-darker);
+  transform: translateY(-1px);
 }
 
 .hero-cta-primary:focus-visible {
@@ -551,7 +646,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-stat-label {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.88);
 }
 
 /* ── Hero image frame ────────────────────────────────────────────────────── */

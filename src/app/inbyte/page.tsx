@@ -117,13 +117,13 @@ export default function InbytePage() {
             <h2 className="text-2xl font-bold text-navy mb-6">Begär värdering</h2>
 
             {submitted ? (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+              <div role="status" className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
                 <p className="text-green-800 font-medium mb-2">Tack för din förfrågan!</p>
                 <p className="text-green-700 text-sm">Vi återkommer med en värdering inom 24 timmar.</p>
                 <button
                   type="button"
                   onClick={() => setSubmitted(false)}
-                  className="mt-4 text-primary hover:underline text-sm"
+                  className="mt-4 text-primary underline underline-offset-4 text-sm"
                 >
                   Skicka en ny förfrågan
                 </button>
@@ -137,6 +137,7 @@ export default function InbytePage() {
                 <input
                   type="text"
                   id="name"
+                  autoComplete="name"
                   name="name"
                   className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                   placeholder="Ditt namn"
@@ -150,6 +151,7 @@ export default function InbytePage() {
                 <input
                   type="email"
                   id="email"
+                  autoComplete="email"
                   name="email"
                   className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                   placeholder="din@email.se"
@@ -163,6 +165,7 @@ export default function InbytePage() {
                 <input
                   type="tel"
                   id="phone"
+                  autoComplete="tel"
                   name="phone"
                   className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
                   placeholder="070-000 00 00"
@@ -292,7 +295,7 @@ export default function InbytePage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-primary to-[#0099CC] rounded-xl p-8 text-white">
+            <div className="bg-linear-to-br from-primary-dark to-primary rounded-xl p-8 text-white">
               <h3 className="text-xl font-bold mb-4">Vill du ha råd direkt?</h3>
               <p className="mb-6 opacity-90">
                 Ring oss så hjälper vi dig med en snabb värdering över telefon

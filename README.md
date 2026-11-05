@@ -10,12 +10,27 @@ Visit the live site: [https://AigennA.github.io/Car-Dealer/](https://AigennA.git
 
 ## ✨ Features
 
-- 🚗 **Car Listings** - Browse through a curated selection of premium vehicles
-- 🔍 **Advanced Search** - Filter by brand, model, and location
-- 📱 **Responsive Design** - Optimized for all devices
-- ⚡ **Fast Performance** - Built with Next.js for optimal speed
-- 🎨 **Modern UI/UX** - Clean and intuitive interface
-- 🔧 **Admin Panel** - CRUD operations for managing vehicle inventory
+- 🚗 **Car Listings** – 24 quality-checked cars, rendered into static HTML (works without JS, crawlable)
+- 🔍 **Search & filters** – make, body type, fuel, price, year, mileage; live result count
+- 💰 **Loan calculators** – live monthly cost with inline validation
+- 📨 **Contact & trade-in forms** – accessible validation, pre-filled from the car page
+- 📱 **Responsive** – mobile-first, no horizontal scroll down to 320 px
+- ♿ **Accessible** – WCAG 2.2 AA: 0 axe violations, keyboard & screen-reader friendly
+- ⚡ **Fast** – responsive AVIF/WebP images, self-hosted fonts, Lighthouse 91–100 (mobile)
+- 🔎 **SEO** – per-car titles/descriptions, Open Graph, sitemap, robots, schema.org JSON-LD
+- 🔧 **Admin demo** – add/edit/delete cars (stored in your browser's localStorage)
+
+## 📊 Quality
+
+| | Before | After |
+|---|---|---|
+| Lighthouse accessibility | 86–96 | **100** on every page |
+| Lighthouse performance (mobile, `/bilar`) | 79 (live site: 58) | **91** |
+| axe WCAG 2.2 AA violations | 237 | **0** |
+| ESLint errors | 10 | **0** |
+| Automated tests | 0 | **44 unit + 72 E2E/a11y** |
+
+Reports (Swedish): [docs/](docs/README.md) – Lighthouse, WCAG audit, heuristic evaluation, code review, test strategy.
 
 ## 🛠️ Technology Stack
 
@@ -67,40 +82,41 @@ npm run build
 
 The static site will be generated in the `out` directory.
 
+### Testing
+
+```bash
+npm test             # unit + component tests (Vitest)
+npm run build:test   # build for "/" (no GitHub Pages base path)
+npm run test:e2e     # end-to-end + WCAG tests (Playwright + axe)
+npm run lighthouse   # Lighthouse CI with performance budgets
+npm run check        # lint + types + unit + build + e2e
+```
+
+See [docs/teststrategi.md](docs/teststrategi.md).
+
 ## 📦 Project Structure
 
 ```
 Car-Dealer/
 ├── src/
-│   ├── app/              # Next.js app directory
-│   │   ├── page.tsx      # Homepage
-│   │   ├── bilar/        # Car listings
-│   │   ├── admin/        # Admin panel
-│   │   └── ...
-│   ├── components/       # React components
-│   └── lib/             # Utility functions and data
-├── public/              # Static assets
-└── scripts/             # Build scripts
+│   ├── app/              # Next.js App Router pages, sitemap, robots, 404
+│   ├── components/       # React components (ui/, layout/, contact/)
+│   └── lib/              # Pure logic: cars, filters, finance, validation, image loader
+├── tests/
+│   ├── unit/             # Vitest unit + component tests
+│   └── e2e/              # Playwright E2E + axe accessibility tests
+├── docs/                 # Quality reports (Lighthouse, WCAG, heuristics, code review)
+└── lighthouserc.json     # Lighthouse CI budgets
 ```
 
-## 🔧 Admin Panel
+## 🔧 Admin Panel (demo)
 
-The application includes an admin interface for managing car listings at `/admin`.
+`/admin` (linked as "Personalinloggning" in the footer) lets you add, edit and delete cars.
+Demo login: `admin` / `admin123`.
 
-### Features:
-- View all vehicles in a sortable table
-- Add new vehicles with detailed information
-- Edit existing vehicles
-- Delete vehicles from inventory
-
-### API Endpoints:
-- `GET /api/cars` - List all cars
-- `POST /api/cars` - Create a new car
-- `GET /api/cars/[id]` - Get a single car
-- `PUT /api/cars/[id]` - Update a car
-- `DELETE /api/cars/[id]` - Delete a car
-
-**Note:** Admin panel and API routes require a Node.js server environment. For static deployment (GitHub Pages), these features are not available.
+> ⚠️ This is a **front-end demo only**: accounts and cars are stored in the browser's
+> localStorage and the login is not secure. A real deployment needs a backend with
+> authentication. See [docs/kodgranskning.md](docs/kodgranskning.md).
 
 ## 🚀 Deployment
 
@@ -112,13 +128,13 @@ This project is configured for GitHub Pages deployment.
 1. Go to Repository Settings > Pages > Source
 2. Select **GitHub Actions**
 3. Push to `main` branch
-4. GitHub Actions will automatically build and deploy
+4. GitHub Actions runs lint, type-check and unit tests, then builds and deploys
 
 The site will be available at: `https://[username].github.io/Car-Dealer/`
 
 ### Alternative Platforms
 
-For full functionality including admin panel and API routes, deploy to:
+For a real backend (forms, secure admin), deploy to:
 - **Vercel** (recommended for Next.js)
 - Railway
 - Heroku  

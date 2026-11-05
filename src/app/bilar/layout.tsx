@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Våra bilar | Car Dealer",
+  title: { default: "Våra bilar", template: "%s | Car Dealer" },
   description: "Utforska vårt lager av kvalitetskontrollerade begagnade bilar. Filtrera efter märke, bränsle, pris och mer.",
 };
 

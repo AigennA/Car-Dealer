@@ -16,7 +16,7 @@ export default function ImageGallery({ images, title }: Props) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-sm overflow-hidden h-fit">
       <div className="aspect-[16/10] bg-gray-100 relative">
         <Image
           src={images[selectedImage]}
@@ -24,7 +24,8 @@ export default function ImageGallery({ images, title }: Props) {
           fill
           sizes="(max-width: 1024px) 100vw, 60vw"
           className="object-cover"
-          priority
+          preload
+          fetchPriority="high"
         />
       </div>
 
@@ -36,8 +37,9 @@ export default function ImageGallery({ images, title }: Props) {
                 key={index}
                 type="button"
                 onClick={() => setSelectedImage(index)}
-                aria-label={`Välj bild ${index + 1} av ${images.length}`}
-                className={`h-20 w-32 flex-shrink-0 rounded-xl border-2 transition-all relative overflow-hidden ${
+                aria-label={`Visa bild ${index + 1} av ${images.length}`}
+                aria-pressed={selectedImage === index}
+                className={`h-20 w-32 flex-shrink-0 rounded-xl border-2 transition-colors relative overflow-hidden ${
                   selectedImage === index
                     ? "border-primary shadow-md"
                     : "border-gray-200 hover:border-primary/50"
@@ -45,7 +47,7 @@ export default function ImageGallery({ images, title }: Props) {
               >
                 <Image
                   src={img}
-                  alt={`${title} - bild ${index + 1}`}
+                  alt=""
                   fill
                   sizes="128px"
                   className="object-cover"

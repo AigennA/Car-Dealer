@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Tjänster & Finansiering | Car Dealer",
+  title: "Tjänster & Finansiering",
   description: "Flexibla finansieringslösningar, privatleasing och inbyte. Beräkna din månadskostnad direkt.",
 };
 

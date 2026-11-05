@@ -3,13 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "node scripts/clean-lock.js",
+    "predev": "node scripts/clean-lock.mjs",
     "dev": "next dev",
-    "prebuild": "node scripts/prepare-build.js",
     "build": "next build",
-    "postbuild": "node scripts/postbuild.js",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "npx serve out",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "build:test": "cross-env LOCAL_BUILD=1 next build",
+    "test:e2e": "playwright test",
+    "lighthouse": "npx -y @lhci/cli@0.15.1 autorun",
+    "check": "npm run lint && npm run typecheck && npm run test && npm run build:test && npm run test:e2e"
   },
   "dependencies": {
     "next": "16.1.6",
@@ -19,13 +25,24 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "1.63.0",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.2.1",
+    "@vitest/coverage-v8": "^3.2.7",
+    "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "jsdom": "^31.0.0",
+    "serve": "^14.2.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.7"
   }
 }

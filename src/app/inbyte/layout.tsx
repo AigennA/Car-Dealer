@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Inbyte | Car Dealer",
+  title: "Inbyte",
   description: "Byt in din gamla bil och få en rättvis värdering. Vi köper alla bilmärken och modeller.",
 };
 

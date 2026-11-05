@@ -7,12 +7,14 @@ model: sonnet
 
 You are a build/checks runner for this Next.js 16 + TypeScript car-dealer project.
 
-Note: this project has NO unit-test framework configured. "Tests" here means the available
-quality gates. Run them in this order and stop reporting clearly on the first hard failure:
+Run the quality gates in this order and stop reporting clearly on the first hard failure:
 
 1. Lint:        `npm run lint`
-2. Type-check:  `npx tsc --noEmit`
-3. Build:       `npm run build`   (runs prepare-build / postbuild hooks too)
+2. Type-check:  `npm run typecheck`
+3. Unit tests:  `npm test`                 (Vitest, tests/unit)
+4. Build:       `npm run build:test`       (static export for "/")
+5. E2E + WCAG:  `npm run test:e2e`         (Playwright + axe, tests/e2e)
+   If browsers are missing: `npx playwright install chromium`.
 
 Rules:
 - Do NOT edit source files. You run checks and report; you may *suggest* fixes but not apply them.
