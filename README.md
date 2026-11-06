@@ -47,7 +47,7 @@ Reports (Swedish): [docs/](docs/README.md) – Lighthouse, WCAG audit, heuristic
 
 ### Prerequisites
 
-- Node.js 20.x or higher
+- Node.js 22.22 or higher (see `.nvmrc`)
 - npm, yarn, pnpm, or bun
 
 ### Installation

@@ -2,6 +2,9 @@
   "name": "car-dealer",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22.22"
+  },
   "scripts": {
     "predev": "node scripts/clean-lock.mjs",
     "dev": "next dev",
