@@ -49,7 +49,7 @@ export default function HomePage() {
               <div className="hero-reveal hero-delay-0 inline-flex items-center gap-2 mb-6">
                 <span className="hero-eyebrow-dash" aria-hidden="true" />
                 <span className="hero-eyebrow-text">
-                  Din nästa bil — hittar du här
+                  Kvalitetskontrollerade bilar · Stockholm
                 </span>
               </div>
 
