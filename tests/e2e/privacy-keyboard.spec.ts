@@ -102,3 +102,30 @@ test.describe("tangentbord & skärmläsare – formulär och dialoger", () => {
     await expect(page.locator("main")).toBeFocused();
   });
 });
+
+test.describe("kundservice & rådgivare", () => {
+  test("startsidan visar en namngiven rådgivare med kontaktvägar", async ({ page }) => {
+    await page.goto("/");
+    const section = page.getByRole("region", { name: "Personlig hjälp hela vägen" });
+    await expect(section).toBeVisible();
+    await expect(section.getByText("Sara Lindqvist")).toBeVisible();
+    await expect(section.getByRole("link", { name: "Boka rådgivning" })).toHaveAttribute("href", /kontakt\/?\?amne=kopa/);
+    await expect(section.getByRole("link", { name: /Ring Sara/ })).toHaveAttribute("href", /^tel:/);
+  });
+
+  test("rådgivaren finns på bilsidan och kontaktsidan", async ({ page }) => {
+    for (const path of ["/bilar/volvo-v90-d4-awd/", "/kontakt/"]) {
+      await page.goto(path);
+      await expect(page.getByRole("region", { name: "Din rådgivare" })).toContainText("Sara Lindqvist");
+    }
+  });
+
+  test("om bilden inte kan laddas visas initialer i stället för en trasig bild", async ({ page }) => {
+    await page.unrouteAll({ behavior: "ignoreErrors" });
+    await page.route(/images\.unsplash\.com/, (r) => r.abort());
+    await page.goto("/om-oss/");
+    const team = page.getByRole("list").filter({ hasText: "Erik Andersson" });
+    await expect(team.getByText("EA", { exact: true })).toBeVisible();
+    await expect(team.locator("img")).toHaveCount(0);
+  });
+});

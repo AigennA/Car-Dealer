@@ -9,6 +9,7 @@ import CarCreditCalculator from "@/components/CarCreditCalculator";
 import ImageGallery from "@/components/ui/ImageGallery";
 import { CheckIcon } from "@/components/ui/icons";
 import { SITE } from "@/lib/site";
+import AdvisorCard from "@/components/people/AdvisorCard";
 
 export default function CarDetailClient({ slug }: { slug: string }) {
   const cars = useCars();
@@ -136,8 +137,9 @@ export default function CarDetailClient({ slug }: { slug: string }) {
           </div>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start">
           <CarCreditCalculator key={car.id} carPrice={car.price} />
+          <AdvisorCard variant="compact" headingLevel="h2" />
         </div>
 
         {similarCars.length > 0 && (

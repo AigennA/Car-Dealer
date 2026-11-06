@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import ContactForm from "@/components/contact/ContactForm";
 import MapEmbed from "@/components/MapEmbed";
+import AdvisorCard from "@/components/people/AdvisorCard";
 import { PhoneIcon, MailIcon, MapPinIcon, ClockIcon } from "@/components/ui/icons";
 import { SITE } from "@/lib/site";
 
@@ -46,6 +47,7 @@ export default function KontaktPage() {
 
           {/* Contact Information */}
           <div className="space-y-6">
+            <AdvisorCard variant="compact" headingLevel="h2" />
             <div className="bg-white rounded-xl p-8 shadow-sm">
               <h2 className="text-2xl font-bold text-navy mb-6">Kontaktinformation</h2>
 

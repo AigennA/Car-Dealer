@@ -7,6 +7,7 @@ import MiniCreditCalculator from "@/components/MiniCreditCalculator";
 import HeroCarStrip from "@/components/HeroCarStrip";
 
 import SearchForm from "@/components/ui/SearchForm";
+import AdvisorCard from "@/components/people/AdvisorCard";
 import {
   ShieldCheckIcon,
   BanknotesIcon,
@@ -241,6 +242,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Customer service — a named advisor */}
+      <AdvisorCard />
 
       {/* Why Choose Us */}
       <section aria-labelledby="why-heading" className="bg-white py-16">

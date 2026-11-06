@@ -1,4 +1,6 @@
 import Link from "next/link";
+import PersonPhoto from "@/components/people/PersonPhoto";
+import { TEAM } from "@/lib/site";
 import {
   TargetIcon,
   ShieldCheckIcon,
@@ -92,34 +94,16 @@ export default function OmOssPage() {
             Vi är ett dedikerat team av bilexperter som brinner för att hjälpa våra kunder 
             hitta rätt bil och skapa långsiktiga relationer.
           </p>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4"></div>
-              <h3 className="font-semibold text-navy mb-1">Erik Andersson</h3>
-              <p className="text-sm text-primary mb-2">VD & Grundare</p>
-              <p className="text-sm text-gray-600">
-                Med 15 års erfarenhet inom bilbranschen leder Erik företaget med passion och vision
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4"></div>
-              <h3 className="font-semibold text-navy mb-1">Maria Svensson</h3>
-              <p className="text-sm text-primary mb-2">Försäljningschef</p>
-              <p className="text-sm text-gray-600">
-                Maria hjälper våra kunder att hitta drömvagnen med expertis och engagemang
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4"></div>
-              <h3 className="font-semibold text-navy mb-1">Johan Karlsson</h3>
-              <p className="text-sm text-primary mb-2">Finansieringsrådgivare</p>
-              <p className="text-sm text-gray-600">
-                Johan ser till att varje kund får den bästa finansieringslösningen för sina behov
-              </p>
-            </div>
-          </div>
+          <ul className="grid md:grid-cols-3 gap-8">
+            {TEAM.map((p) => (
+              <li key={p.name} className="text-center">
+                <PersonPhoto src={p.photo} name={p.name} size={128} className="mx-auto mb-4" />
+                <h3 className="font-semibold text-navy mb-1">{p.name}</h3>
+                <p className="text-sm text-primary mb-2">{p.role}</p>
+                <p className="text-sm text-gray-700">{p.bio}</p>
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* CTA Section */}

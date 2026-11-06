@@ -13,6 +13,7 @@ Visit the live site: [https://AigennA.github.io/Car-Dealer/](https://AigennA.git
 - 🚗 **Car Listings** – 24 quality-checked cars, rendered into static HTML (works without JS, crawlable)
 - 🔍 **Search & filters** – make, body type, fuel, price, year, mileage; live result count
 - 💰 **Loan calculators** – live monthly cost with inline validation
+- 🙋 **Customer service** – named advisor with photo, phone, e-mail and booking on home, car and contact pages; team portraits on "Om oss"
 - 📨 **Contact & trade-in forms** – accessible validation, pre-filled from the car page
 - 📱 **Responsive** – mobile-first, no horizontal scroll down to 320 px
 - ♿ **Accessible** – WCAG 2.2 AA: 0 axe violations, keyboard & screen-reader friendly
@@ -30,7 +31,7 @@ Visit the live site: [https://AigennA.github.io/Car-Dealer/](https://AigennA.git
 | axe WCAG 2.2 AA violations | 237 | **0** |
 | Contrast failures on gradients/photos (pixel test) | 10 | **0** |
 | ESLint errors | 10 | **0** |
-| Automated tests | 0 | **69 unit + 118 E2E/a11y/contrast** |
+| Automated tests | 0 | **69 unit + 124 E2E/a11y/contrast** |
 
 Reports (Swedish): [docs/](docs/README.md) – Lighthouse, WCAG audit, heuristic evaluation, code review, test strategy.
 
