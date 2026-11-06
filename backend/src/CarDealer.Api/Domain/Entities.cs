@@ -1,0 +1,81 @@
+namespace CarDealer.Api.Domain;
+
+/// <summary>Where a car is in the sales process. Only Available/Reserved are public.</summary>
+public enum CarStatus { Available, Reserved, Sold, Draft }
+
+/// <summary>Workflow state for incoming customer requests.</summary>
+public enum RequestStatus { New, InProgress, Closed }
+
+public class Car
+{
+    public int Id { get; set; }
+    public required string Slug { get; set; }
+    public required string Make { get; set; }
+    public required string Model { get; set; }
+    public int Year { get; set; }
+    /// <summary>Swedish "mil" (1 mil = 10 km).</summary>
+    public int Mileage { get; set; }
+    public required string Fuel { get; set; }
+    public required string Transmission { get; set; }
+    public required string Drivetrain { get; set; }
+    public required string BodyType { get; set; }
+    public required string Color { get; set; }
+    /// <summary>Price in SEK incl. VAT.</summary>
+    public int Price { get; set; }
+    public bool Featured { get; set; }
+    public string Description { get; set; } = "";
+    public CarStatus Status { get; set; } = CarStatus.Available;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+    public List<CarImage> Images { get; set; } = [];
+    public List<CarFeature> Features { get; set; } = [];
+
+    public string Title => $"{Make} {Model}";
+}
+
+public class CarImage
+{
+    public int Id { get; set; }
+    public int CarId { get; set; }
+    public required string Url { get; set; }
+    public int SortOrder { get; set; }
+}
+
+public class CarFeature
+{
+    public int Id { get; set; }
+    public int CarId { get; set; }
+    public required string Name { get; set; }
+}
+
+/// <summary>A message from the contact form ("Kontakta oss" / "Boka provkörning").</summary>
+public class Lead
+{
+    public int Id { get; set; }
+    public required string Name { get; set; }
+    public required string Email { get; set; }
+    public string? Phone { get; set; }
+    public string? Subject { get; set; }
+    public required string Message { get; set; }
+    public int? CarId { get; set; }
+    public Car? Car { get; set; }
+    public RequestStatus Status { get; set; } = RequestStatus.New;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+}
+
+/// <summary>A trade-in valuation request ("Begär värdering").</summary>
+public class TradeIn
+{
+    public int Id { get; set; }
+    public required string Name { get; set; }
+    public required string Email { get; set; }
+    public string? Phone { get; set; }
+    public required string Brand { get; set; }
+    public required string Model { get; set; }
+    public int Year { get; set; }
+    public int Mileage { get; set; }
+    public string? Message { get; set; }
+    public RequestStatus Status { get; set; } = RequestStatus.New;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+}

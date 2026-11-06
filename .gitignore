@@ -51,3 +51,11 @@ next-env.d.ts
 /playwright/.cache
 /coverage
 /.lighthouseci
+
+# backend (.NET)
+/backend/**/bin/
+/backend/**/obj/
+/backend/**/*.db
+/backend/**/*.db-shm
+/backend/**/*.db-wal
+/backend/TestResults/

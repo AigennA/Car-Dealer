@@ -1,0 +1,30 @@
+# Try the API from VS Code (REST Client) or Visual Studio / Rider.
+@host = http://localhost:5162
+
+### Public inventory with filters
+GET {{host}}/api/cars?make=Volvo&sort=price-asc
+
+### One car
+GET {{host}}/api/cars/volvo-v90-d4-awd
+
+### Contact form (as sent from "Boka provkörning")
+POST {{host}}/api/leads
+Content-Type: application/json
+
+{ "name": "Anna Svensson", "email": "anna@example.se", "subject": "provkorning",
+  "message": "Hej! Kan jag provköra bilen på lördag?", "carSlug": "volvo-v90-d4-awd" }
+
+### Staff login (development account)
+# @name login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "admin@cardealer.local", "password": "Dev-Password-123" }
+
+### Dashboard (uses the token from the login above)
+GET {{host}}/api/dashboard
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### New customer requests
+GET {{host}}/api/leads?status=New
+Authorization: Bearer {{login.response.body.accessToken}}

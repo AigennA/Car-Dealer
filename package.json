@@ -18,7 +18,8 @@
     "build:test": "cross-env LOCAL_BUILD=1 next build",
     "test:e2e": "playwright test",
     "lighthouse": "npx -y @lhci/cli@0.15.1 autorun",
-    "check": "npm run lint && npm run typecheck && npm run test && npm run build:test && npm run test:e2e"
+    "check": "npm run lint && npm run typecheck && npm run test && npm run build:test && npm run test:e2e",
+    "seed:export": "node --experimental-strip-types scripts/export-seed.mjs"
   },
   "dependencies": {
     "next": "16.1.6",

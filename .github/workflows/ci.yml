@@ -60,3 +60,46 @@ jobs:
       - run: npm ci
       - run: npm run build:test
       - run: npm run lighthouse
+
+  backend:
+    name: Backend (.NET API + tester)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - run: dotnet restore
+      - run: dotnet build --no-restore -warnaserror
+      - run: dotnet test --no-build
+
+  backend-sqlserver:
+    name: Backend mot riktig SQL Server
+    runs-on: ubuntu-latest
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: "Y"
+          MSSQL_SA_PASSWORD: "CI-Only-Passw0rd!"
+        ports:
+          - 1433:1433
+        options: >-
+          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P 'CI-Only-Passw0rd!' -Q 'SELECT 1' || exit 1"
+          --health-interval 10s --health-timeout 5s --health-retries 12
+    env:
+      Database__Provider: SqlServer
+      ConnectionStrings__Default: "Server=localhost,1433;Database=CarDealer;User Id=sa;Password=CI-Only-Passw0rd!;TrustServerCertificate=True"
+      Jwt__Key: "ci-only-signing-key-0123456789-abcdefghijklmnop"
+      Admin__Email: "admin@ci.example"
+      Admin__Password: "CI-Admin-Passw0rd-123"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      # Applies the EF Core migrations to SQL Server, seeds, and exercises the API.
+      - run: ./backend/scripts/smoke-test.sh
