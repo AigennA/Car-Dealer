@@ -32,7 +32,7 @@ Visit the live site: [https://AigennA.github.io/Car-Dealer/](https://AigennA.git
 | axe WCAG 2.2 AA violations | 237 | **0** |
 | Contrast failures on gradients/photos (pixel test) | 10 | **0** |
 | ESLint errors | 10 | **0** |
-| Automated tests | 0 | **69 unit + 124 E2E/a11y/contrast** |
+| Automated tests | 0 | **101 unit + 150 E2E/a11y/contrast + 53 API** |
 
 Reports (Swedish): [docs/](docs/README.md) – Lighthouse, WCAG audit, heuristic evaluation, code review, test strategy.
 

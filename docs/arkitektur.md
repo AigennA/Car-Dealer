@@ -10,6 +10,9 @@ värden i komponenter, och varje del ska ha **ett ansvar** och gå att testa fö
 | Företagsnamn, org.nr, kontakt, adress, öppettider, garanti, öppet köp, ränta, lånetider, karta | `data/business.json` | webbplatsen (`src/config/business.ts`) och API:t (`BusinessInfo`) |
 | Verkstadstjänster, priser, tider, öppettider, platser, framförhållning | `data/workshop.json` | webbplatsen (`src/lib/workshop.ts`) och API:t (`WorkshopCatalog`) |
 | Startlager (24 bilar) | `src/lib/cars.ts` → `npm run seed:export` | webbplatsen och API:ts databas |
+| Rutter, huvudmeny, sidfotens länkar, sitemap | `src/config/navigation.ts` | Header, Footer, sitemap, robots och alla länkar (`ROUTES`) |
+| Fordonsval i personalformuläret (bränsle, växellåda, drivning, kaross), gränser, standardbild | `src/config/vehicle.ts` | admin-formuläret |
+| Demokonto för den statiska admin-sidan | `data/demo.json` | `src/lib/admin/accounts.ts` |
 | Svenska fel- och statusmeddelanden | `src/lib/messages.ts` · `Common/Messages.cs` | formulär respektive API-validering |
 | Tekniska inställningar (databas, JWT, rate limits, lösenordspolicy, CORS, API-dokumentation, filvägar) | `appsettings.json` / miljövariabler (Options-mönstret) | API:t |
 
@@ -42,6 +45,8 @@ Tjänsterna vet inget om HTTP.
 | **S** | `BookingWizard` (98 rader) komponerar bara: tillstånd i `useBookingFlow`, varje steg en egen komponent, bekräftelsen en egen. Validering i `lib/validation.ts`, regler i `lib/workshop.ts`. |
 | **D** | Bokningen beror på gränssnittet `BookingRepository`. `ApiBookingRepository` (riktig) och `DemoBookingRepository` (statisk sajt, klocka injicerbar) väljs på **ett** ställe: `createBookingRepository()`. |
 | **O** | Ny datakälla = ny klass som implementerar `BookingRepository`. |
+| **S** | Admin-sidan (742 → 90 rader) komponerar `LoginPanel`, `CarTable`, `CarFormDialog`; logiken ligger i `lib/admin/` (konton, session, formulärmodell med validering). |
+| **DRY** | Upprepade kort och listor ersatta av `FeatureGrid`, `CheckList`, `StepList`, `Faq` (`components/ui/Features.tsx`); sidorna beskriver bara innehållet som data. Logotypen finns en gång (`Logo`). |
 
 ## Tester som skyddar principerna
 

@@ -23,8 +23,8 @@ const logo = Unbounded({
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE.url}/`),
   title: {
-    default: "Car Dealer | Kvalitetskontrollerade begagnade bilar",
-    template: "%s | Car Dealer",
+    default: `${SITE.name} | Kvalitetskontrollerade begagnade bilar`,
+    template: `%s | ${SITE.name}`,
   },
   description: SITE.description,
   applicationName: SITE.name,
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "sv_SE",
     siteName: SITE.name,
-    title: "Car Dealer | Kvalitetskontrollerade begagnade bilar",
+    title: `${SITE.name} | Kvalitetskontrollerade begagnade bilar`,
     description: SITE.description,
     url: "./",
     images: [
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
         url: "https://images.unsplash.com/photo-1614200187524-dc4b892acf16?w=1200&h=630&fit=crop&q=70&auto=format",
         width: 1200,
         height: 630,
-        alt: "Bil i showroom hos Car Dealer",
+        alt: `Bil i showroom hos ${SITE.name}`,
       },
     ],
   },

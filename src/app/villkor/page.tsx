@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SITE } from "@/lib/site";
+import { ROUTES } from "@/config/navigation";
 
 export default function VillkorPage() {
   return (
@@ -300,7 +301,7 @@ export default function VillkorPage() {
             <h2 className="text-2xl font-bold text-navy mb-4">12. Personuppgifter</h2>
             <p className="text-gray-600">
               Vi behandlar dina personuppgifter i enlighet med vår{" "}
-              <Link href="/integritet" className="text-primary hover:text-primary-dark underline">
+              <Link href={ROUTES.privacy} className="text-primary hover:text-primary-dark underline">
                 integritetspolicy
               </Link>
               . Genom att acceptera dessa villkor godkänner du behandlingen av dina personuppgifter 
@@ -345,7 +346,7 @@ export default function VillkorPage() {
         {/* Back Link */}
         <div className="mt-8 text-center">
           <Link
-            href="/"
+            href={ROUTES.home}
             className="inline-block text-primary hover:text-primary-dark transition"
           >
             ← Tillbaka till startsidan

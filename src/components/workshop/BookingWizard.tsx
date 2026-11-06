@@ -10,6 +10,7 @@ import { ErrorSummary, RequiredHint, SUBMIT_CLASS } from "@/components/forms/For
 import { useBookingFlow } from "./booking/useBookingFlow";
 import { DayStep, DetailsStep, ServiceStep, TimeStep } from "./booking/Steps";
 import { BookingConfirmation } from "./booking/BookingConfirmation";
+import { ROUTES } from "@/config/navigation";
 
 type Props = {
   category: ServiceCategory;
@@ -86,7 +87,7 @@ export default function BookingWizard({ category, initialService, repository }: 
           <p className="text-sm text-gray-700">
             Du bokar <strong className="text-navy">{selected.name}</strong> {formatDay(flow.date)} kl.{" "}
             <strong className="text-navy">{flow.time}</strong>. Pris från {formatSek(selected.priceFrom)}. Vi behandlar
-            dina uppgifter enligt vår <Link href="/integritet" className="text-primary underline">integritetspolicy</Link>.
+            dina uppgifter enligt vår <Link href={ROUTES.privacy} className="text-primary underline">integritetspolicy</Link>.
           </p>
           <button type="submit" disabled={flow.submitting} className={`${SUBMIT_CLASS} sm:w-auto sm:px-10`}>
             {flow.submitting ? "Bokar…" : "Boka tid"}

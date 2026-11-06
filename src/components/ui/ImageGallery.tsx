@@ -30,7 +30,7 @@ export default function ImageGallery({ images, title }: Props) {
       </div>
 
       {images.length > 1 && (
-        <div className="p-5 border-t">
+        <div className="p-5 border-t border-gray-200">
           <div className="flex gap-3 overflow-x-auto">
             {images.map((img, index) => (
               <button

@@ -10,6 +10,7 @@ import MapEmbed from "@/components/MapEmbed";
 import AdvisorCard from "@/components/people/AdvisorCard";
 import { PhoneIcon, MailIcon, MapPinIcon, ClockIcon } from "@/components/ui/icons";
 import { SITE } from "@/lib/site";
+import { ROUTES } from "@/config/navigation";
 
 /** Pre-fills car + subject when arriving from a car page (?bil=slug&amne=provkorning). */
 function ContactFormWithParams() {
@@ -107,7 +108,7 @@ export default function KontaktPage() {
                 Besök vår showroom och låt våra experter guida dig till rätt bil
               </p>
               <Link
-                href="/bilar"
+                href={ROUTES.cars}
                 className="inline-block bg-white text-primary px-6 py-3 rounded-lg hover:bg-gray-100 transition font-medium"
               >
                 Se vårt lager

@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import { DEFAULT_ANNUAL_RATE, DEFAULT_TERM_MONTHS, LOAN_TERMS, quoteLoan } from "@/lib/finance";
 import { formatPercent } from "@/config/business";
+import { ROUTES } from "@/config/navigation";
 
 /* ── Inline SVG icons (Heroicons outline style, stroke-width 1.75) ── */
 
@@ -182,7 +183,7 @@ export default function MiniCreditCalculator() {
           * Indikativ beräkning med {formatPercent(DEFAULT_ANNUAL_RATE)} årsränta. Exakta villkor fastställs vid ansökan.
         </p>
         <Link
-          href="/finansiering"
+          href={ROUTES.financing}
           className="
             inline-flex items-center gap-1.5
             text-sm font-semibold text-accent-darker

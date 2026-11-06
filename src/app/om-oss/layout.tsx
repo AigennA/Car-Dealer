@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Om oss",
-  description: "Lär känna Car Dealer AB - din pålitliga partner för bilaffärer sedan 2020.",
+  description: `Lär känna ${SITE.legalName} – din pålitliga partner för bilaffärer sedan ${SITE.foundedYear}.`,
 };
 
 export default function OmOssLayout({ children }: { children: React.ReactNode }) {

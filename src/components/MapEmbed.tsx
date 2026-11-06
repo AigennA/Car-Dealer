@@ -6,6 +6,7 @@ import Link from "next/link";
 import { setConsent, useConsent } from "@/lib/consent";
 import { MapPinIcon } from "@/components/ui/icons";
 import { SITE } from "@/lib/site";
+import { ROUTES } from "@/config/navigation";
 
 const EMBED_SRC = BUSINESS.maps.embedUrl;
 const DIRECTIONS = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
@@ -56,7 +57,7 @@ export default function MapEmbed() {
             <p id={`${id}-desc`} className="text-sm text-gray-700 max-w-md">
               Kartan visas via Google Maps. När den laddas skickas din IP-adress till Google och
               Google kan sätta cookies. Läs mer i vår{" "}
-              <Link href="/cookies" className="text-primary underline underline-offset-4">
+              <Link href={ROUTES.cookies} className="text-primary underline underline-offset-4">
                 cookiepolicy
               </Link>
               .

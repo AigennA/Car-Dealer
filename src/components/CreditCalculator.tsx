@@ -19,7 +19,7 @@ export default function CreditCalculator() {
   return (
     <section
       aria-labelledby="calc-heading"
-      className="bg-linear-to-br from-primary-dark to-primary rounded-xl p-8 md:p-12 text-white mb-12"
+      className="bg-linear-to-br from-primary-dark to-primary rounded-xl p-8 md:p-12 text-white"
     >
       <div className="max-w-3xl mx-auto">
         <h2 id="calc-heading" className="text-3xl font-bold mb-4 text-center">Räkna på ditt billån</h2>

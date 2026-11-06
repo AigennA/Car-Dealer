@@ -29,6 +29,14 @@ export const MESSAGES = {
     loadSlotsFailed: "Kunde inte hämta lediga tider. Ring oss gärna i stället.",
     sendFailed: "Bokningen kunde inte skickas. Försök igen eller ring oss.",
   },
+  car: {
+    make: "Ange märke.",
+    model: "Ange modell.",
+    yearRange: (min: number, max: number) => `Årsmodellen ska vara mellan ${min} och ${max}.`,
+    mileageRange: (max: number) => `Miltal ska anges i mil (0–${max.toLocaleString("sv-SE")}).`,
+    price: "Ange ett pris i kronor.",
+    color: "Ange färg.",
+  },
   loan: {
     priceRequired: "Ange bilens pris.",
     downPaymentNegative: "Kontantinsatsen kan inte vara negativ.",

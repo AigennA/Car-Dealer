@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Car } from "@/lib/cars";
+import { ROUTES } from "@/config/navigation";
 
 type Props = {
   car: Car;
@@ -109,7 +110,7 @@ function ArrowRightIcon() {
 
 export default function CarCard({ car, headingLevel = "h3", preload = false }: Props) {
   const Heading = headingLevel;
-  const href = `/bilar/${car.slug}`;
+  const href = `${ROUTES.cars}/${car.slug}`;
   const name = `${car.make} ${car.model}`;
 
   return (

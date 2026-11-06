@@ -12,15 +12,18 @@ export const BUSINESS = data as unknown as {
   name: string;
   legalName: string;
   orgNumber: string;
+  foundedYear: number;
   copyrightHolder: string;
   url: string;
   description: string;
+  tagline: string;
   contact: { phone: string; phoneE164: string; email: string };
   address: { street: string; postalCode: string; city: string; country: string };
   showroomHours: WeekHours;
   policies: { baseWarrantyMonths: number; warrantyMonths: number; openPurchaseDays: number; refundDays: number; responseHours: number };
-  financing: { annualRate: number; loanTermsMonths: number[]; defaultTermMonths: number; defaultDownPaymentShare: number };
+  financing: { annualRate: number; loanTermsMonths: number[]; defaultTermMonths: number; defaultDownPaymentShare: number; leasingTermMonths: [number, number] };
   maps: { embedUrl: string };
+  dataRetention: { leadMonths: number; tradeInMonths: number; bookkeepingYears: number };
 };
 
 export const phoneHref = `tel:${BUSINESS.contact.phoneE164}`;

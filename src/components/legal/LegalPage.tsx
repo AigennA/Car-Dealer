@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ROUTES } from "@/config/navigation";
 
 export type LegalSection = { id: string; title: string; content: React.ReactNode };
 
@@ -52,7 +53,7 @@ export default function LegalPage({ title, intro, updated, sections }: Props) {
         </div>
 
         <p className="mt-8 text-center">
-          <Link href="/" className="text-primary underline underline-offset-4">
+          <Link href={ROUTES.home} className="text-primary underline underline-offset-4">
             Tillbaka till startsidan
           </Link>
         </p>

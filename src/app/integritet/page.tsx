@@ -1,6 +1,8 @@
 import Link from "next/link";
 import LegalPage, { Table, Ul } from "@/components/legal/LegalPage";
 import { SITE } from "@/lib/site";
+import { BUSINESS } from "@/config/business";
+import { ROUTES } from "@/config/navigation";
 
 const a = "text-primary underline underline-offset-4";
 
@@ -55,21 +57,21 @@ export default function IntegritetPage() {
                   "Namn, e-post, telefon (valfritt), meddelande, ev. vilken bil det gäller",
                   "Svara på frågor, boka provkörning",
                   "Berättigat intresse (art. 6.1 f) – att kunna svara dig",
-                  "12 månader efter sista kontakt",
+                  `${BUSINESS.dataRetention.leadMonths} månader efter sista kontakt`,
                 ],
                 [
                   "Du begär inbytesvärdering",
                   "Namn, kontaktuppgifter, bilens märke, modell, årsmodell, miltal, beskrivning",
                   "Värdera din bil och lämna erbjudande",
                   "Åtgärder före avtal (art. 6.1 b)",
-                  "6 månader om inget köp sker",
+                  `${BUSINESS.dataRetention.tradeInMonths} månader om inget köp sker`,
                 ],
                 [
                   "Du köper eller finansierar en bil",
                   "Identitets- och kontaktuppgifter, personnummer, betal- och avtalsuppgifter",
                   "Fullgöra köpeavtalet, garanti, reklamation",
                   "Avtal (art. 6.1 b) och rättslig förpliktelse (art. 6.1 c)",
-                  "7 år enligt bokföringslagen; avtal så länge garanti/reklamationsrätt gäller",
+                  `${BUSINESS.dataRetention.bookkeepingYears} år enligt bokföringslagen; avtal så länge garanti/reklamationsrätt gäller`,
                 ],
                 [
                   "Du besöker webbplatsen",
@@ -96,7 +98,7 @@ export default function IntegritetPage() {
                 <li>inloggning och bilar som läggs till i personalens demo-admin.</li>
               </Ul>
               <p>
-                Du kan när som helst ta bort dem under <Link className={a} href="/cookies">Cookies och lagring</Link>{" "}
+                Du kan när som helst ta bort dem under <Link className={a} href={ROUTES.cookies}>Cookies och lagring</Link>{" "}
                 eller genom att rensa webbplatsdata i webbläsaren.
               </p>
             </>

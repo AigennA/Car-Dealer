@@ -1,0 +1,4 @@
+{
+  "$comment": "Demo-only staff account for the static website's admin page (stored in the browser, not secure). The real platform uses the API's login (backend/), whose accounts come from configuration.",
+  "staffAccount": { "username": "admin", "password": "admin123" }
+}
