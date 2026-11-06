@@ -28,6 +28,8 @@ export default function Footer() {
             <ul className="space-y-1 text-sm">
                 <li><Link href="/bilar" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Lager</Link></li>
                 <li><Link href="/finansiering" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Finansiering</Link></li>
+                <li><Link href="/verkstad" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Verkstad</Link></li>
+                <li><Link href="/besiktning" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Besiktning</Link></li>
                 <li><Link href="/inbyte" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Inbyte</Link></li>
                 <li><Link href="/om-oss" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Om oss</Link></li>
                 <li><Link href="/kontakt" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Kontakt</Link></li>

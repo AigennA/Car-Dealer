@@ -16,6 +16,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<CarFeature> CarFeatures => Set<CarFeature>();
     public DbSet<Lead> Leads => Set<Lead>();
     public DbSet<TradeIn> TradeIns => Set<TradeIn>();
+    public DbSet<Booking> Bookings => Set<Booking>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -66,6 +67,20 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             e.Property(t => t.Message).HasMaxLength(4000);
             e.Property(t => t.Status).HasConversion<string>().HasMaxLength(20);
             e.HasIndex(t => new { t.Status, t.CreatedAt });
+        });
+
+        b.Entity<Booking>(e =>
+        {
+            e.HasIndex(x => x.Reference).IsUnique();
+            e.HasIndex(x => new { x.Date, x.Status });
+            e.Property(x => x.Reference).HasMaxLength(12);
+            e.Property(x => x.ServiceCode).HasMaxLength(40);
+            e.Property(x => x.Name).HasMaxLength(100);
+            e.Property(x => x.Email).HasMaxLength(254);
+            e.Property(x => x.Phone).HasMaxLength(30);
+            e.Property(x => x.RegNumber).HasMaxLength(7);
+            e.Property(x => x.Message).HasMaxLength(2000);
+            e.Property(x => x.Status).HasConversion<string>().HasMaxLength(20);
         });
     }
 }

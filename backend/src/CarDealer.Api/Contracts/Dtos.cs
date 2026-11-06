@@ -108,3 +108,33 @@ public record LoginRequest(
 public record LoginResponse(string AccessToken, DateTime ExpiresAt, string Email, string[] Roles);
 
 public record DashboardDto(int CarsAvailable, int CarsReserved, int CarsSold, int NewLeads, int NewTradeIns, int InventoryValue);
+
+public record AvailabilityDto(string Service, DateOnly Date, string[] Slots);
+
+public record BookableDayDto(DateOnly Date, int FreeSlots);
+
+public class CreateBookingRequest
+{
+    [Required(ErrorMessage = "Välj en tjänst.")] public string ServiceCode { get; set; } = "";
+    [Required(ErrorMessage = "Välj en dag.")] public DateOnly? Date { get; set; }
+    [Required(ErrorMessage = "Välj en tid."), RegularExpression(@"^\d{2}:\d{2}$", ErrorMessage = "Välj en tid.")]
+    public string Time { get; set; } = "";
+    [Required(ErrorMessage = "Fyll i ditt namn."), StringLength(100)] public string Name { get; set; } = "";
+    [Required(ErrorMessage = "Fyll i din e-postadress."), EmailAddress(ErrorMessage = "E-postadressen verkar inte stämma. Exempel: namn@exempel.se"), StringLength(254)]
+    public string Email { get; set; } = "";
+    [Required(ErrorMessage = "Fyll i ditt telefonnummer så att verkstaden kan nå dig."),
+     RegularExpression(@"^[+\d][\d\s-]{6,}$", ErrorMessage = "Telefonnumret får bara innehålla siffror, mellanslag och bindestreck."), StringLength(30)]
+    public string Phone { get; set; } = "";
+    [Required(ErrorMessage = "Fyll i bilens registreringsnummer."),
+     RegularExpression(@"^\s*[A-Za-z]{3}\s?\d{2}[A-Za-z0-9]\s*$", ErrorMessage = "Registreringsnumret ska ha formatet ABC 123 eller ABC 12D.")]
+    public string RegNumber { get; set; } = "";
+    [StringLength(2000)] public string? Message { get; set; }
+    public string? Website { get; set; }
+}
+
+public record BookingConfirmationDto(string Reference, string ServiceName, DateOnly Date, string Time, int DurationMinutes, string Message);
+
+public record BookingDto(int Id, string Reference, string ServiceCode, string ServiceName, DateOnly Date, string Time,
+    int DurationMinutes, string Name, string Email, string Phone, string RegNumber, string? Message, string Status, DateTime CreatedAt);
+
+public record UpdateBookingStatusRequest([Required] BookingStatus Status);

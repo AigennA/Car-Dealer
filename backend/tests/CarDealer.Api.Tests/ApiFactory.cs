@@ -3,6 +3,8 @@ using System.Net.Http.Json;
 using CarDealer.Api.Contracts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Time.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CarDealer.Api.Tests;
@@ -18,6 +20,12 @@ public class ApiFactory : WebApplicationFactory<Program>
     public const string SalesEmail = "saljare@test.se";
     public const string SalesPassword = "Sales-Password-123";
 
+    /// <summary>
+    /// Fixed clock: Monday 9 November 2026, 07:00 in Stockholm (06:00 UTC).
+    /// Workshop availability depends on "now", so tests must not use the real clock.
+    /// </summary>
+    public FakeTimeProvider Clock { get; } = new(new DateTimeOffset(2026, 11, 9, 6, 0, 0, TimeSpan.Zero));
+
     private readonly string _dbPath = Path.Combine(Path.GetTempPath(), $"cardealer-test-{Guid.NewGuid():N}.db");
     protected virtual int FormsPerMinute => 1000;
 
@@ -32,6 +40,7 @@ public class ApiFactory : WebApplicationFactory<Program>
         builder.UseSetting("RateLimits:FormsPerMinute", FormsPerMinute.ToString());
         builder.UseSetting("RateLimits:LoginPerMinute", "1000");
         builder.UseSetting("ApiDocs:Enabled", "true");
+        builder.ConfigureTestServices(s => s.AddSingleton<TimeProvider>(Clock));
     }
 
     /// <summary>Creates a Sales user (once) through the Identity APIs.</summary>

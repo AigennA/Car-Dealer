@@ -20,6 +20,8 @@ handlarens system bakom den.
 | | `GET /api/leads?status=New` · `PATCH /api/leads/{id}/status` | Personal |
 | **Inbytesförfrågningar** | `POST /api/tradeins` | Alla (rate-limit + honeypot) |
 | | `GET /api/tradeins` · `PATCH /api/tradeins/{id}/status` | Personal |
+| **Verkstad & besiktning** | `GET /api/workshop/services` · `GET /api/workshop/days?service=` · `GET /api/workshop/availability?service=&date=` · `POST /api/workshop/bookings` | Alla (rate-limit + honeypot) |
+| | `GET /api/workshop/bookings?from=&to=` · `PATCH /api/workshop/bookings/{id}/status` | Personal |
 | **Översikt** | `GET /api/dashboard` – bilar i lager/reserverade/sålda, nya förfrågningar, lagervärde | Personal |
 | **Inloggning** | `POST /api/auth/login` → JWT · `GET /api/auth/me` | Personal |
 | **Drift** | `GET /health` | Alla |
@@ -35,11 +37,23 @@ byta från statisk data till API:t utan ändringar i gränssnittet.
 | `CarImages`, `CarFeatures` | bilder (i ordning) och utrustning per bil |
 | `Leads` | meddelanden från kontaktformuläret, kopplade till en bil när de kommer från "Boka provkörning" |
 | `TradeIns` | inbytesförfrågningar |
+| `Bookings` | verkstads- och besiktningstider: tjänst, datum, starttid, längd, regnr, bokningsnummer (`CD-XXXXXX`), status |
 | `AspNet*` | personalkonton och roller (ASP.NET Core Identity) |
 
 - Schemat hanteras med **EF Core-migreringar** (`src/CarDealer.Api/Data/Migrations`).
 - [`sql/schema.sql`](sql/schema.sql) är samma schema som ett idempotent SQL-skript för den som vill köra det direkt i SQL Server.
 - Startdata: webbplatsens 24 bilar (`Data/seed-cars.json`, genereras med `npm run seed:export` i repots rot).
+
+## Verkstadsbokning – regler
+
+Tjänster, priser, öppettider och kapacitet ligger i [`data/workshop.json`](../data/workshop.json), som
+**både webbplatsen och API:t läser** – priserna kan inte skilja sig åt.
+
+- Bara öppna dagar (mån–tor 08–17, fre 08–16) och jobbet måste vara klart före stängning
+- Tidigast 2 timmar fram, högst 21 dagar fram (tidszon Europe/Stockholm)
+- Högst så många bilar samtidigt som verkstaden har platser (`bays`: 2)
+- Den sista platsen kan inte dubbelbokas: tiden kontrolleras igen i en serialiserbar transaktion (409 om någon hann före)
+- Registreringsnummer valideras (ABC 123 / ABC 12D) och sparas normaliserat
 
 ## Säkerhet
 
@@ -67,7 +81,7 @@ API-dokumentation. Utvecklingskontot är `admin@cardealer.local` / `Dev-Password
 (finns bara i `appsettings.Development.json`).
 
 ```bash
-dotnet test        # 30 integrationstester mot en riktig (temporär) databas
+dotnet test        # 46 tester (integration + schemaläggningsregler) mot en riktig (temporär) databas
 ```
 
 ## Köra mot SQL Server / Azure SQL

@@ -1,0 +1,25 @@
+{
+  "$comment": "Single source of truth for workshop & inspection services and opening hours. Read by the website (src/lib/workshop.ts) and the API (backend, linked as Data/workshop.json). Prices in SEK incl. VAT ('från' = starting price).",
+  "timeZone": "Europe/Stockholm",
+  "slotMinutes": 30,
+  "bays": 2,
+  "minLeadMinutes": 120,
+  "bookingHorizonDays": 21,
+  "openingHours": {
+    "1": ["08:00", "17:00"],
+    "2": ["08:00", "17:00"],
+    "3": ["08:00", "17:00"],
+    "4": ["08:00", "17:00"],
+    "5": ["08:00", "16:00"]
+  },
+  "services": [
+    { "code": "service-liten", "category": "verkstad", "name": "Service liten", "description": "Oljebyte, oljefilter, kontroll av vätskor, bromsar och däck enligt tillverkarens serviceprogram.", "minutes": 60, "priceFrom": 1995 },
+    { "code": "service-stor", "category": "verkstad", "name": "Service stor", "description": "Allt i liten service plus luft-, kupé- och bränslefilter, tändstift samt provkörning.", "minutes": 120, "priceFrom": 3995 },
+    { "code": "dackbyte", "category": "verkstad", "name": "Däckbyte", "description": "Skifte mellan sommar- och vinterhjul, inklusive lufttryck och åtdragning.", "minutes": 30, "priceFrom": 495 },
+    { "code": "bromsar", "category": "verkstad", "name": "Bromsar", "description": "Kontroll och byte av bromsbelägg och skivor. Pris enligt offert efter kontroll.", "minutes": 90, "priceFrom": 1495 },
+    { "code": "ac-service", "category": "verkstad", "name": "AC-service", "description": "Läcktest, påfyllning av köldmedium och funktionskontroll.", "minutes": 60, "priceFrom": 1295 },
+    { "code": "felsokning", "category": "verkstad", "name": "Felsökning", "description": "Diagnos med felkodsläsning när en varningslampa lyser eller något låter fel.", "minutes": 60, "priceFrom": 895 },
+    { "code": "forbesiktning", "category": "besiktning", "name": "Förbesiktning", "description": "Vi går igenom bilen enligt besiktningsprotokollet och åtgärdar fel innan den riktiga besiktningen.", "minutes": 30, "priceFrom": 495 },
+    { "code": "besiktning-partner", "category": "besiktning", "name": "Kontrollbesiktning via partner", "description": "Vi bokar kontrollbesiktning hos vår ackrediterade besiktningspartner och kör dit bilen åt dig. Besiktningsavgiften betalas enligt partnerns prislista.", "minutes": 60, "priceFrom": 395 }
+  ]
+}

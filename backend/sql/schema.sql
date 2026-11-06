@@ -343,3 +343,55 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261106191924_AddBookings'
+)
+BEGIN
+    CREATE TABLE [Bookings] (
+        [Id] int NOT NULL IDENTITY,
+        [Reference] nvarchar(12) NOT NULL,
+        [ServiceCode] nvarchar(40) NOT NULL,
+        [Date] date NOT NULL,
+        [StartTime] time NOT NULL,
+        [DurationMinutes] int NOT NULL,
+        [Name] nvarchar(100) NOT NULL,
+        [Email] nvarchar(254) NOT NULL,
+        [Phone] nvarchar(30) NOT NULL,
+        [RegNumber] nvarchar(7) NOT NULL,
+        [Message] nvarchar(2000) NULL,
+        [Status] nvarchar(20) NOT NULL,
+        [CreatedAt] datetime2 NOT NULL,
+        CONSTRAINT [PK_Bookings] PRIMARY KEY ([Id])
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261106191924_AddBookings'
+)
+BEGIN
+    CREATE INDEX [IX_Bookings_Date_Status] ON [Bookings] ([Date], [Status]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261106191924_AddBookings'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_Bookings_Reference] ON [Bookings] ([Reference]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261106191924_AddBookings'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261106191924_AddBookings', N'10.0.14');
+END;
+
+COMMIT;
+GO
+

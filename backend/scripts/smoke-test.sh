@@ -31,4 +31,21 @@ token=$(curl -fs -X POST "$URL/api/auth/login" -H 'Content-Type: application/jso
 new_leads=$(curl -fs "$URL/api/dashboard" -H "Authorization: Bearer $token" | python3 -c 'import sys,json;print(json.load(sys.stdin)["newLeads"])')
 echo "new leads: $new_leads"
 [ "$new_leads" -ge 1 ] || exit 1
+# Workshop booking: first day with a free slot → book it → it shows up for staff.
+read -r day slot < <(python3 - "$URL" <<'PY'
+import json, sys, urllib.request
+url = sys.argv[1]
+days = json.load(urllib.request.urlopen(f"{url}/api/workshop/days?service=dackbyte"))
+day = next(d["date"] for d in days if d["freeSlots"] > 0)
+slots = json.load(urllib.request.urlopen(f"{url}/api/workshop/availability?service=dackbyte&date={day}"))["slots"]
+print(day, slots[0])
+PY
+)
+code=$(curl -s -o booking.json -w '%{http_code}' -X POST "$URL/api/workshop/bookings" -H 'Content-Type: application/json' \
+  -d "{\"serviceCode\":\"dackbyte\",\"date\":\"$day\",\"time\":\"$slot\",\"name\":\"CI\",\"email\":\"ci@example.se\",\"phone\":\"070-0000000\",\"regNumber\":\"ABC 12D\"}")
+echo "POST /api/workshop/bookings ($day $slot) -> $code"
+[ "$code" = "201" ] || { cat booking.json; cat smoke.log; exit 1; }
+ref=$(python3 -c 'import json;print(json.load(open("booking.json"))["reference"])')
+curl -fs "$URL/api/workshop/bookings?from=$day&to=$day" -H "Authorization: Bearer $token" | grep -q "$ref" || { echo "booking not listed"; exit 1; }
+rm -f booking.json
 echo "Smoke test OK"
