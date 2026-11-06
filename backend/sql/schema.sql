@@ -395,3 +395,24 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261106202907_AddBookingManageToken'
+)
+BEGIN
+    ALTER TABLE [Bookings] ADD [ManageTokenHash] nvarchar(64) NULL;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261106202907_AddBookingManageToken'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261106202907_AddBookingManageToken', N'10.0.14');
+END;
+
+COMMIT;
+GO
+

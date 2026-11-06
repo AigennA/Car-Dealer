@@ -7,7 +7,8 @@ public enum CarStatus { Available, Reserved, Sold, Draft }
 public enum RequestStatus { New, InProgress, Closed }
 
 /// <summary>Lifecycle of a workshop / inspection booking.</summary>
-public enum BookingStatus { Booked, Confirmed, Completed, Cancelled }
+/// <summary>Arrived = the customer has checked in at the workshop (staff scanned the QR code).</summary>
+public enum BookingStatus { Booked, Confirmed, Completed, Cancelled, Arrived }
 
 public class Car
 {
@@ -102,4 +103,9 @@ public class Booking
     public string? Message { get; set; }
     public BookingStatus Status { get; set; } = BookingStatus.Booked;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    /// <summary>
+    /// SHA-256 (hex) of the secret in the customer's "Hantera bokning" link.
+    /// Only the hash is stored, so a database leak does not expose working links.
+    /// </summary>
+    public string? ManageTokenHash { get; set; }
 }

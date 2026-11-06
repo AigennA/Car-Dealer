@@ -6,6 +6,7 @@
   "foundedYear": 2020,
   "copyrightHolder": "Globamart ZM",
   "url": "https://aigenna.github.io/Car-Dealer",
+  "manageBookingPath": "/min-bokning",
   "description": "Kvalitetskontrollerade begagnade bilar med garanti, finansiering och inbyte. Hitta din nästa bil hos Car Dealer i Stockholm.",
   "tagline": "Säkra och enkla bilaffärer med kvalitetskontrollerade fordon.",
   "contact": {
@@ -74,6 +75,7 @@
   },
   "dataRetention": {
     "leadMonths": 12,
+    "bookingMonths": 12,
     "tradeInMonths": 6,
     "bookkeepingYears": 7
   }

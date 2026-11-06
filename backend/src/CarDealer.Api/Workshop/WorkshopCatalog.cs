@@ -18,6 +18,8 @@ public class WorkshopCatalog
     /// <summary>Earliest bookable time is now + this many minutes.</summary>
     public int MinLeadMinutes { get; init; } = 120;
     public int BookingHorizonDays { get; init; } = 21;
+    /// <summary>Customers can cancel or move a booking online until this many hours before it starts.</summary>
+    public int ChangeCutoffHours { get; init; } = 24;
     /// <summary>ISO weekday (1 = Monday … 7 = Sunday) → ["08:00", "17:00"]. Missing day = closed.</summary>
     public Dictionary<string, string[]> OpeningHours { get; init; } = [];
     public List<WorkshopService> Services { get; init; } = [];
@@ -33,6 +35,10 @@ public class WorkshopCatalog
             ? (TimeOnly.Parse(h[0]), TimeOnly.Parse(h[1]))
             : null;
     }
+
+    /// <summary>Local workshop date and time → UTC.</summary>
+    public DateTime ToUtc(DateOnly date, TimeOnly time) =>
+        TimeZoneInfo.ConvertTimeToUtc(date.ToDateTime(time, DateTimeKind.Unspecified), Zone);
 
     public static WorkshopCatalog Load(string path)
     {

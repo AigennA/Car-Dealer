@@ -29,6 +29,20 @@ export const MESSAGES = {
     loadSlotsFailed: "Kunde inte hämta lediga tider. Ring oss gärna i stället.",
     sendFailed: "Bokningen kunde inte skickas. Försök igen eller ring oss.",
   },
+  /** "Min bokning" – same wording as backend Common/Messages.cs. */
+  myBooking: {
+    referenceRequired: "Fyll i ditt bokningsnummer, t.ex. CD-7K3PQX.",
+    contactRequired: "Fyll i e-postadressen eller registreringsnumret du bokade med.",
+    notFound: "Vi hittade ingen bokning med de uppgifterna.",
+    notFoundDetail:
+      "Kontrollera bokningsnumret och att e-postadressen eller registreringsnumret är samma som när du bokade.",
+    locked: (hours: number) =>
+      `Ändringar och avbokningar går att göra fram till ${hours} timmar före besöket. Ring oss, så hjälper vi dig.`,
+    slotTaken: "Någon hann boka tiden före dig. Välj en annan tid.",
+    cancelled: "Bokningen är avbokad. Välkommen åter!",
+    moved: (when: string) => `Klart! Din nya tid är ${when}.`,
+    failed: "Det gick inte att nå bokningssystemet. Försök igen eller ring oss.",
+  },
   car: {
     make: "Ange märke.",
     model: "Ange modell.",

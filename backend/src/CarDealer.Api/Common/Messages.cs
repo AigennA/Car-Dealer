@@ -41,6 +41,15 @@ public static class Messages
     public const string SlotTaken = "Tiden är inte längre ledig.";
     public const string SlotTakenDetail = "Någon hann boka tiden före dig. Välj en annan tid.";
 
+    // Min bokning (customer self-service)
+    public const string ReferenceRequired = "Fyll i ditt bokningsnummer, t.ex. CD-7K3PQX.";
+    public const string BookingNotFound = "Vi hittade ingen bokning med de uppgifterna.";
+    public const string BookingNotFoundDetail = "Kontrollera bokningsnumret och att e-postadressen eller registreringsnumret är samma som när du bokade.";
+    public const string BookingLocked = "Bokningen kan inte längre ändras på webben.";
+    /// <summary>{0} = hours before the appointment.</summary>
+    public const string BookingLockedDetail = "Ändringar och avbokningar går att göra fram till {0} timmar före besöket. Ring oss, så hjälper vi dig.";
+    public const string BookingCancelled = "Bokningen är avbokad.";
+
     // Auth
     public const string EmailRequiredLogin = "Ange e-post.";
     public const string PasswordRequired = "Ange lösenord.";

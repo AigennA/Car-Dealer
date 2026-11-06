@@ -47,5 +47,10 @@ echo "POST /api/workshop/bookings ($day $slot) -> $code"
 [ "$code" = "201" ] || { cat booking.json; cat smoke.log; exit 1; }
 ref=$(python3 -c 'import json;print(json.load(open("booking.json"))["reference"])')
 curl -fs "$URL/api/workshop/bookings?from=$day&to=$day" -H "Authorization: Bearer $token" | grep -q "$ref" || { echo "booking not listed"; exit 1; }
+# Min bokning: the customer finds the booking with the secret from their link.
+manage=$(python3 -c 'import json;print(json.load(open("booking.json"))["manageToken"])')
+curl -fs -X POST "$URL/api/workshop/bookings/manage" -H 'Content-Type: application/json' \
+  -d "{\"reference\":\"$ref\",\"token\":\"$manage\"}" | grep -q "$ref" || { echo "min bokning lookup failed"; exit 1; }
+echo "POST /api/workshop/bookings/manage -> OK"
 rm -f booking.json
 echo "Smoke test OK"

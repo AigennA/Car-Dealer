@@ -14,7 +14,7 @@ namespace CarDealer.Api.Controllers;
 [ApiController]
 [Route("api/workshop")]
 [Produces("application/json")]
-public class WorkshopController(WorkshopCatalog catalog, IBookingService bookings) : ControllerBase
+public class WorkshopController(WorkshopCatalog catalog, IBookingService bookings, IBookingManagementService manage) : ControllerBase
 {
     [HttpGet("services")]
     public WorkshopCatalog Services() => catalog;
@@ -45,4 +45,27 @@ public class WorkshopController(WorkshopCatalog catalog, IBookingService booking
     [Authorize(Roles = Roles.Staff)]
     public async Task<IActionResult> SetStatus(int id, UpdateBookingStatusRequest request, CancellationToken ct) =>
         this.ToActionResult(await bookings.SetStatusAsync(id, request.Status, ct));
+
+    // "Min bokning" – POST so the secret and contact details never end up in URLs or logs.
+    // Rate-limited like the forms, which also makes guessing booking numbers impractical.
+
+    [HttpPost("bookings/manage")]
+    [EnableRateLimiting(RateLimitPolicies.Forms)]
+    public async Task<ActionResult<ManagedBookingDto>> Find(BookingAccessRequest access, CancellationToken ct) =>
+        this.ToActionResult(await manage.FindAsync(access, ct));
+
+    [HttpPost("bookings/manage/cancel")]
+    [EnableRateLimiting(RateLimitPolicies.Forms)]
+    public async Task<ActionResult<ManagedBookingDto>> Cancel(BookingAccessRequest access, CancellationToken ct) =>
+        this.ToActionResult(await manage.CancelAsync(access, ct));
+
+    [HttpPost("bookings/manage/reschedule")]
+    [EnableRateLimiting(RateLimitPolicies.Forms)]
+    public async Task<ActionResult<ManagedBookingDto>> Reschedule(RescheduleBookingRequest request, CancellationToken ct) =>
+        this.ToActionResult(await manage.RescheduleAsync(request, ct));
+
+    [HttpPost("bookings/check-in")]
+    [Authorize(Roles = Roles.Staff)]
+    public async Task<ActionResult<ManagedBookingDto>> CheckIn(CheckInRequest request, CancellationToken ct) =>
+        this.ToActionResult(await manage.CheckInAsync(request.Reference, ct));
 }

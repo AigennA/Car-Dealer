@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
   output: "export",
   trailingSlash: true,
   basePath,
+  // Absolute links (QR code, calendar file) need the base path at runtime.
+  env: { NEXT_PUBLIC_BASE_PATH: basePath },
   images: {
     loader: "custom",
     loaderFile: "./src/lib/imageLoader.ts",

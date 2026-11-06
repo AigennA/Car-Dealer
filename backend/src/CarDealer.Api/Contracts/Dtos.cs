@@ -133,7 +133,34 @@ public class CreateBookingRequest
     public string? Website { get; set; }
 }
 
-public record BookingConfirmationDto(string Reference, string ServiceName, DateOnly Date, string Time, int DurationMinutes, string Message);
+/// <param name="ManageToken">Secret for the customer's "Hantera bokning" link. Returned once, never stored in plain text.</param>
+public record BookingConfirmationDto(string Reference, string ServiceName, DateOnly Date, string Time, int DurationMinutes, string Message,
+    string ManageToken);
+
+/// <summary>
+/// Proves the customer owns a booking: the booking number plus either the
+/// secret from their link (<see cref="Token"/>) or the e-mail address or
+/// registration number they booked with (<see cref="Contact"/>).
+/// </summary>
+public class BookingAccessRequest
+{
+    [Required(ErrorMessage = Messages.ReferenceRequired), StringLength(12)] public string Reference { get; set; } = "";
+    [StringLength(100)] public string? Token { get; set; }
+    [StringLength(254)] public string? Contact { get; set; }
+}
+
+public class RescheduleBookingRequest : BookingAccessRequest
+{
+    [Required(ErrorMessage = Messages.DateRequired)] public DateOnly? Date { get; set; }
+    [Required(ErrorMessage = Messages.TimeRequired), RegularExpression(Limits.TimePattern, ErrorMessage = Messages.TimeRequired)]
+    public string Time { get; set; } = "";
+}
+
+/// <summary>What the customer sees on "Min bokning". No e-mail or phone: the page may be opened on a shared screen.</summary>
+public record ManagedBookingDto(string Reference, string ServiceCode, string ServiceName, string Category, DateOnly Date, string Time,
+    int DurationMinutes, string RegNumber, string Status, bool CanChange, DateTime ChangeDeadlineUtc);
+
+public record CheckInRequest([Required(ErrorMessage = Messages.ReferenceRequired)] string Reference);
 
 public record BookingDto(int Id, string Reference, string ServiceCode, string ServiceName, DateOnly Date, string Time,
     int DurationMinutes, string Name, string Email, string Phone, string RegNumber, string? Message, string Status, DateTime CreatedAt);
