@@ -448,23 +448,6 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(0, 191, 255, 0.14);
 }
 
-/* ── Hero eyebrow line ───────────────────────────────────────────────────── */
-
-.hero-eyebrow-dash {
-  display: block;
-  height: 1px;
-  width: 2rem;  /* w-8 */
-  background: var(--color-accent);
-}
-
-.hero-eyebrow-text {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #ffffff;
-}
-
 /* ── Hero car thumbnail marquee (slow auto-scroll) ───────────────────────── */
 
 .hero-strip {

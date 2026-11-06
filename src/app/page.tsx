@@ -39,21 +39,12 @@ export default function HomePage() {
           breaks the content-box boundary — the compositional
           tension that distinguishes it from a plain 50/50 split.
         */}
-        <div className="max-w-7xl 2xl:max-w-400 mx-auto px-4 sm:px-6 md:px-10 2xl:px-16 pt-6 sm:pt-8 md:pt-10 pb-24 md:pb-28 w-full relative z-10">
+        <div className="max-w-7xl 2xl:max-w-400 mx-auto px-4 sm:px-6 md:px-10 2xl:px-16 pt-10 sm:pt-12 md:pt-14 pb-24 md:pb-28 w-full relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-6 items-center">
 
             {/* ── Left / text column — 7 of 12 ── */}
             <div className="lg:col-span-7 text-white">
 
-              {/* Eyebrow label */}
-              <div className="hero-reveal hero-delay-0 inline-flex items-center gap-2 mb-6">
-                <span className="hero-eyebrow-dash" aria-hidden="true" />
-                <span className="hero-eyebrow-text">
-                  Kvalitetskontrollerade bilar · Stockholm
-                </span>
-              </div>
-
-              {/* Editorial H1: line 1 heavy display, line 2 lighter + accent word */}
               {/* No entrance animation on the H1/lead/image: they are LCP candidates */}
               <h1 className="font-heading leading-none mb-6">
                 {/* Line 1 — oversized, ultra-bold */}

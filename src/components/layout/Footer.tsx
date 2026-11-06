@@ -78,7 +78,7 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
-          <p>© {new Date().getFullYear()} {SITE.legalName}. Alla rättigheter förbehållna.</p>
+          <p>© {new Date().getFullYear()} {SITE.copyrightHolder}. Alla rättigheter förbehållna.</p>
           <Link href="/admin" className="text-gray-400 hover:text-white underline-offset-4 hover:underline">
             Personalinloggning
           </Link>
