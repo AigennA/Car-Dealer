@@ -18,6 +18,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
 
   // usePathname() has no trailing slash even with trailingSlash: true,
   // but normalise defensively.
@@ -25,7 +26,10 @@ export default function Header() {
   const isActive = (href: string) =>
     href === "/" ? current === "/" : current === href || current.startsWith(`${href}/`);
 
-  // Escape closes the mobile menu and returns focus to the toggle (WCAG 2.1.2 / 2.4.3)
+  // While the mobile menu is open:
+  // - Escape closes it and returns focus to the toggle (WCAG 2.1.2 / 2.4.3)
+  // - tapping or tabbing anywhere outside the header closes it, so the tall
+  //   sticky menu never covers the content the user moved on to (WCAG 2.4.11)
   useEffect(() => {
     if (!mobileMenuOpen) return;
     const onKey = (e: KeyboardEvent) => {
@@ -34,14 +38,23 @@ export default function Header() {
         menuButtonRef.current?.focus();
       }
     };
+    const onOutside = (e: Event) => {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) setMobileMenuOpen(false);
+    };
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onOutside);
+    document.addEventListener("focusin", onOutside);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onOutside);
+      document.removeEventListener("focusin", onOutside);
+    };
   }, [mobileMenuOpen]);
 
   const closeMenu = () => setMobileMenuOpen(false);
 
   return (
-    <header className="bg-black text-white sticky top-0 z-50 border-b border-gray-800">
+    <header ref={headerRef} className="bg-black text-white sticky top-0 z-50 border-b border-gray-800">
       <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between gap-4">
 
         {/* Logo */}

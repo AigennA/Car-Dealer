@@ -45,6 +45,14 @@ body {
 
 /* ── Accessibility primitives ─────────────────────────────────────────── */
 
+/* Anything we move focus to or scroll to (error summaries, form fields from
+   the summary's links, #anchors, <main>) must land below the sticky header,
+   not under it (WCAG 2.4.11 Focus Not Obscured). scroll-padding on <html>
+   is not applied to every focus-scroll, so set scroll-margin explicitly. */
+:where(input, select, textarea, [tabindex="-1"], [role="alert"], [role="status"], [id]) {
+  scroll-margin-top: 6.5rem;
+}
+
 /* Skip link — visible only when focused (WCAG 2.4.1) */
 .skip-link {
   position: absolute;
