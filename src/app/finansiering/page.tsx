@@ -1,3 +1,4 @@
+import { BUSINESS, formatPercent } from "@/config/business";
 import Link from "next/link";
 import CreditCalculator from "@/components/CreditCalculator";
 import {
@@ -39,11 +40,11 @@ export default function FinansieringPage() {
             <ul className="space-y-2 text-sm text-gray-600">
               <li className="flex items-start gap-2">
                 <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-                <span>Ränta från 3,95%</span>
+                <span>Ränta från {formatPercent(BUSINESS.financing.annualRate)}</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-                <span>Lånetid upp till 84 månader</span>
+                <span>Lånetid upp till {Math.max(...BUSINESS.financing.loanTermsMonths)} månader</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
@@ -145,7 +146,7 @@ export default function FinansieringPage() {
               </div>
               <h3 className="font-semibold text-navy mb-2">Garanti</h3>
               <p className="text-sm text-gray-600">
-                Upp till 24 månaders garanti på alla bilar
+                Upp till {BUSINESS.policies.warrantyMonths} månaders garanti på alla bilar
               </p>
             </div>
 
@@ -155,7 +156,7 @@ export default function FinansieringPage() {
               </div>
               <h3 className="font-semibold text-navy mb-2">Öppet Köp</h3>
               <p className="text-sm text-gray-600">
-                14 dagars öppet köp på alla bilar
+                {BUSINESS.policies.openPurchaseDays} dagars öppet köp på alla bilar
               </p>
             </div>
           </div>

@@ -172,7 +172,7 @@ export default function Header() {
             })}
             <li>
               <a href={SITE.phoneHref} className="block px-4 py-3 font-medium text-white border-l-4 border-transparent hover:bg-gray-800">
-                Ring oss: 070-000 00 00
+                Ring oss: {SITE.phone}
               </a>
             </li>
           </ul>

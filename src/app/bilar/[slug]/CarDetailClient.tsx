@@ -106,8 +106,8 @@ export default function CarDetailClient({ slug }: { slug: string }) {
               </div>
 
               <ul className="mt-6 flex flex-wrap gap-2" aria-label="Ingår vid köp">
-                <li><Badge>24 mån garanti</Badge></li>
-                <li><Badge>14 dagars öppet köp</Badge></li>
+                <li><Badge>{SITE.policies.warrantyMonths} mån garanti</Badge></li>
+                <li><Badge>{SITE.policies.openPurchaseDays} dagars öppet köp</Badge></li>
                 <li><Badge>Hemleverans</Badge></li>
               </ul>
 

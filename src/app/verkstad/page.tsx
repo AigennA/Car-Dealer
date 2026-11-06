@@ -8,7 +8,7 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Verkstad – boka service online",
   description:
-    "Service, däckbyte, bromsar, AC och felsökning för alla bilmärken. Se priser och boka verkstadstid online hos Car Dealer i Stockholm.",
+    `Service, däckbyte, bromsar, AC och felsökning för alla bilmärken. Se priser och boka verkstadstid online hos ${SITE.name} i ${SITE.address.city}.`,
 };
 
 const PROMISES = [

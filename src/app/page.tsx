@@ -1,3 +1,4 @@
+import { SITE } from "@/lib/site";
 import Link from "next/link";
 import Image from "next/image";
 import { cars, getUniqueMakes, getUniqueFuels, getUniqueBodyTypes } from "@/lib/cars";
@@ -98,8 +99,8 @@ export default function HomePage() {
               <dl className="hero-reveal hero-delay-4 hero-stats-row flex flex-wrap gap-6 mt-6 pt-6">
                 {[
                   { value: String(cars.length), label: "Bilar i lager" },
-                  { value: "24 mån", label: "Garanti" },
-                  { value: "14 dagar", label: "Öppet köp" },
+                  { value: `${SITE.policies.warrantyMonths} mån`, label: "Garanti" },
+                  { value: `${SITE.policies.openPurchaseDays} dagar`, label: "Öppet köp" },
                 ].map(({ value, label }) => (
                   <div key={label} className="flex flex-col-reverse">
                     <dt className="hero-stat-label text-xs tracking-wide">{label}</dt>

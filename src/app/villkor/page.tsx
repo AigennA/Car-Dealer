@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SITE } from "@/lib/site";
 
 export default function VillkorPage() {
   return (
@@ -24,7 +25,7 @@ export default function VillkorPage() {
           <div>
             <h2 className="text-2xl font-bold text-navy mb-4">1. Allmänt</h2>
             <p className="text-gray-600 mb-4">
-              Dessa allmänna villkor gäller för köp av fordon från Car Dealer AB (org.nr 556XXX-XXXX), 
+              Dessa allmänna villkor gäller för köp av fordon från {SITE.legalName} (org.nr {SITE.orgNumber}), 
               nedan kallat &quot;Säljaren&quot;. Genom att genomföra ett köp hos oss accepterar du dessa villkor.
             </p>
             <p className="text-gray-600">
@@ -121,7 +122,7 @@ export default function VillkorPage() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary mt-1">•</span>
-                <span>Reklamation ska ske skriftligen till info@cardealer.se</span>
+                <span>Reklamation ska ske skriftligen till {SITE.email}</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary mt-1">•</span>
@@ -139,8 +140,8 @@ export default function VillkorPage() {
             <div className="bg-gray-50 p-4 rounded-lg mb-4">
               <p className="text-gray-700 mb-2"><strong>Grundgaranti:</strong></p>
               <ul className="space-y-1 text-sm text-gray-600 ml-4">
-                <li>• 12 månaders garanti på motor och transmission</li>
-                <li>• 24 månaders garanti vid tillval av utökad garanti</li>
+                <li>• {SITE.policies.baseWarrantyMonths} månaders garanti på motor och transmission</li>
+                <li>• {SITE.policies.warrantyMonths} månaders garanti vid tillval av utökad garanti</li>
                 <li>• Garantin gäller vid normal användning och regelbunden service</li>
               </ul>
             </div>
@@ -171,7 +172,7 @@ export default function VillkorPage() {
           <div>
             <h2 className="text-2xl font-bold text-navy mb-4">7. Öppet köp</h2>
             <p className="text-gray-600 mb-4">
-              Vi erbjuder 14 dagars öppet köp på alla fordon:
+              Vi erbjuder {SITE.policies.openPurchaseDays} dagars öppet köp på alla fordon:
             </p>
             <ul className="space-y-2 text-gray-600">
               <li className="flex items-start gap-2">
@@ -192,7 +193,7 @@ export default function VillkorPage() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary mt-1">•</span>
-                <span>Återbetalning sker inom 14 dagar efter godkänd återlämning</span>
+                <span>Återbetalning sker inom {SITE.policies.refundDays} dagar efter godkänd återlämning</span>
               </li>
             </ul>
           </div>
@@ -331,11 +332,11 @@ export default function VillkorPage() {
               För frågor om dessa villkor, kontakta:
             </p>
             <div className="bg-gray-50 p-4 rounded-lg text-sm">
-              <p className="text-gray-700 mb-1"><strong>Car Dealer AB</strong></p>
-              <p className="text-gray-600">Organisationsnummer: 556XXX-XXXX</p>
-              <p className="text-gray-600">Bilvägen 123, 123 45 Stockholm</p>
-              <p className="text-gray-600">E-post: info@cardealer.se</p>
-              <p className="text-gray-600">Telefon: 070-000 00 00</p>
+              <p className="text-gray-700 mb-1"><strong>{SITE.legalName}</strong></p>
+              <p className="text-gray-600">Organisationsnummer: {SITE.orgNumber}</p>
+              <p className="text-gray-600">{SITE.fullAddress}</p>
+              <p className="text-gray-600">E-post: {SITE.email}</p>
+              <p className="text-gray-600">Telefon: {SITE.phone}</p>
             </div>
           </div>
 

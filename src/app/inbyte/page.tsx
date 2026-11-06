@@ -1,3 +1,4 @@
+import { SITE } from "@/lib/site";
 import Link from "next/link";
 import TradeInForm from "@/components/contact/TradeInForm";
 import {
@@ -165,9 +166,9 @@ export default function InbytePage() {
               <div className="space-y-2">
                 <p className="font-semibold flex items-center gap-2">
                   <PhoneIcon className="w-5 h-5 shrink-0" />
-                  <span>070-000 00 00</span>
+                  <span>{SITE.phone}</span>
                 </p>
-                <p className="text-sm opacity-90">Mån-Fre 09:00-18:00</p>
+                <p className="text-sm opacity-90">{SITE.openingHours}</p>
               </div>
             </div>
 

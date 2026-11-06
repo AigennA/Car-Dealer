@@ -1,3 +1,4 @@
+import { BUSINESS, schemaOpeningHours } from "@/config/business";
 import type { Metadata, Viewport } from "next";
 import { preconnect } from "react-dom";
 import { Hanken_Grotesk, Sora, Unbounded } from "next/font/google";
@@ -68,7 +69,7 @@ const organizationJsonLd = {
     addressLocality: SITE.address.city,
     addressCountry: SITE.address.country,
   },
-  openingHours: ["Mo-Fr 09:00-18:00", "Sa 10:00-15:00"],
+  openingHours: schemaOpeningHours(BUSINESS.showroomHours),
 };
 
 export default function RootLayout({

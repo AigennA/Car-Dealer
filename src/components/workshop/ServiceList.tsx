@@ -1,4 +1,5 @@
-import { type ServiceCategory, formatDuration, servicesIn } from "@/lib/workshop";
+import { type ServiceCategory, catalog, formatDuration, servicesIn } from "@/lib/workshop";
+import HoursList from "@/components/ui/HoursList";
 
 /** Price list for one category, from the shared catalogue (data/workshop.json). */
 export default function ServiceList({ category, headingLevel = "h3" }: { category: ServiceCategory; headingLevel?: "h2" | "h3" }) {
@@ -23,10 +24,6 @@ export default function ServiceList({ category, headingLevel = "h3" }: { categor
 
 export function OpeningHours() {
   return (
-    <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-1 text-gray-800">
-      <dt>Måndag–torsdag</dt><dd className="tabular-nums">08:00–17:00</dd>
-      <dt>Fredag</dt><dd className="tabular-nums">08:00–16:00</dd>
-      <dt>Lördag–söndag</dt><dd>Stängt</dd>
-    </dl>
+    <HoursList week={catalog.openingHours} />
   );
 }

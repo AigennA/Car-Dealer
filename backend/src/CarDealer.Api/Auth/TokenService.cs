@@ -10,11 +10,13 @@ namespace CarDealer.Api.Auth;
 public class JwtOptions
 {
     public const string Section = "Jwt";
+    public const int MinKeyBytes = 32;
     public string Issuer { get; set; } = "car-dealer-api";
     public string Audience { get; set; } = "car-dealer-web";
     /// <summary>HMAC-SHA256 signing key, at least 32 characters. Set via environment/user-secrets.</summary>
     public string Key { get; set; } = "";
     public int LifetimeMinutes { get; set; } = 120;
+    public int ClockSkewSeconds { get; set; } = 60;
 }
 
 /// <summary>Issues short-lived JWT access tokens for staff after a successful login.</summary>

@@ -62,7 +62,7 @@ public class AvailabilityRulesTests
     [InlineData(" abc 12d ", "ABC12D")]
     [InlineData("ABC123", "ABC123")]
     public void Registration_numbers_are_normalised(string input, string expected) =>
-        Assert.Equal(expected, WorkshopController.NormalizeReg(input));
+        Assert.Equal(expected, Domain.RegistrationNumber.Normalize(input));
 
     [Fact]
     public void Shared_catalog_has_both_categories()
@@ -171,5 +171,34 @@ public class WorkshopApiTests(ApiFactory factory) : IClassFixture<ApiFactory>
 
         var free = await _client.GetFromJsonAsync<AvailabilityDto>($"/api/workshop/availability?service=service-stor&date={day:yyyy-MM-dd}");
         Assert.Contains("09:00", free!.Slots);
+    }
+}
+
+public class DomainRulesTests
+{
+    [Theory]
+    [InlineData("ABC123", true)]
+    [InlineData("abc 12d", true)]
+    [InlineData("AB1234", false)]
+    [InlineData("", false)]
+    [InlineData(null, false)]
+    public void Registration_number_validation(string? input, bool expected) =>
+        Assert.Equal(expected, Domain.RegistrationNumber.IsValid(input));
+
+    [Fact]
+    public void Reference_codes_are_unambiguous()
+    {
+        var generator = new Services.RandomReferenceGenerator();
+        var codes = Enumerable.Range(0, 200).Select(_ => generator.Next()).ToList();
+        Assert.All(codes, c => Assert.Matches("^CD-[A-HJ-NP-Z2-9]{6}$", c));
+        Assert.True(codes.Distinct().Count() > 190);
+    }
+
+    [Fact]
+    public void Shared_business_file_is_read_by_the_api()
+    {
+        var business = Configuration.BusinessInfo.Load(Path.Combine(AppContext.BaseDirectory, "Data", "business.json"));
+        Assert.True(business.Policies.ResponseHours > 0);
+        Assert.False(string.IsNullOrWhiteSpace(business.LegalName));
     }
 }
