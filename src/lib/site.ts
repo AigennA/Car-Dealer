@@ -3,7 +3,7 @@ export const SITE = {
   name: "Car Dealer",
   legalName: "Car Dealer AB",
   /** Copyright holder shown in the footer (the site's developer/owner). */
-  copyrightHolder: "Globamart AB",
+  copyrightHolder: "Globamart ZM",
   url: "https://aigenna.github.io/Car-Dealer",
   description:
     "Kvalitetskontrollerade begagnade bilar med garanti, finansiering och inbyte. Hitta din nästa bil hos Car Dealer i Stockholm.",
