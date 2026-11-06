@@ -4,7 +4,7 @@ import { SITE } from "@/lib/site";
 
 export const dynamic = "force-static";
 
-const PAGES = ["", "bilar", "finansiering", "inbyte", "om-oss", "kontakt", "villkor", "integritet", "cookies", "tillganglighet"];
+const PAGES = ["", "bilar", "finansiering", "inbyte", "verkstad", "besiktning", "om-oss", "kontakt", "villkor", "integritet", "cookies", "tillganglighet"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

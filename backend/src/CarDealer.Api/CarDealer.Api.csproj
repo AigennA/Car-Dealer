@@ -9,6 +9,8 @@
   <ItemGroup>
     <!-- Seed data exported from the website (npm run seed:export) -->
     <None Update="Data\seed-cars.json" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Shared with the website: services, prices, opening hours -->
+    <None Include="..\..\..\data\workshop.json" Link="Data\workshop.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

@@ -27,6 +27,8 @@ export const PAGES = [
   { path: "/bilar/volvo-v90-d4-awd/", h1: "Volvo V90 D4 AWD" },
   { path: "/finansiering/", h1: "Våra Tjänster" },
   { path: "/inbyte/", h1: /inbyte/i },
+  { path: "/verkstad/", h1: "Service och reparationer – boka tid online" },
+  { path: "/besiktning/", h1: "Besiktning utan krångel" },
   { path: "/om-oss/", h1: /om oss/i },
   { path: "/kontakt/", h1: "Kontakta oss" },
   { path: "/villkor/", h1: /villkor/i },

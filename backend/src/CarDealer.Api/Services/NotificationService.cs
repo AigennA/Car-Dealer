@@ -11,6 +11,7 @@ public interface INotificationService
 {
     Task NewLeadAsync(Lead lead, CancellationToken ct);
     Task NewTradeInAsync(TradeIn tradeIn, CancellationToken ct);
+    Task NewBookingAsync(Booking booking, string serviceName, CancellationToken ct);
 }
 
 public class LogNotificationService(ILogger<LogNotificationService> log) : INotificationService
@@ -25,6 +26,12 @@ public class LogNotificationService(ILogger<LogNotificationService> log) : INoti
     public Task NewTradeInAsync(TradeIn t, CancellationToken ct)
     {
         log.LogInformation("Ny inbytesförfrågan #{Id}: {Brand} {Model} {Year}", t.Id, t.Brand, t.Model, t.Year);
+        return Task.CompletedTask;
+    }
+
+    public Task NewBookingAsync(Booking b, string serviceName, CancellationToken ct)
+    {
+        log.LogInformation("Ny bokning {Reference}: {Service} {Date} {Time}", b.Reference, serviceName, b.Date, b.StartTime);
         return Task.CompletedTask;
     }
 }

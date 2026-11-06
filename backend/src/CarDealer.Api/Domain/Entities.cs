@@ -6,6 +6,9 @@ public enum CarStatus { Available, Reserved, Sold, Draft }
 /// <summary>Workflow state for incoming customer requests.</summary>
 public enum RequestStatus { New, InProgress, Closed }
 
+/// <summary>Lifecycle of a workshop / inspection booking.</summary>
+public enum BookingStatus { Booked, Confirmed, Completed, Cancelled }
+
 public class Car
 {
     public int Id { get; set; }
@@ -77,5 +80,26 @@ public class TradeIn
     public int Mileage { get; set; }
     public string? Message { get; set; }
     public RequestStatus Status { get; set; } = RequestStatus.New;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+}
+
+/// <summary>A workshop or inspection appointment ("Boka verkstadstid").</summary>
+public class Booking
+{
+    public int Id { get; set; }
+    /// <summary>Short code the customer can quote on the phone, e.g. "CD-7K3PQX".</summary>
+    public required string Reference { get; set; }
+    public required string ServiceCode { get; set; }
+    /// <summary>Local (Europe/Stockholm) date and start time of the appointment.</summary>
+    public DateOnly Date { get; set; }
+    public TimeOnly StartTime { get; set; }
+    public int DurationMinutes { get; set; }
+    public required string Name { get; set; }
+    public required string Email { get; set; }
+    public required string Phone { get; set; }
+    /// <summary>Swedish registration number, normalised to upper case without spaces (ABC123 / ABC12D).</summary>
+    public required string RegNumber { get; set; }
+    public string? Message { get; set; }
+    public BookingStatus Status { get; set; } = BookingStatus.Booked;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

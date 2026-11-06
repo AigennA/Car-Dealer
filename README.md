@@ -13,6 +13,7 @@ Visit the live site: [https://AigennA.github.io/Car-Dealer/](https://AigennA.git
 - 🚗 **Car Listings** – 24 quality-checked cars, rendered into static HTML (works without JS, crawlable)
 - 🔍 **Search & filters** – make, body type, fuel, price, year, mileage; live result count
 - 💰 **Loan calculators** – live monthly cost with inline validation
+- 🔧 **Workshop & inspection** – `/verkstad` and `/besiktning` with prices and an accessible online booking wizard (service → day → time → details), connected to the API
 - 🙋 **Customer service** – named advisor with photo, phone, e-mail and booking on home, car and contact pages; team portraits on "Om oss"
 - 📨 **Contact & trade-in forms** – accessible validation, pre-filled from the car page
 - 📱 **Responsive** – mobile-first, no horizontal scroll down to 320 px
@@ -39,7 +40,7 @@ Reports (Swedish): [docs/](docs/README.md) – Lighthouse, WCAG audit, heuristic
 
 The [`backend/`](backend/README.md) folder contains the dealer's platform: an **ASP.NET Core
 (.NET 10) Web API** with **SQL Server** (EF Core migrations, Azure SQL-ready) for inventory,
-contact and trade-in requests, staff login (JWT, roles Admin/Sales) and a dashboard.
+contact and trade-in requests, workshop/inspection bookings, staff login (JWT, roles Admin/Sales) and a dashboard.
 Locally it runs with SQLite, no database server needed: `cd backend && dotnet run --project src/CarDealer.Api`.
 
 ## 🛠️ Technology Stack

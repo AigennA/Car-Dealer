@@ -81,6 +81,8 @@ builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
     p.WithOrigins(origins).AllowAnyHeader().WithMethods("GET", "POST", "PUT", "PATCH", "DELETE")));
 
 builder.Services.AddScoped<INotificationService, LogNotificationService>();
+builder.Services.AddSingleton(_ => CarDealer.Api.Workshop.WorkshopCatalog.Load(
+    Path.Combine(AppContext.BaseDirectory, "Data", "workshop.json")));
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();

@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { href: "/bilar", label: "Lager" },
   { href: "/finansiering", label: "Finansiering" },
   { href: "/inbyte", label: "Inbyte" },
+  { href: "/verkstad", label: "Verkstad" },
   { href: "/om-oss", label: "Om oss" },
   { href: "/kontakt", label: "Kontakt" },
 ];
