@@ -30,6 +30,7 @@ export const MAIN_NAV: NavLink[] = [
   { href: ROUTES.financing, label: "Finansiering" },
   { href: ROUTES.tradeIn, label: "Inbyte" },
   { href: ROUTES.workshop, label: "Verkstad" },
+  { href: ROUTES.inspection, label: "Besiktning" },
   { href: ROUTES.about, label: "Om oss" },
   { href: ROUTES.contact, label: "Kontakt" },
 ];
@@ -51,6 +52,9 @@ export const FOOTER_INFO_LINKS: NavLink[] = [
   { href: ROUTES.cookies, label: "Cookies och lagring" },
   { href: ROUTES.accessibility, label: "Tillgänglighetsredogörelse" },
 ];
+
+/** Call to action in the header: customers' own bookings. */
+export const MY_BOOKING_LINK: NavLink = { href: ROUTES.myBooking, label: "Min bokning" };
 
 export const STAFF_LINK: NavLink = { href: ROUTES.staff, label: "Personalinloggning" };
 

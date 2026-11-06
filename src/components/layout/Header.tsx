@@ -4,9 +4,22 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { SITE } from "@/lib/site";
-import { MAIN_NAV, ROUTES, isActiveRoute } from "@/config/navigation";
+import { MAIN_NAV, MY_BOOKING_LINK, ROUTES, isActiveRoute } from "@/config/navigation";
 import Logo from "./Logo";
 
+/** Red call to action; white on red-600 = 4.8:1 (WCAG AA). */
+const MY_BOOKING_CLASS =
+  "inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-lg bg-red-600 font-semibold text-white transition-colors hover:bg-red-700 " +
+  "focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black";
+
+function CalendarIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4" />
+    </svg>
+  );
+}
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -53,8 +66,8 @@ export default function Header() {
         </Link>
 
         {/* Desktop Menu — active page in coral + animated underline */}
-        <nav aria-label="Huvudmeny" className="hidden lg:block">
-          <ul className="flex items-center gap-7">
+        <nav aria-label="Huvudmeny" className="hidden xl:block">
+          <ul className="flex items-center gap-6">
             {MAIN_NAV.map(({ href, label }) => {
               const active = isActive(href);
               return (
@@ -62,7 +75,7 @@ export default function Header() {
                   <Link
                     href={href}
                     aria-current={active ? "page" : undefined}
-                    className="group relative inline-block py-2 text-sm font-medium rounded-sm"
+                    className="group relative inline-block whitespace-nowrap py-2 text-sm font-medium rounded-sm"
                   >
                     <span className={`transition-colors duration-200 ${active ? "text-accent" : "text-white"}`}>
                       {label}
@@ -81,10 +94,22 @@ export default function Header() {
           </ul>
         </nav>
 
-        {/* Primary action — always visible on desktop */}
+        <div className="flex items-center gap-3">
+        {/* Customers' own bookings — visible on every screen size */}
+        <Link
+          href={MY_BOOKING_LINK.href}
+          aria-current={isActive(MY_BOOKING_LINK.href) ? "page" : undefined}
+          className={`${MY_BOOKING_CLASS} px-3 py-2 text-sm`}
+        >
+          <CalendarIcon />
+          {/* Icon only on the narrowest phones; the name stays for screen readers. */}
+          <span className="sr-only min-[380px]:not-sr-only">{MY_BOOKING_LINK.label}</span>
+        </Link>
+
+        {/* Phone — desktop (wide screens) */}
         <a
           href={SITE.phoneHref}
-          className="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border border-white/40 text-white hover:border-white hover:bg-white/10 transition-colors"
+          className="hidden xl:inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border border-white/40 text-white hover:border-white hover:bg-white/10 transition-colors"
         >
           <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.1 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
@@ -98,7 +123,7 @@ export default function Header() {
           type="button"
           aria-expanded={mobileMenuOpen}
           aria-controls="mobile-menu"
-          className="lg:hidden inline-flex items-center justify-center w-11 h-11 -mr-2 rounded-lg text-white hover:text-accent transition-colors duration-200"
+          className="xl:hidden inline-flex items-center justify-center w-11 h-11 -mr-2 rounded-lg text-white hover:text-accent transition-colors duration-200"
           onClick={() => setMobileMenuOpen((o) => !o)}
         >
           <span className="sr-only">{mobileMenuOpen ? "Stäng meny" : "Öppna meny"}</span>
@@ -110,10 +135,11 @@ export default function Header() {
             )}
           </svg>
         </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
-      <div id="mobile-menu" hidden={!mobileMenuOpen} className="lg:hidden bg-gray-900 border-t border-gray-800">
+      <div id="mobile-menu" hidden={!mobileMenuOpen} className="xl:hidden bg-gray-900 border-t border-gray-800">
         <nav aria-label="Mobilmeny">
           <ul className="flex flex-col py-4">
             {MAIN_NAV.map(({ href, label }) => {

@@ -17,6 +17,8 @@ export const BUSINESS = data as unknown as {
   url: string;
   /** Customer self-service page for bookings ("Min bokning"); the API builds links to it too. */
   manageBookingPath: string;
+  /** Shows the "demo site" banner. Set to false when the site is used by a real dealer. */
+  demoSite: boolean;
   description: string;
   tagline: string;
   contact: { phone: string; phoneE164: string; email: string };

@@ -4,6 +4,7 @@ import { preconnect } from "react-dom";
 import { Hanken_Grotesk, Sora, Unbounded } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
+import DemoBanner from "@/components/layout/DemoBanner";
 import Footer from "@/components/layout/Footer";
 import RouteFocus from "@/components/layout/RouteFocus";
 import { SITE } from "@/lib/site";
@@ -88,6 +89,7 @@ export default function RootLayout({
         <a href="#main" className="skip-link">
           Hoppa till huvudinnehållet
         </a>
+        <DemoBanner />
         <Header />
         <main id="main" tabIndex={-1} className="focus:outline-none">
           {children}

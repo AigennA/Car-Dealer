@@ -131,11 +131,25 @@ test.describe("verkstad & besiktning – bokning", () => {
     expect(results.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(", ")}`)).toEqual([]);
   });
 
-  test("Verkstad finns i huvudmenyn och besiktning i sidfoten", async ({ page, isMobile }) => {
+  test("Verkstad och Besiktning finns i menyn, Min bokning i sidhuvudet", async ({ page, isMobile }) => {
     await page.goto("/");
+    // Min bokning is always visible in the header, also without opening the menu.
+    const myBooking = page.getByRole("banner").getByRole("link", { name: "Min bokning" });
+    await expect(myBooking).toBeVisible();
+    await expect(myBooking).toHaveAttribute("href", /\/min-bokning\/?$/);
+
     if (isMobile) await page.getByRole("button", { name: "Öppna meny" }).click();
     const nav = page.getByRole("navigation", { name: isMobile ? "Mobilmeny" : "Huvudmeny" });
     await expect(nav.getByRole("link", { name: "Verkstad" })).toHaveAttribute("href", /\/verkstad\/?$/);
+    await expect(nav.getByRole("link", { name: "Besiktning" })).toHaveAttribute("href", /\/besiktning\/?$/);
     await expect(page.getByRole("contentinfo").getByRole("link", { name: "Besiktning" })).toBeVisible();
+
+    await myBooking.click();
+    await expect(page.getByRole("heading", { level: 1, name: "Min bokning" })).toBeVisible();
+  });
+
+  test("demo-banderollen talar om att webbplatsen är ett exempel", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByText(/Demowebbplats:/)).toBeVisible();
   });
 });
