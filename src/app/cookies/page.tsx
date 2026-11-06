@@ -4,6 +4,7 @@ import LegalPage, { Table } from "@/components/legal/LegalPage";
 import CookieSettings from "@/components/legal/CookieSettings";
 import { ROUTES } from "@/config/navigation";
 import { SITE } from "@/lib/site";
+import { DEMO_BOOKINGS_KEY } from "@/lib/booking/demoRepository";
 
 export const metadata: Metadata = {
   title: "Cookies och lagring",
@@ -47,6 +48,12 @@ export default function CookiesPage() {
                   ["admin_auth, admin_user", "sessionStorage", "Håller personal inloggad i demo-admin", "Tills fliken stängs"],
                   ["car_dealer_custom_cars", "localStorage", "Bilar som personal lagt till i demo-admin", "Tills de tas bort"],
                   ["car_dealer_accounts", "localStorage", "Demokonton för personalinloggning", "Tills du rensar"],
+                  [
+                    DEMO_BOOKINGS_KEY,
+                    "localStorage",
+                    "Demobokningar (tjänst, tid, e-post och regnummer) så att Min bokning fungerar i demoläget",
+                    "Tills du rensar",
+                  ],
                 ]}
               />
             </>

@@ -7,3 +7,9 @@ export const OPTION =
   "has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-60";
 export const RADIO = "mt-1 h-5 w-5 shrink-0 accent-[var(--color-primary)]";
 export const FIELD_ERROR = "mt-2 text-sm text-red-700";
+export const SECONDARY_BUTTON =
+  "inline-flex min-h-11 items-center justify-center rounded-lg border-2 border-primary bg-white px-5 py-2 font-semibold " +
+  "text-primary hover:bg-primary/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
+export const DANGER_BUTTON =
+  "inline-flex min-h-11 items-center justify-center rounded-lg border-2 border-red-700 bg-white px-5 py-2 font-semibold " +
+  "text-red-800 hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-700 focus-visible:ring-offset-2";

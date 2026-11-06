@@ -21,7 +21,8 @@ handlarens system bakom den.
 | **Inbytesförfrågningar** | `POST /api/tradeins` | Alla (rate-limit + honeypot) |
 | | `GET /api/tradeins` · `PATCH /api/tradeins/{id}/status` | Personal |
 | **Verkstad & besiktning** | `GET /api/workshop/services` · `GET /api/workshop/days?service=` · `GET /api/workshop/availability?service=&date=` · `POST /api/workshop/bookings` | Alla (rate-limit + honeypot) |
-| | `GET /api/workshop/bookings?from=&to=` · `PATCH /api/workshop/bookings/{id}/status` | Personal |
+| **Min bokning** (kund, utan konto) | `POST /api/workshop/bookings/manage` · `…/manage/cancel` · `…/manage/reschedule` | Alla med bokningsnummer + länkhemlighet, e-post eller regnr (rate-limit) |
+| | `GET /api/workshop/bookings?from=&to=` · `PATCH /api/workshop/bookings/{id}/status` · `POST /api/workshop/bookings/check-in` | Personal |
 | **Översikt** | `GET /api/dashboard` – bilar i lager/reserverade/sålda, nya förfrågningar, lagervärde | Personal |
 | **Inloggning** | `POST /api/auth/login` → JWT · `GET /api/auth/me` | Personal |
 | **Drift** | `GET /health` | Alla |
@@ -54,6 +55,24 @@ Tjänster, priser, öppettider och kapacitet ligger i [`data/workshop.json`](../
 - Högst så många bilar samtidigt som verkstaden har platser (`bays`: 2)
 - Den sista platsen kan inte dubbelbokas: tiden kontrolleras igen i en serialiserbar transaktion (409 om någon hann före)
 - Registreringsnummer valideras (ABC 123 / ABC 12D) och sparas normaliserat
+
+## Min bokning – kunden hanterar sin tid själv
+
+Inget konto behövs. Bekräftelsen ger kunden tre vägar tillbaka till bokningen:
+
+1. **Personlig länk** `…/min-bokning/?ref=CD-XXXXXX#t=<hemlighet>` (i bekräftelsen och e-posten).
+   Hemligheten ligger efter `#`, så den skickas aldrig till någon server och hamnar inte i loggar.
+2. **QR-kod** med samma länk – kunden öppnar bokningen i mobilen, personalen skannar den i receptionen (check-in).
+3. **Bokningsnummer + e-post eller registreringsnummer** om länken har kommit bort.
+
+Regler:
+
+- Bara en SHA-256-hash av hemligheten sparas (`Bookings.ManageTokenHash`), jämförelsen är tidskonstant.
+- Fel uppgifter och okända nummer ger exakt samma svar (404), och anropen är rate-limitade – det går inte att gissa sig fram.
+- Svaret innehåller aldrig e-post eller telefon.
+- Flytta/avboka går fram till `changeCutoffHours` (24 h) före besöket, sedan hänvisas kunden till telefon.
+- Vid flytt räknas kundens egen gamla tid inte som upptagen, och den nya tiden kontrolleras i en serialiserbar transaktion.
+- Kalenderfilen (.ics) skapas i webbläsaren.
 
 ## Kodstruktur
 
@@ -97,7 +116,7 @@ API-dokumentation. Utvecklingskontot är `admin@cardealer.local` / `Dev-Password
 (finns bara i `appsettings.Development.json`).
 
 ```bash
-dotnet test        # 53 tester (integration, schemaläggning, domänregler) mot en riktig (temporär) databas
+dotnet test        # 64 tester (integration, schemaläggning, domänregler) mot en riktig (temporär) databas
 ```
 
 ## Köra mot SQL Server / Azure SQL
@@ -129,4 +148,5 @@ Studenter kan använda *Azure for Students* (gratis krediter).
 1. Koppla webbplatsen till API:t (lager från databasen, formulären skickar på riktigt).
 2. Ny personalpanel mot API:t (inloggning, bilar, förfrågningar, översikt).
 3. Bilduppladdning till Blob Storage.
-4. E-postnotis till personalen vid nya förfrågningar (byt `LogNotificationService` mot en e-posttjänst).
+4. E-post: bekräftelse med personlig länk till kunden och notis till personalen
+   (byt `LogNotificationService` mot en e-posttjänst – `BookingReceiptAsync` får länken). SMS-påminnelse därefter.

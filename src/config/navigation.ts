@@ -1,3 +1,5 @@
+import { BUSINESS } from "./business";
+
 /**
  * Every route and menu in one place. Header, footer and sitemap read from
  * here, so adding a page means adding it once.
@@ -9,6 +11,8 @@ export const ROUTES = {
   tradeIn: "/inbyte",
   workshop: "/verkstad",
   inspection: "/besiktning",
+  /** Shared with the API (data/business.json), which e-mails links to it. */
+  myBooking: BUSINESS.manageBookingPath,
   about: "/om-oss",
   contact: "/kontakt",
   terms: "/villkor",
@@ -35,6 +39,7 @@ export const FOOTER_QUICK_LINKS: NavLink[] = [
   { href: ROUTES.financing, label: "Finansiering" },
   { href: ROUTES.workshop, label: "Verkstad" },
   { href: ROUTES.inspection, label: "Besiktning" },
+  { href: ROUTES.myBooking, label: "Min bokning" },
   { href: ROUTES.tradeIn, label: "Inbyte" },
   { href: ROUTES.about, label: "Om oss" },
   { href: ROUTES.contact, label: "Kontakt" },

@@ -7,7 +7,7 @@ import type { BookableDay } from "@/lib/booking/repository";
 import { Field } from "@/components/forms/FormKit";
 import { FIELD_ERROR, LEGEND, OPTION, RADIO, STEP } from "./styles";
 
-type StepProps = { anchorId: string; error?: string };
+type StepProps = { anchorId: string; error?: string; /** Overrides the numbered heading (e.g. when moving a booking). */ legend?: string };
 
 function StepError({ id, error }: { id: string; error?: string }) {
   return error ? <p id={id} className={FIELD_ERROR}>{error}</p> : null;
@@ -37,14 +37,14 @@ export function ServiceStep({ anchorId, error, services, value, onChange }: Step
   );
 }
 
-export function DayStep({ anchorId, error, days, value, onChange }: StepProps & {
+export function DayStep({ anchorId, error, days, value, onChange, legend = "2. Välj dag" }: StepProps & {
   days: BookableDay[] | null;
   value: string;
   onChange: (date: string) => void;
 }) {
   return (
     <fieldset className={STEP} aria-describedby={error ? `${anchorId}-err` : undefined}>
-      <legend className={`${LEGEND} mb-4`}>2. Välj dag <span aria-hidden="true">*</span></legend>
+      <legend className={`${LEGEND} mb-4`}>{legend} <span aria-hidden="true">*</span></legend>
       <div id={anchorId} tabIndex={-1} className="clear-both">
         {days === null ? (
           <p className="text-gray-700" role="status">Hämtar lediga dagar…</p>
@@ -78,10 +78,10 @@ export const TimeStep = forwardRef<HTMLFieldSetElement, StepProps & {
   slots: string[] | null;
   value: string;
   onChange: (time: string) => void;
-}>(function TimeStep({ anchorId, error, date, service, slots, value, onChange }, ref) {
+}>(function TimeStep({ anchorId, error, date, service, slots, value, onChange, legend = "3. Välj tid" }, ref) {
   return (
     <fieldset ref={ref} className={STEP} aria-describedby={error ? `${anchorId}-err` : undefined}>
-      <legend className={`${LEGEND} mb-1`}>3. Välj tid <span aria-hidden="true">*</span></legend>
+      <legend className={`${LEGEND} mb-1`}>{legend} <span aria-hidden="true">*</span></legend>
       <p className="clear-both mb-4 text-sm text-gray-700" role="status" aria-live="polite">
         {slots === null
           ? "Hämtar lediga tider…"

@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "next": "16.1.6",
+    "qrcode": "^1.5.4",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.71.1",
@@ -37,6 +38,7 @@
     "@testing-library/user-event": "^14.6.8",
     "@types/node": "^20",
     "@types/pngjs": "^6.0.5",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6.2.1",

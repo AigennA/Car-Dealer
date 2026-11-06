@@ -1,6 +1,7 @@
 using System.Data;
 using System.Security.Cryptography;
 using CarDealer.Api.Common;
+using CarDealer.Api.Configuration;
 using CarDealer.Api.Contracts;
 using CarDealer.Api.Data;
 using CarDealer.Api.Domain;
@@ -18,10 +19,14 @@ public interface IBookingService
     Task<Result> SetStatusAsync(int id, BookingStatus status, CancellationToken ct);
 }
 
-/// <summary>Short booking codes the customer can read out on the phone.</summary>
+/// <summary>
+/// Booking codes: a short reference the customer can read out on the phone,
+/// and a long secret for their personal "Hantera bokning" link.
+/// </summary>
 public interface IReferenceGenerator
 {
     string Next();
+    string NewManageToken();
 }
 
 public sealed class RandomReferenceGenerator : IReferenceGenerator
@@ -29,18 +34,43 @@ public sealed class RandomReferenceGenerator : IReferenceGenerator
     private const string Prefix = "CD-";
     private const int Length = 6;
     private const string Alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0/O, 1/I
+    private const int TokenBytes = 24; // 192 bits
 
     public string Next() => Prefix + new string(Enumerable.Range(0, Length)
         .Select(_ => Alphabet[RandomNumberGenerator.GetInt32(Alphabet.Length)]).ToArray());
+
+    public string NewManageToken() =>
+        Convert.ToBase64String(RandomNumberGenerator.GetBytes(TokenBytes)).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+}
+
+/// <summary>Only a hash of the manage token is stored; comparison is constant-time.</summary>
+public static class ManageToken
+{
+    public static string Hash(string token) => Convert.ToHexString(SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(token)));
+
+    public static bool Matches(string? token, string? storedHash) =>
+        !string.IsNullOrEmpty(token) && storedHash is { Length: > 0 } &&
+        CryptographicOperations.FixedTimeEquals(System.Text.Encoding.ASCII.GetBytes(Hash(token)), System.Text.Encoding.ASCII.GetBytes(storedHash));
+}
+
+/// <summary>Bookings that occupy a bay (everything except cancelled ones).</summary>
+internal static class BookingQueries
+{
+    public static async Task<IReadOnlyList<Occupied>> OccupiedAsync(this AppDbContext db, DateOnly from, DateOnly to,
+        CancellationToken ct, int? exceptId = null) =>
+        await db.Bookings.Where(b => b.Status != BookingStatus.Cancelled && b.Date >= from && b.Date <= to && b.Id != exceptId)
+            .Select(b => new Occupied(b.StartTime, b.DurationMinutes)).ToListAsync(ct);
+
+    public static string Format(TimeOnly t) => t.ToString("HH:mm");
 }
 
 /// <summary>Workshop and inspection booking use cases. Scheduling rules live in <see cref="Workshop.Availability"/>.</summary>
 public sealed class BookingService(
-    AppDbContext db, WorkshopCatalog catalog, TimeProvider clock, INotificationService notify, IReferenceGenerator references)
+    AppDbContext db, WorkshopCatalog catalog, TimeProvider clock, INotificationService notify, IReferenceGenerator references,
+    BusinessInfo business)
     : IBookingService
 {
     private DateTime UtcNow => clock.GetUtcNow().UtcDateTime;
-    private IQueryable<Booking> Active => db.Bookings.Where(b => b.Status != BookingStatus.Cancelled);
 
     private Result<AvailabilityDto> Availability(string serviceCode, DateOnly date, IReadOnlyList<Occupied> taken)
     {
@@ -85,20 +115,23 @@ public sealed class BookingService(
             if (!free.Contains(start))
                 return Result<BookingConfirmationDto>.Failure(Error.Conflict(Messages.SlotTaken, Messages.SlotTakenDetail));
 
+            var token = references.NewManageToken();
             var booking = new Booking
             {
                 Reference = await UniqueReferenceAsync(ct),
                 ServiceCode = svc.Code, Date = date, StartTime = start, DurationMinutes = svc.Minutes,
                 Name = r.Name.Trim(), Email = r.Email.Trim(), Phone = r.Phone.Trim(),
                 RegNumber = RegistrationNumber.Normalize(r.RegNumber), Message = r.Message?.Trim(), CreatedAt = UtcNow,
+                ManageTokenHash = ManageToken.Hash(token),
             };
             db.Bookings.Add(booking);
             await db.SaveChangesAsync(ct);
             await tx.CommitAsync(ct);
             await notify.NewBookingAsync(booking, svc.Name, ct);
+            await notify.BookingReceiptAsync(booking, svc.Name, business.ManageBookingLink(booking.Reference, token), ct);
 
             return new BookingConfirmationDto(booking.Reference, svc.Name, date, Format(start), svc.Minutes,
-                string.Format(Messages.BookingThanks, booking.Reference));
+                string.Format(Messages.BookingThanks, booking.Reference), token);
         });
     }
 
@@ -122,9 +155,7 @@ public sealed class BookingService(
         return Result.Success();
     }
 
-    private async Task<IReadOnlyList<Occupied>> TakenAsync(DateOnly from, DateOnly to, CancellationToken ct) =>
-        await Active.Where(b => b.Date >= from && b.Date <= to)
-            .Select(b => new Occupied(b.StartTime, b.DurationMinutes)).ToListAsync(ct);
+    private Task<IReadOnlyList<Occupied>> TakenAsync(DateOnly from, DateOnly to, CancellationToken ct) => db.OccupiedAsync(from, to, ct);
 
     private async Task<string> UniqueReferenceAsync(CancellationToken ct)
     {
@@ -134,5 +165,5 @@ public sealed class BookingService(
         return code;
     }
 
-    private static string Format(TimeOnly t) => t.ToString("HH:mm");
+    private static string Format(TimeOnly t) => BookingQueries.Format(t);
 }

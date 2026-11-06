@@ -61,6 +61,10 @@ export default function BookingWizard({ category, initialService, repository }: 
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5" aria-describedby={anchor("req")}>
+      <p className="text-gray-700">
+        Har du redan bokat? Se, flytta eller avboka under{" "}
+        <Link href={ROUTES.myBooking} className="text-primary underline underline-offset-4">Min bokning</Link>.
+      </p>
       <RequiredHint id={anchor("req")} />
       <ErrorSummary ref={summaryRef} errors={errorList} />
 

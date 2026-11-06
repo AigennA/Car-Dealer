@@ -34,10 +34,58 @@ test.describe("verkstad & besiktning – bokning", () => {
     await expect(form).toContainText("Du bokar Service stor tisdag 10 november kl. 10:00");
     await form.getByRole("button", { name: "Boka tid" }).click();
 
-    const confirmation = page.getByRole("status").filter({ hasText: "bokningsbekräftelse" });
+    const confirmation = page.getByRole("status").filter({ hasText: "Demobokning sparad" });
     await expect(confirmation).toBeFocused();
     await expect(confirmation).toContainText("tisdag 10 november kl. 10:00");
     await expect(confirmation).toContainText("Demoläge"); // honest: nothing was booked without the API
+    await expect(confirmation).toContainText(/DEMO-[A-Z2-9]{6}/);
+    await expect(confirmation.getByRole("img", { name: /QR-kod till din bokning/ })).toBeVisible();
+  });
+
+  test("Min bokning: öppna via länken, flytta och avboka", async ({ page }) => {
+    await page.goto("/verkstad/");
+    const form = page.locator("form").filter({ hasText: "1. Välj tjänst" });
+    await form.getByRole("radio", { name: /Service liten/ }).check();
+    await form.getByRole("group", { name: /2\. Välj dag/ }).getByRole("radio", { name: /17 nov/i }).check();
+    await pickTime(page, "10:00");
+    await form.getByLabel(/^Namn/).fill("Anna Svensson");
+    await form.getByLabel(/^Telefon/).fill("070-123 45 67");
+    await form.getByLabel(/^E-post/).fill("anna@example.se");
+    await form.getByLabel(/^Registreringsnummer/).fill("abc 12d");
+    await form.getByRole("button", { name: "Boka tid" }).click();
+
+    const confirmation = page.getByRole("status").filter({ hasText: "Demobokning sparad" });
+    const reference = (await confirmation.textContent())!.match(/DEMO-[A-Z2-9]{6}/)![0];
+    const calendar = confirmation.getByRole("link", { name: "Lägg till i kalendern" });
+    await expect(calendar).toHaveAttribute("download", `bokning-${reference}.ics`);
+
+    await confirmation.getByRole("link", { name: "Hantera bokningen" }).click();
+    await expect(page).toHaveURL(new RegExp(`/min-bokning/\\?ref=${reference}#t=`));
+    const heading = page.getByRole("heading", { name: "Service liten" });
+    await expect(heading).toBeFocused();
+    await expect(page.getByRole("article")).toContainText("tisdag 17 november kl. 10:00");
+
+    await page.getByRole("button", { name: "Ändra tid" }).click();
+    await page.getByRole("radio", { name: /18 nov/i }).check();
+    await pickTime(page, "14:00");
+    await page.getByRole("button", { name: "Spara ny tid" }).click();
+    await expect(page.getByRole("status").filter({ hasText: "Din nya tid" })).toBeFocused();
+    await expect(page.getByRole("article")).toContainText("onsdag 18 november kl. 14:00");
+
+    const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+    expect(results.violations.map((v) => v.id)).toEqual([]);
+
+    await page.getByRole("button", { name: "Avboka" }).click();
+    await page.getByRole("button", { name: "Ja, avboka" }).click();
+    await expect(page.getByRole("status").filter({ hasText: "avbokad" })).toBeFocused();
+    await expect(page.getByRole("article")).toContainText("Avbokad");
+
+    // Lost the link? Booking number + registration number finds it again.
+    await page.goto("/min-bokning/");
+    await page.getByLabel(/^Bokningsnummer/).fill(reference);
+    await page.getByLabel(/^E-post eller registreringsnummer/).fill("ABC 12D");
+    await page.getByRole("button", { name: "Visa bokningen" }).click();
+    await expect(page.getByRole("article")).toContainText("Avbokad");
   });
 
   test("felsammanfattning för saknad tid och ogiltigt registreringsnummer", async ({ page }) => {

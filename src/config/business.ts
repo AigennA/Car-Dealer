@@ -15,6 +15,8 @@ export const BUSINESS = data as unknown as {
   foundedYear: number;
   copyrightHolder: string;
   url: string;
+  /** Customer self-service page for bookings ("Min bokning"); the API builds links to it too. */
+  manageBookingPath: string;
   description: string;
   tagline: string;
   contact: { phone: string; phoneE164: string; email: string };
@@ -23,7 +25,7 @@ export const BUSINESS = data as unknown as {
   policies: { baseWarrantyMonths: number; warrantyMonths: number; openPurchaseDays: number; refundDays: number; responseHours: number };
   financing: { annualRate: number; loanTermsMonths: number[]; defaultTermMonths: number; defaultDownPaymentShare: number; leasingTermMonths: [number, number] };
   maps: { embedUrl: string };
-  dataRetention: { leadMonths: number; tradeInMonths: number; bookkeepingYears: number };
+  dataRetention: { leadMonths: number; bookingMonths: number; tradeInMonths: number; bookkeepingYears: number };
 };
 
 export const phoneHref = `tel:${BUSINESS.contact.phoneE164}`;

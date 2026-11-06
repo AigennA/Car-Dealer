@@ -123,6 +123,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ILeadService, LeadService>();
         services.AddScoped<ITradeInService, TradeInService>();
         services.AddScoped<IBookingService, BookingService>();
+        services.AddScoped<IBookingManagementService, BookingManagementService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IDashboardService, DashboardService>();
         services.AddScoped<INotificationService, LogNotificationService>();

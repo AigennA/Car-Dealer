@@ -81,6 +81,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             e.Property(x => x.RegNumber).HasMaxLength(7);
             e.Property(x => x.Message).HasMaxLength(2000);
             e.Property(x => x.Status).HasConversion<string>().HasMaxLength(20);
+            e.Property(x => x.ManageTokenHash).HasMaxLength(64);
         });
     }
 }

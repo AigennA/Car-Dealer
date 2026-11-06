@@ -22,6 +22,8 @@ export type Catalog = {
   bays: number;
   minLeadMinutes: number;
   bookingHorizonDays: number;
+  /** Customers can move or cancel online until this many hours before the appointment. */
+  changeCutoffHours: number;
   openingHours: Record<string, [string, string]>;
   services: WorkshopService[];
 };
@@ -56,6 +58,17 @@ export function zonedNow(now: Date = new Date(), timeZone = catalog.timeZone): {
     }).formatToParts(now).map((p) => [p.type, p.value]),
   );
   return { date: `${parts.year}-${parts.month}-${parts.day}`, minutes: Number(parts.hour) * 60 + Number(parts.minute) };
+}
+
+/** Local workshop date + "HH:MM" → the UTC instant (handles summer/winter time). */
+export function zonedToUtc(date: string, time: string, timeZone = catalog.timeZone): Date {
+  const guess = Date.parse(`${date}T${time}:00Z`);
+  const offsetAt = (ms: number) => {
+    const z = zonedNow(new Date(ms), timeZone);
+    return Date.parse(`${z.date}T${toHHMM(z.minutes)}:00Z`) - ms;
+  };
+  const first = guess - offsetAt(guess);
+  return new Date(guess - offsetAt(first));
 }
 
 export type Occupied = { start: string; minutes: number };

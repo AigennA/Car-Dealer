@@ -60,6 +60,13 @@ export default function IntegritetPage() {
                   `${BUSINESS.dataRetention.leadMonths} månader efter sista kontakt`,
                 ],
                 [
+                  "Du bokar verkstads- eller besiktningstid",
+                  "Namn, e-post, telefon, registreringsnummer, ev. meddelande",
+                  "Utföra jobbet, skicka bekräftelse och låta dig hantera bokningen under Min bokning",
+                  "Avtal (art. 6.1 b)",
+                  `${BUSINESS.dataRetention.bookingMonths} månader efter besöket; kvitton enligt bokföringslagen`,
+                ],
+                [
                   "Du begär inbytesvärdering",
                   "Namn, kontaktuppgifter, bilens märke, modell, årsmodell, miltal, beskrivning",
                   "Värdera din bil och lämna erbjudande",
@@ -95,7 +102,8 @@ export default function IntegritetPage() {
               </p>
               <Ul>
                 <li>ditt val om kartan ska visas (samtycke till Google Maps),</li>
-                <li>inloggning och bilar som läggs till i personalens demo-admin.</li>
+                <li>inloggning och bilar som läggs till i personalens demo-admin,</li>
+                <li>bokningar som görs i demoläget, så att Min bokning går att prova.</li>
               </Ul>
               <p>
                 Du kan när som helst ta bort dem under <Link className={a} href={ROUTES.cookies}>Cookies och lagring</Link>{" "}
