@@ -35,13 +35,21 @@ Visit the live site: [https://AigennA.github.io/Car-Dealer/](https://AigennA.git
 
 Reports (Swedish): [docs/](docs/README.md) – Lighthouse, WCAG audit, heuristic evaluation, code review, test strategy.
 
+## 🏢 Dealer platform (backend)
+
+The [`backend/`](backend/README.md) folder contains the dealer's platform: an **ASP.NET Core
+(.NET 10) Web API** with **SQL Server** (EF Core migrations, Azure SQL-ready) for inventory,
+contact and trade-in requests, staff login (JWT, roles Admin/Sales) and a dashboard.
+Locally it runs with SQLite, no database server needed: `cd backend && dotnet run --project src/CarDealer.Api`.
+
 ## 🛠️ Technology Stack
 
 - **Framework:** Next.js 16
 - **UI Library:** React 19
 - **Styling:** Tailwind CSS 4
 - **Language:** TypeScript
-- **Deployment:** GitHub Pages
+- **Backend:** ASP.NET Core (.NET 10) Web API, EF Core, SQL Server / Azure SQL
+- **Deployment:** GitHub Pages (website)
 
 ## 📋 Getting Started
 
