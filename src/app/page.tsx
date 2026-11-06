@@ -7,6 +7,7 @@ import MiniCreditCalculator from "@/components/MiniCreditCalculator";
 import HeroCarStrip from "@/components/HeroCarStrip";
 
 import SearchForm from "@/components/ui/SearchForm";
+import AdvisorCard from "@/components/people/AdvisorCard";
 import {
   ShieldCheckIcon,
   BanknotesIcon,
@@ -38,22 +39,14 @@ export default function HomePage() {
           breaks the content-box boundary — the compositional
           tension that distinguishes it from a plain 50/50 split.
         */}
-        <div className="max-w-7xl 2xl:max-w-400 mx-auto px-4 sm:px-6 md:px-10 2xl:px-16 pt-6 sm:pt-8 md:pt-10 pb-24 md:pb-28 w-full relative z-10">
+        <div className="max-w-7xl 2xl:max-w-400 mx-auto px-4 sm:px-6 md:px-10 2xl:px-16 pt-10 sm:pt-12 md:pt-14 pb-24 md:pb-28 w-full relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-6 items-center">
 
             {/* ── Left / text column — 7 of 12 ── */}
             <div className="lg:col-span-7 text-white">
 
-              {/* Eyebrow label */}
-              <div className="hero-reveal hero-delay-0 inline-flex items-center gap-2 mb-6">
-                <span className="hero-eyebrow-dash" aria-hidden="true" />
-                <span className="hero-eyebrow-text">
-                  Din nästa bil — hittar du här
-                </span>
-              </div>
-
-              {/* Editorial H1: line 1 heavy display, line 2 lighter + accent word */}
-              <h1 className="hero-reveal hero-delay-1 font-heading leading-none mb-6 select-none">
+              {/* No entrance animation on the H1/lead/image: they are LCP candidates */}
+              <h1 className="font-heading leading-none mb-6">
                 {/* Line 1 — oversized, ultra-bold */}
                 <span className="hero-h1-line hero-h1-line-1">HITTA DIN</span>
                 {/* Line 2 — semibold, last word in accent color */}
@@ -64,9 +57,9 @@ export default function HomePage() {
               </h1>
 
               {/* Lead paragraph */}
-              <p className="hero-reveal hero-delay-2 hero-lead text-lg md:text-xl mb-6 max-w-md">
-                Bläddra bland hundratals handplockade bilar och hitta den
-                som passar dig — med trygg finansiering och garanti.
+              <p className="hero-lead text-lg md:text-xl mb-6 max-w-md">
+                Bläddra bland {cars.length} handplockade, kvalitetskontrollerade bilar
+                och hitta den som passar dig — med trygg finansiering och garanti.
               </p>
 
               {/* CTA row */}
@@ -76,7 +69,7 @@ export default function HomePage() {
                   href="/bilar"
                   className="hero-cta-primary inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-white transition-all duration-200 cursor-pointer"
                 >
-                  <span>Utforska mer</span>
+                  <span>Se alla bilar</span>
                   {/* Heroicons arrow-right (24px outline, strokeWidth 2) */}
                   <svg
                     aria-hidden="true"
@@ -91,28 +84,29 @@ export default function HomePage() {
                   </svg>
                 </Link>
 
-                {/* Secondary ghost CTA */}
+                {/* Secondary ghost CTA — a different task than the primary one */}
                 <Link
-                  href="/bilar"
-                  className="hero-cta-ghost inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-medium text-white border border-white/40 hover:bg-white/10 transition-all duration-200 cursor-pointer"
+                  href="/finansiering"
+                  className="hero-cta-ghost inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-medium text-white border border-white/60 hover:bg-white/10 transition-colors duration-200 cursor-pointer"
                 >
-                  <span>Se alla bilar</span>
+                  <span>Räkna på billån</span>
                 </Link>
               </div>
 
               {/* Trust micro-stats */}
-              <div className="hero-reveal hero-delay-4 hero-stats-row flex flex-wrap gap-6 mt-6 pt-6">
+              {/* Trust facts — only claims the business can back up */}
+              <dl className="hero-reveal hero-delay-4 hero-stats-row flex flex-wrap gap-6 mt-6 pt-6">
                 {[
-                  { value: "200+", label: "Bilar i lager" },
-                  { value: "100%", label: "Garanterade" },
-                  { value: "5★",   label: "Kundbetyg" },
+                  { value: String(cars.length), label: "Bilar i lager" },
+                  { value: "24 mån", label: "Garanti" },
+                  { value: "14 dagar", label: "Öppet köp" },
                 ].map(({ value, label }) => (
-                  <div key={label}>
-                    <p className="hero-stat-value font-heading font-bold text-2xl">{value}</p>
-                    <p className="hero-stat-label text-xs tracking-wide">{label}</p>
+                  <div key={label} className="flex flex-col-reverse">
+                    <dt className="hero-stat-label text-xs tracking-wide">{label}</dt>
+                    <dd className="hero-stat-value font-heading font-bold text-2xl">{value}</dd>
                   </div>
                 ))}
-              </div>
+              </dl>
             </div>
 
             {/* ── Right / image column — 5 of 12, offset upward ── */}
@@ -122,7 +116,7 @@ export default function HomePage() {
                 accent (top-right) + white (bottom-left) — composing the
                 photo without clashing with the gradient background.
               */}
-              <div className="hero-image-frame hero-reveal-scale hero-delay-img">
+              <div className="hero-image-frame">
                 {/* Subtle azur glow behind the car photo */}
                 <div
                   aria-hidden="true"
@@ -130,11 +124,13 @@ export default function HomePage() {
                 />
                 <Image
                   src="https://images.unsplash.com/photo-1614200187524-dc4b892acf16?w=800&h=500&fit=crop"
-                  alt="Premium bil"
+                  alt="Sportig bil i studiomiljö"
                   width={800}
                   height={500}
+                  sizes="(max-width: 1024px) 92vw, 40vw"
                   className="hero-image w-full h-auto object-contain drop-shadow-2xl rounded-2xl"
-                  priority
+                  preload
+                  fetchPriority="high"
                 />
               </div>
             </div>
@@ -149,17 +145,17 @@ export default function HomePage() {
       </section>
 
       {/* Search Bar */}
-      <section className="relative z-20 -mt-16">
+      <section aria-label="Snabbsök" className="relative z-20 -mt-16">
         <div className="max-w-6xl 2xl:max-w-350 mx-auto px-4 2xl:px-16">
           <SearchForm makes={makes} bodyTypes={bodyTypes} fuels={fuels} />
         </div>
       </section>
 
       {/* Featured Cars — moved above USP so cars appear right after the search bar */}
-      <section className="bg-surface pt-8 pb-16">
+      <section aria-labelledby="featured-heading" className="bg-surface pt-8 pb-16">
         <div className="max-w-7xl 2xl:max-w-400 mx-auto px-4 2xl:px-16">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-navy mb-4">
+            <h2 id="featured-heading" className="text-3xl md:text-4xl font-bold text-navy mb-4">
               Utvalda bilar
             </h2>
             <p className="text-lg text-gray-600">
@@ -169,23 +165,24 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {featuredCars.map((car) => (
-              <CarCard key={car.id} car={car} />
+              <CarCard key={car.id} car={car} headingLevel="h3" />
             ))}
           </div>
 
           <div className="text-center">
             <Link
               href="/bilar"
-              className="inline-block bg-primary text-white px-8 py-3 rounded-xl font-semibold hover:bg-primary-dark transition"
+              className="inline-flex items-center gap-2 bg-primary text-white px-8 py-3 rounded-xl font-semibold hover:bg-primary-dark transition-colors"
             >
-              Visa alla bilar →
+              Visa alla {cars.length} bilar
+              <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>
       </section>
 
       {/* Mini Loan Calculator — right after "Visa alla bilar" (Featured), above USP */}
-      <section className="bg-white py-16">
+      <section aria-label="Snabbkalkyl för billån" className="bg-white py-16">
         <div className="max-w-7xl 2xl:max-w-400 mx-auto px-4 2xl:px-16">
           <div className="max-w-3xl mx-auto">
             <MiniCreditCalculator />
@@ -194,8 +191,9 @@ export default function HomePage() {
       </section>
 
       {/* USP Section */}
-      <section className="bg-white py-16">
+      <section aria-labelledby="usp-heading" className="bg-surface py-16">
         <div className="max-w-7xl 2xl:max-w-400 mx-auto px-4 2xl:px-16">
+          <h2 id="usp-heading" className="sr-only">Våra tjänster</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="mb-4 flex justify-center">
@@ -236,10 +234,13 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Customer service — a named advisor */}
+      <AdvisorCard />
+
       {/* Why Choose Us */}
-      <section className="bg-white py-16">
+      <section aria-labelledby="why-heading" className="bg-white py-16">
         <div className="max-w-5xl 2xl:max-w-350 mx-auto px-4 2xl:px-16">
-          <h2 className="text-3xl font-bold text-navy mb-8 text-center">
+          <h2 id="why-heading" className="text-3xl font-bold text-navy mb-8 text-center">
             Varför välja oss?
           </h2>
 

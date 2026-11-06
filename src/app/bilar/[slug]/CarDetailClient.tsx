@@ -1,105 +1,119 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { type Car } from "@/lib/cars";
-import { getAllCars } from "@/lib/clientStorage";
+import Image from "next/image";
+import Link from "next/link";
+import { useCars } from "@/lib/clientStorage";
 import Badge from "@/components/ui/Badge";
 import PrimaryButtonLink from "@/components/ui/PrimaryButtonLink";
-import Link from "next/link";
 import CarCreditCalculator from "@/components/CarCreditCalculator";
 import ImageGallery from "@/components/ui/ImageGallery";
+import { CheckIcon } from "@/components/ui/icons";
+import { SITE } from "@/lib/site";
+import AdvisorCard from "@/components/people/AdvisorCard";
 
 export default function CarDetailClient({ slug }: { slug: string }) {
-  const [car, setCar] = useState<Car | null>(null);
-  const [similarCars, setSimilarCars] = useState<Car[]>([]);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    const allCars = getAllCars();
-    const found = allCars.find((c) => c.slug === slug) || null;
-    setCar(found);
-    if (found) {
-      setSimilarCars(
-        allCars
-          .filter((c) => c.id !== found.id && (c.bodyType === found.bodyType || c.fuel === found.fuel))
-          .slice(0, 3)
-      );
-    }
-    setLoaded(true);
-  }, [slug]);
-
-  if (!loaded) {
-    return (
-      <section className="bg-surface min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 py-16 text-center text-gray-600">
-          Laddar...
-        </div>
-      </section>
-    );
-  }
+  const cars = useCars();
+  const car = cars.find((c) => c.slug === slug) ?? null;
 
   if (!car) {
     return (
       <section className="bg-surface min-h-screen">
         <div className="max-w-7xl mx-auto px-4 py-16">
           <h1 className="text-2xl font-bold text-navy">Bilen hittades inte</h1>
-          <p className="text-gray-600 mt-2">Den här sidan finns inte.</p>
-          <Link href="/bilar" className="text-primary hover:underline mt-6 inline-block">
-            Tillbaka till bilar
+          <p className="text-gray-700 mt-2">
+            Bilen kan redan vara såld eller så har länken ändrats.
+          </p>
+          <Link href="/bilar" className="text-primary underline underline-offset-4 mt-6 inline-block">
+            Se alla bilar i lager
           </Link>
         </div>
       </section>
     );
   }
 
+  const similarCars = cars
+    .filter((c) => c.id !== car.id && (c.bodyType === car.bodyType || c.fuel === car.fuel))
+    .slice(0, 3);
+  const contactHref = `/kontakt?bil=${encodeURIComponent(car.slug)}`;
+
   return (
     <section className="bg-surface min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-10">
-        <div className="mb-6">
-          <Link href="/bilar" className="text-sm text-primary hover:underline">
-            &larr; Tillbaka
-          </Link>
-        </div>
+        {/* Breadcrumbs — WCAG 2.4.8 Location / heuristic "visibility of system status" */}
+        <nav aria-label="Brödsmulor" className="mb-6 text-sm">
+          <ol className="flex flex-wrap items-center gap-1.5 text-gray-700">
+            <li>
+              <Link href="/" className="text-primary underline-offset-4 hover:underline">Hem</Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li>
+              <Link href="/bilar" className="text-primary underline-offset-4 hover:underline">Lager</Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" className="text-gray-800 font-medium truncate max-w-[60vw]">{car.title}</li>
+          </ol>
+        </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_0.6fr] gap-8">
           <ImageGallery images={car.images} title={car.title} />
 
-          <aside className="lg:sticky lg:top-24 h-fit">
+          <aside className="lg:sticky lg:top-24 h-fit" aria-labelledby="car-title">
             <div className="bg-white rounded-2xl shadow-sm p-6">
-              <h1 className="text-2xl font-bold text-navy">{car.title}</h1>
+              <h1 id="car-title" className="text-2xl font-bold text-navy">{car.title}</h1>
 
-              <div className="mt-4 flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-primary">
-                  {car.price.toLocaleString()} kr
+              <p className="mt-4 flex items-baseline gap-2">
+                <span className="text-2xl font-bold text-primary tabular-nums">
+                  {car.price.toLocaleString("sv-SE")} kr
                 </span>
-                <span className="text-sm text-gray-500">inkl. moms</span>
-              </div>
+                <span className="text-sm text-gray-600">inkl. moms</span>
+              </p>
 
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Badge>{car.year}</Badge>
-                <Badge>{car.mileage.toLocaleString()} mil</Badge>
-                <Badge>{car.fuel}</Badge>
-                <Badge>{car.transmission}</Badge>
-                <Badge>{car.drivetrain}</Badge>
-                <Badge>{car.bodyType}</Badge>
-              </div>
+              <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                {[
+                  ["Årsmodell", String(car.year)],
+                  ["Miltal", `${car.mileage.toLocaleString("sv-SE")} mil`],
+                  ["Bränsle", car.fuel],
+                  ["Växellåda", car.transmission],
+                  ["Drivning", car.drivetrain],
+                  ["Kaross", car.bodyType],
+                  ["Färg", car.color],
+                ].map(([k, v]) => (
+                  <div key={k}>
+                    <dt className="text-gray-600">{k}</dt>
+                    <dd className="font-semibold text-navy">{v}</dd>
+                  </div>
+                ))}
+              </dl>
 
               <div className="mt-6 space-y-3">
-                <PrimaryButtonLink href="/kontakt">
+                <PrimaryButtonLink href={`${contactHref}&amne=provkorning`}>
                   Boka provkörning
                 </PrimaryButtonLink>
 
-                <Link
-                  href="/kontakt"
-                  className="block text-center text-sm text-gray-700 hover:text-primary"
+                <a
+                  href={SITE.phoneHref}
+                  className="block w-full text-center border border-gray-400 rounded-xl px-5 py-3 font-medium text-navy hover:border-primary hover:text-primary transition-colors"
                 >
-                  Kontakta oss
+                  Ring oss: {SITE.phone}
+                </a>
+
+                <Link
+                  href={contactHref}
+                  className="block text-center text-sm text-gray-700 underline underline-offset-4 hover:text-primary"
+                >
+                  Ställ en fråga om bilen
                 </Link>
               </div>
 
-              <div className="mt-6 text-xs text-gray-500">
+              <ul className="mt-6 flex flex-wrap gap-2" aria-label="Ingår vid köp">
+                <li><Badge>24 mån garanti</Badge></li>
+                <li><Badge>14 dagars öppet köp</Badge></li>
+                <li><Badge>Hemleverans</Badge></li>
+              </ul>
+
+              <p className="mt-6 text-xs text-gray-600">
                 Vi reserverar oss för eventuella felskrivningar.
-              </div>
+              </p>
             </div>
           </aside>
         </div>
@@ -115,7 +129,7 @@ export default function CarDetailClient({ slug }: { slug: string }) {
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-gray-700">
               {car.features.map((f) => (
                 <li key={f} className="flex items-start gap-2">
-                  <span className="text-primary mt-0.5">&bull;</span>
+                  <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
                   <span>{f}</span>
                 </li>
               ))}
@@ -123,40 +137,49 @@ export default function CarDetailClient({ slug }: { slug: string }) {
           </div>
         </div>
 
-        <div className="mt-8">
-          <CarCreditCalculator carPrice={car.price} />
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start">
+          <CarCreditCalculator key={car.id} carPrice={car.price} />
+          <AdvisorCard variant="compact" headingLevel="h2" />
         </div>
 
         {similarCars.length > 0 && (
-          <div className="mt-12">
-            <h2 className="text-xl font-bold text-navy mb-4">Liknande bilar</h2>
-            <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+          <section className="mt-12" aria-labelledby="similar-heading">
+            <h2 id="similar-heading" className="text-xl font-bold text-navy mb-4">Liknande bilar</h2>
+            <ul className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
               {similarCars.map((c) => (
-                <div key={c.id} className="bg-white rounded-2xl shadow-sm p-5">
-                  <Link href={`/bilar/${c.slug}`} className="block aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden cursor-pointer">
-                    <img src={c.images[0]} alt={c.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                <li key={c.id} className="group bg-white rounded-2xl shadow-sm p-5">
+                  <Link
+                    href={`/bilar/${c.slug}`}
+                    tabIndex={-1}
+                    aria-hidden="true"
+                    className="block relative aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden"
+                  >
+                    <Image
+                      src={c.images[0]}
+                      alt=""
+                      fill
+                      sizes="(max-width: 640px) 92vw, (max-width: 1280px) 45vw, 380px"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
                   </Link>
 
                   <div className="mt-4">
-                    <Link href={`/bilar/${c.slug}`} className="block">
-                      <div className="font-semibold text-navy hover:text-primary transition-colors cursor-pointer">{c.title}</div>
-                    </Link>
-                    <div className="text-sm text-gray-600 mt-1">
-                      {c.year} &bull; {c.mileage.toLocaleString()} mil
-                    </div>
-                    <div className="flex items-center justify-between mt-3">
-                      <div className="text-primary font-bold">
-                        {c.price.toLocaleString()} kr
-                      </div>
-                      <Link href={`/bilar/${c.slug}`} className="text-primary hover:underline text-sm">
-                        Visa
+                    <h3 className="font-semibold text-navy">
+                      <Link href={`/bilar/${c.slug}`} className="hover:text-primary transition-colors">
+                        {c.title}
                       </Link>
-                    </div>
+                    </h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {c.year} &bull; {c.mileage.toLocaleString("sv-SE")} mil
+                    </p>
+                    <p className="text-primary font-bold mt-3 tabular-nums">
+                      {c.price.toLocaleString("sv-SE")} kr
+                    </p>
                   </div>
-                </div>
+                </li>
               ))}
-            </div>
-          </div>
+            </ul>
+          </section>
         )}
       </div>
     </section>

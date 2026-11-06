@@ -1,111 +1,105 @@
 "use client";
 
-import { useState } from "react";
-import { calculateMonthlyPayment } from "@/lib/finance";
+import { useId, useState } from "react";
+import { LOAN_TERMS, quoteLoan } from "@/lib/finance";
 
 interface CarCreditCalculatorProps {
   carPrice: number;
 }
 
-export default function CarCreditCalculator({ carPrice }: CarCreditCalculatorProps) {
-  const [downPayment, setDownPayment] = useState<number>(Math.round(carPrice * 0.2));
-  const [loanTerm, setLoanTerm] = useState<number>(60);
-  const [monthlyPayment, setMonthlyPayment] = useState<number | null>(null);
-  const [showResult, setShowResult] = useState(false);
+const FIELD =
+  "w-full border border-gray-400 rounded-lg px-3 py-2 text-gray-900 bg-white " +
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary";
 
-  const handleCalculate = () => {
-    const loanAmount = carPrice - downPayment;
-    if (loanAmount <= 0) {
-      alert("Kontantinsatsen måste vara mindre än bilens pris");
-      return;
-    }
-    setMonthlyPayment(calculateMonthlyPayment(loanAmount, loanTerm));
-    setShowResult(true);
-  };
+/** Live loan calculator for a specific car — updates as you type, no alert() dialogs. */
+export default function CarCreditCalculator({ carPrice }: CarCreditCalculatorProps) {
+  const id = useId();
+  const [downPayment, setDownPayment] = useState<string>(String(Math.round(carPrice * 0.2)));
+  const [loanTerm, setLoanTerm] = useState<number>(60);
+
+  const result = quoteLoan(carPrice, Number(downPayment || 0), loanTerm);
+  const errorId = `${id}-error`;
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6">
-      <h2 className="text-lg font-semibold text-navy mb-4">Beräkna finansiering</h2>
+    <section className="bg-white rounded-2xl shadow-sm p-6" aria-labelledby={`${id}-heading`}>
+      <h2 id={`${id}-heading`} className="text-lg font-semibold text-navy mb-4">Beräkna finansiering</h2>
 
-      <div className="space-y-4">
+      <div className="grid gap-4 md:grid-cols-3">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Bilens pris
-          </label>
-          <div className="text-lg font-bold text-navy">
-            {carPrice.toLocaleString("sv-SE")} kr
-          </div>
+          <p className="block text-sm font-medium text-gray-700 mb-2">Bilens pris</p>
+          <p className="text-lg font-bold text-navy tabular-nums">{carPrice.toLocaleString("sv-SE")} kr</p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor={`${id}-down`} className="block text-sm font-medium text-gray-700 mb-2">
             Kontantinsats (kr)
           </label>
           <input
+            id={`${id}-down`}
             type="number"
+            inputMode="numeric"
+            min={0}
+            step={5000}
             value={downPayment}
-            onChange={(e) => setDownPayment(Number(e.target.value))}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+            onChange={(e) => setDownPayment(e.target.value)}
+            aria-invalid={!result.ok}
+            aria-describedby={!result.ok ? errorId : undefined}
+            className={FIELD}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor={`${id}-term`} className="block text-sm font-medium text-gray-700 mb-2">
             Lånetid
           </label>
           <select
+            id={`${id}-term`}
             value={loanTerm}
             onChange={(e) => setLoanTerm(Number(e.target.value))}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+            className={FIELD}
           >
-            <option value="24">24 månader</option>
-            <option value="36">36 månader</option>
-            <option value="48">48 månader</option>
-            <option value="60">60 månader</option>
-            <option value="72">72 månader</option>
-            <option value="84">84 månader</option>
+            {LOAN_TERMS.map((t) => (
+              <option key={t} value={t}>{t} månader</option>
+            ))}
           </select>
         </div>
+      </div>
 
-        <button
-          type="button"
-          onClick={handleCalculate}
-          className="w-full bg-primary text-white px-4 py-3 rounded-lg hover:bg-primary-dark transition font-medium"
-        >
-          Beräkna månadskostnad
-        </button>
-
-        {showResult && monthlyPayment !== null && (
-          <div className="mt-4 bg-primary/5 border border-primary/20 rounded-lg p-4">
-            <div className="text-center">
-              <p className="text-sm text-gray-600 mb-1">Beräknad månadskostnad</p>
-              <p className="text-3xl font-bold text-primary mb-1">
-                {monthlyPayment.toLocaleString("sv-SE")} kr
+      <div className="mt-6" aria-live="polite">
+        {result.ok ? (
+          <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 grid gap-4 md:grid-cols-[auto_1fr] md:items-center">
+            <div className="text-center md:text-left md:pr-6 md:border-r md:border-gray-200">
+              <p className="text-sm text-gray-700 mb-1">Beräknad månadskostnad</p>
+              <p className="text-3xl font-bold text-primary tabular-nums">
+                {result.quote.monthlyPayment.toLocaleString("sv-SE")} kr
               </p>
-              <p className="text-sm text-gray-600">per månad i {loanTerm} månader</p>
+              <p className="text-sm text-gray-700">per månad i {loanTerm} månader</p>
             </div>
-
-            <div className="mt-4 pt-4 border-t border-gray-200 space-y-2 text-sm">
+            <dl className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600">Totalt att låna:</span>
-                <span className="font-medium text-navy">{(carPrice - downPayment).toLocaleString("sv-SE")} kr</span>
+                <dt className="text-gray-700">Totalt att låna</dt>
+                <dd className="font-medium text-navy tabular-nums">{result.quote.loanAmount.toLocaleString("sv-SE")} kr</dd>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Total kostnad:</span>
-                <span className="font-medium text-navy">{(monthlyPayment * loanTerm).toLocaleString("sv-SE")} kr</span>
+                <dt className="text-gray-700">Total kostnad</dt>
+                <dd className="font-medium text-navy tabular-nums">{result.quote.totalCost.toLocaleString("sv-SE")} kr</dd>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Räntekostnad:</span>
-                <span className="font-medium text-navy">{(monthlyPayment * loanTerm - (carPrice - downPayment)).toLocaleString("sv-SE")} kr</span>
+                <dt className="text-gray-700">Räntekostnad</dt>
+                <dd className="font-medium text-navy tabular-nums">{result.quote.interestCost.toLocaleString("sv-SE")} kr</dd>
               </div>
-            </div>
+            </dl>
           </div>
+        ) : (
+          <p id={errorId} className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+            {result.error}
+          </p>
         )}
       </div>
 
-      <p className="text-xs text-gray-500 mt-4">
-        * Beräkning med 3,95% årsränta. Exakta villkor fastställs vid ansökan.
+      <p className="text-xs text-gray-600 mt-4">
+        * Beräkning med 3,95 % årsränta. Exakta villkor fastställs vid ansökan.
       </p>
-    </div>
+    </section>
   );
 }

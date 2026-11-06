@@ -1,7 +1,5 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
+import TradeInForm from "@/components/contact/TradeInForm";
 import {
   BoltIcon,
   BanknotesIcon,
@@ -11,14 +9,6 @@ import {
 } from "@/components/ui/icons";
 
 export default function InbytePage() {
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSubmitted(true);
-    e.currentTarget.reset();
-  };
-
   return (
     <section className="bg-surface min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -116,132 +106,7 @@ export default function InbytePage() {
           <div className="bg-white rounded-xl p-8 shadow-sm">
             <h2 className="text-2xl font-bold text-navy mb-6">Begär värdering</h2>
 
-            {submitted ? (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
-                <p className="text-green-800 font-medium mb-2">Tack för din förfrågan!</p>
-                <p className="text-green-700 text-sm">Vi återkommer med en värdering inom 24 timmar.</p>
-                <button
-                  type="button"
-                  onClick={() => setSubmitted(false)}
-                  className="mt-4 text-primary hover:underline text-sm"
-                >
-                  Skicka en ny förfrågan
-                </button>
-              </div>
-            ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                  Namn
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
-                  placeholder="Ditt namn"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  E-post
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
-                  placeholder="din@email.se"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                  Telefon
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
-                  placeholder="070-000 00 00"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="brand" className="block text-sm font-medium text-gray-700 mb-2">
-                  Bilmärke
-                </label>
-                <input
-                  type="text"
-                  id="brand"
-                  name="brand"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
-                  placeholder="t.ex. Volvo"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="model" className="block text-sm font-medium text-gray-700 mb-2">
-                  Modell
-                </label>
-                <input
-                  type="text"
-                  id="model"
-                  name="model"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
-                  placeholder="t.ex. V90"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="year" className="block text-sm font-medium text-gray-700 mb-2">
-                  Årsmodell
-                </label>
-                <input
-                  type="text"
-                  id="year"
-                  name="year"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
-                  placeholder="t.ex. 2020"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="mileage" className="block text-sm font-medium text-gray-700 mb-2">
-                  Miltal
-                </label>
-                <input
-                  type="text"
-                  id="mileage"
-                  name="mileage"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
-                  placeholder="t.ex. 50000 km"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                  Ytterligare information
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={4}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
-                  placeholder="Beskriv bilens skick, utrustning mm..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition font-medium"
-              >
-                Begär värdering
-              </button>
-            </form>
-            )}
+            <TradeInForm />
           </div>
 
           {/* Additional Info */}
@@ -292,7 +157,7 @@ export default function InbytePage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-primary to-[#0099CC] rounded-xl p-8 text-white">
+            <div className="bg-linear-to-br from-primary-dark to-primary rounded-xl p-8 text-white">
               <h3 className="text-xl font-bold mb-4">Vill du ha råd direkt?</h3>
               <p className="mb-6 opacity-90">
                 Ring oss så hjälper vi dig med en snabb värdering över telefon

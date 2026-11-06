@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { type Car } from "@/lib/cars";
-import { getAllCars, addCar, updateCar, deleteCar } from "@/lib/clientStorage";
+import { useCars, addCar, updateCar, deleteCar } from "@/lib/clientStorage";
 import Link from "next/link";
+import Image from "next/image";
 
 const ACCOUNTS_KEY = "car_dealer_accounts";
 const DEFAULT_ACCOUNT = { username: "admin", password: "admin123" };
@@ -32,44 +33,48 @@ function saveAccount(username: string, password: string): boolean {
   return true;
 }
 
+/* Session state lives in sessionStorage; expose it as an external store so we
+   don't need setState-in-effect to restore a login after reload. */
+const SESSION_EVENT = "car-dealer:admin-session";
+function subscribeSession(cb: () => void) {
+  window.addEventListener(SESSION_EVENT, cb);
+  return () => window.removeEventListener(SESSION_EVENT, cb);
+}
+function getSessionUser(): string {
+  return sessionStorage.getItem("admin_auth") === "true" ? sessionStorage.getItem("admin_user") ?? "" : "";
+}
+function setSessionUser(user: string | null) {
+  if (user) {
+    sessionStorage.setItem("admin_auth", "true");
+    sessionStorage.setItem("admin_user", user);
+  } else {
+    sessionStorage.removeItem("admin_auth");
+    sessionStorage.removeItem("admin_user");
+  }
+  window.dispatchEvent(new Event(SESSION_EVENT));
+}
+
 export default function AdminPage() {
-  const [authenticated, setAuthenticated] = useState(false);
+  const sessionUser = useSyncExternalStore(subscribeSession, getSessionUser, () => "");
+  const authenticated = sessionUser !== "";
   const [username, setUsername] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [authError, setAuthError] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
   const [registerSuccess, setRegisterSuccess] = useState("");
-  const [cars, setCars] = useState<Car[]>([]);
+  const cars = useCars();
   const [showForm, setShowForm] = useState(false);
   const [editingCar, setEditingCar] = useState<Car | null>(null);
+  const [notice, setNotice] = useState("");
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const saved = sessionStorage.getItem("admin_auth");
-      const savedUser = sessionStorage.getItem("admin_user");
-      if (saved === "true" && savedUser) {
-        setAuthenticated(true);
-        setUsername(savedUser);
-      }
-    }
-  }, []);
-
-  const loadCars = useCallback(() => {
-    setCars(getAllCars());
-  }, []);
-
-  useEffect(() => {
-    if (authenticated) loadCars();
-  }, [authenticated, loadCars]);
-
-  const handleDelete = (id: string) => {
-    if (!confirm("Är du säker på att du vill ta bort denna bil?")) return;
-    const deleted = deleteCar(id);
-    if (deleted) {
-      loadCars();
-    } else {
-      alert("Denna bil kan inte tas bort (statisk data).");
-    }
+  const handleDelete = (car: Car) => {
+    if (!confirm(`Är du säker på att du vill ta bort ${car.title}?`)) return;
+    const deleted = deleteCar(car.id);
+    setNotice(
+      deleted
+        ? `${car.title} togs bort.`
+        : `${car.title} ingår i grunddatan och kan inte tas bort här.`,
+    );
   };
 
   const handleEdit = (car: Car) => {
@@ -85,7 +90,6 @@ export default function AdminPage() {
   const handleFormClose = () => {
     setShowForm(false);
     setEditingCar(null);
-    loadCars();
   };
 
   const handleLogin = (e: React.FormEvent) => {
@@ -98,10 +102,7 @@ export default function AdminPage() {
     const accounts = getAccounts();
     const account = accounts.find((a) => a.username.toLowerCase() === user.toLowerCase());
     if (account && account.password === passwordInput) {
-      setAuthenticated(true);
-      setUsername(user);
-      sessionStorage.setItem("admin_auth", "true");
-      sessionStorage.setItem("admin_user", user);
+      setSessionUser(user);
       setAuthError("");
     } else {
       setAuthError("Fel användarnamn eller lösenord.");
@@ -130,11 +131,9 @@ export default function AdminPage() {
   };
 
   const handleLogout = () => {
-    setAuthenticated(false);
+    setSessionUser(null);
     setUsername("");
     setPasswordInput("");
-    sessionStorage.removeItem("admin_auth");
-    sessionStorage.removeItem("admin_user");
   };
 
   if (!authenticated) {
@@ -159,6 +158,7 @@ export default function AdminPage() {
               <input
                 type="text"
                 id="username"
+                autoComplete="username"
                 value={username}
                 onChange={(e) => { setUsername(e.target.value); setAuthError(""); }}
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
@@ -172,6 +172,7 @@ export default function AdminPage() {
               <input
                 type="password"
                 id="password"
+                autoComplete={isRegistering ? "new-password" : "current-password"}
                 value={passwordInput}
                 onChange={(e) => { setPasswordInput(e.target.value); setAuthError(""); }}
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-gray-900"
@@ -179,7 +180,7 @@ export default function AdminPage() {
               />
             </div>
             {authError && (
-              <p className="text-red-600 text-sm">{authError}</p>
+              <p role="alert" className="text-red-700 text-sm">{authError}</p>
             )}
             <button
               type="submit"
@@ -220,7 +221,7 @@ export default function AdminPage() {
             <div>
               <h1 className="text-3xl font-bold text-navy">Admin Panel</h1>
               <p className="text-gray-600 mt-1">
-                Inloggad som <span className="font-medium text-navy">{username}</span>
+                Inloggad som <span className="font-medium text-navy">{sessionUser}</span>
               </p>
             </div>
             <div className="flex gap-3">
@@ -246,28 +247,33 @@ export default function AdminPage() {
           </div>
         </div>
 
+        <p role="status" aria-live="polite" className={notice ? "mb-4 bg-white border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-800" : "sr-only"}>
+          {notice}
+        </p>
+
         {/* Cars List */}
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
+              <caption className="sr-only">Bilar i lager, {cars.length} st. Varje rad har knappar för att redigera och ta bort.</caption>
               <thead className="bg-gray-50 border-b">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                  <th scope="col" className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
                     Bil
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                  <th scope="col" className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
                     År
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                  <th scope="col" className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
                     Miltal
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                  <th scope="col" className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
                     Pris
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+                  <th scope="col" className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
                     Bränsle
                   </th>
-                  <th className="px-6 py-4 text-right text-sm font-semibold text-gray-900">
+                  <th scope="col" className="px-6 py-4 text-right text-sm font-semibold text-gray-900">
                     Åtgärder
                   </th>
                 </tr>
@@ -277,9 +283,11 @@ export default function AdminPage() {
                   <tr key={car.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <Link href={`/bilar/${car.slug}`} className="flex items-center gap-3 group">
-                        <img
+                        <Image
                           src={car.images[0]}
-                          alt={car.title}
+                          alt=""
+                          width={64}
+                          height={48}
                           className="w-16 h-12 object-cover rounded"
                         />
                         <div>
@@ -294,23 +302,27 @@ export default function AdminPage() {
                       {car.year}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
-                      {car.mileage.toLocaleString()} mil
+                      {car.mileage.toLocaleString("sv-SE")} mil
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
-                      {car.price.toLocaleString()} kr
+                      {car.price.toLocaleString("sv-SE")} kr
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
                       {car.fuel}
                     </td>
                     <td className="px-6 py-4 text-right text-sm">
                       <button
+                        type="button"
                         onClick={() => handleEdit(car)}
+                        aria-label={`Redigera ${car.title}`}
                         className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark hover:shadow-lg transition-all duration-200 font-medium mr-3"
                       >
                         Redigera
                       </button>
                       <button
-                        onClick={() => handleDelete(car.id)}
+                        type="button"
+                        onClick={() => handleDelete(car)}
+                        aria-label={`Ta bort ${car.title}`}
                         className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 hover:shadow-lg transition-all duration-200 font-medium"
                       >
                         Ta bort
@@ -348,6 +360,20 @@ export default function AdminPage() {
 }
 
 function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  // Open as a true modal and give focus back to the button that opened it.
+  useEffect(() => {
+    const opener = document.activeElement as HTMLElement | null;
+    const dialog = dialogRef.current;
+    dialog?.showModal();
+    dialog?.querySelector<HTMLInputElement>("input, select, textarea")?.focus();
+    return () => {
+      dialog?.close();
+      opener?.focus();
+    };
+  }, []);
+
   const [formData, setFormData] = useState({
     make: car?.make || "",
     model: car?.model || "",
@@ -429,17 +455,29 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-navy">
-            {car ? "Redigera bil" : "Lägg till ny bil"}
+    /* Native modal <dialog>: traps focus, makes the page behind inert,
+       closes on Escape (onCancel) and is announced as a dialog. */
+    <dialog
+      ref={dialogRef}
+      aria-labelledby="car-form-title"
+      onCancel={(e) => {
+        e.preventDefault();
+        onClose();
+      }}
+      className="backdrop:bg-black/50 bg-transparent p-4 m-auto max-w-3xl w-full"
+    >
+      <div className="bg-white rounded-xl shadow-xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 z-10 bg-white border-b px-6 py-4 flex justify-between items-center">
+          <h2 id="car-form-title" className="text-2xl font-bold text-navy">
+            {car ? `Redigera ${car.title}` : "Lägg till ny bil"}
           </h2>
           <button
+            type="button"
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 text-2xl cursor-pointer"
+            className="inline-flex items-center justify-center w-11 h-11 rounded-lg text-gray-700 hover:text-navy hover:bg-gray-100 text-2xl cursor-pointer"
           >
-            &times;
+            <span aria-hidden="true">&times;</span>
+            <span className="sr-only">Stäng dialogen</span>
           </button>
         </div>
 
@@ -699,6 +737,6 @@ function CarFormModal({ car, onClose }: { car: Car | null; onClose: () => void }
           </div>
         </form>
       </div>
-    </div>
+    </dialog>
   );
 }

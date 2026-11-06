@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Kontakta oss | Car Dealer",
+  title: "Kontakta oss",
   description: "Kontakta Car Dealer för frågor om bilar, finansiering eller inbyte. Vi finns i Stockholm.",
 };
 

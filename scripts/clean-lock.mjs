@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-
-const fs = require('fs');
-const path = require('path');
+import fs from 'node:fs';
+import path from 'node:path';
 
 const lockPath = path.join(process.cwd(), '.next', 'dev', 'lock');
 

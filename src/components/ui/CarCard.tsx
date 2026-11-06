@@ -4,6 +4,10 @@ import { Car } from "@/lib/cars";
 
 type Props = {
   car: Car;
+  /** Heading level for the car name, so pages keep a logical outline (WCAG 1.3.1). */
+  headingLevel?: "h2" | "h3";
+  /** Preload the image — only for cards that are likely above the fold. */
+  preload?: boolean;
 };
 
 /* ── Inline SVG icons (Heroicons outline style, 16×16 viewport, stroke-width 1.75) ── */
@@ -103,23 +107,29 @@ function ArrowRightIcon() {
 
 /* ─────────────────────────────────────────────────────────────── */
 
-export default function CarCard({ car }: Props) {
-  return (
-    <article className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-primary/30 shadow-sm hover:shadow-xl transition-[box-shadow,border-color] duration-300 flex flex-col">
+export default function CarCard({ car, headingLevel = "h3", preload = false }: Props) {
+  const Heading = headingLevel;
+  const href = `/bilar/${car.slug}`;
+  const name = `${car.make} ${car.model}`;
 
-      {/* ── Image ── */}
+  return (
+    <article className="group w-full bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-primary/30 shadow-sm hover:shadow-xl transition-[box-shadow,border-color] duration-300 flex flex-col">
+
+      {/* ── Image ── (duplicate link: hidden from AT and tab order to avoid
+           three identical tab stops per card) */}
       <Link
-        href={`/bilar/${car.slug}`}
-        className="block relative aspect-[16/10] bg-gray-50 overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-        aria-label={`Se ${car.make} ${car.model}`}
+        href={href}
+        tabIndex={-1}
+        aria-hidden="true"
+        className="block relative aspect-[16/10] bg-gray-100 overflow-hidden cursor-pointer"
       >
         <Image
           src={car.images[0]}
-          alt={`${car.make} ${car.model}`}
+          alt=""
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes="(max-width: 640px) 92vw, (max-width: 1280px) 45vw, 380px"
           className="object-cover transition-transform duration-500 motion-reduce:transition-none group-hover:scale-105"
-          priority={car.featured}
+          preload={preload}
         />
 
         {/* Subtle gradient overlay for readability */}
@@ -138,28 +148,28 @@ export default function CarCard({ car }: Props) {
       <div className="flex flex-col flex-1 p-5 gap-4">
 
         {/* Make + model */}
-        <Link
-          href={`/bilar/${car.slug}`}
-          className="block cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm"
-        >
-          <h3 className="font-heading font-semibold text-lg leading-snug text-navy group-hover:text-primary transition-colors duration-200 line-clamp-1">
-            {car.make} {car.model}
-          </h3>
-        </Link>
+        <Heading className="font-heading font-semibold text-lg leading-snug text-navy line-clamp-1">
+          <Link
+            href={href}
+            className="cursor-pointer rounded-sm group-hover:text-primary transition-colors duration-200"
+          >
+            {name}
+          </Link>
+        </Heading>
 
         {/* Meta row */}
-        <ul className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[13px] text-gray-500 list-none m-0 p-0">
+        <ul className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-gray-600 list-none m-0 p-0">
           <li className="inline-flex items-center gap-1.5">
             <CalendarIcon />
-            <span>{car.year}</span>
+            <span><span className="sr-only">Årsmodell </span>{car.year}</span>
           </li>
           <li className="inline-flex items-center gap-1.5">
             <OdometerIcon />
-            <span>{car.mileage.toLocaleString("sv-SE")} mil</span>
+            <span><span className="sr-only">Miltal </span>{car.mileage.toLocaleString("sv-SE")} mil</span>
           </li>
           <li className="inline-flex items-center gap-1.5">
             <FuelIcon />
-            <span>{car.fuel}</span>
+            <span><span className="sr-only">Bränsle </span>{car.fuel}</span>
           </li>
         </ul>
 
@@ -169,18 +179,18 @@ export default function CarCard({ car }: Props) {
         {/* Price + CTA */}
         <div className="flex items-center justify-between gap-3">
           <div className="flex flex-col">
-            <span className="text-[11px] font-medium text-gray-400 uppercase tracking-widest">Pris</span>
+            <span className="text-xs font-medium text-gray-600 uppercase tracking-widest">Pris</span>
             <span className="font-heading font-bold text-2xl leading-none text-navy tabular-nums">
               {car.price.toLocaleString("sv-SE")}
-              <span className="text-base font-medium text-gray-500 ml-1">kr</span>
+              <span className="text-base font-medium text-gray-600 ml-1">kr</span>
             </span>
           </div>
 
           <Link
-            href={`/bilar/${car.slug}`}
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white text-sm font-semibold px-4 py-2.5 rounded-xl cursor-pointer transition-colors duration-200 shadow-sm hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            href={href}
+            className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white text-sm font-semibold px-4 py-2.5 rounded-xl cursor-pointer transition-colors duration-200 shadow-sm hover:shadow-md"
           >
-            <span>Visa bil</span>
+            <span>Visa bil{" "}<span className="sr-only">{name}</span></span>
             <span className="transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none">
               <ArrowRightIcon />
             </span>

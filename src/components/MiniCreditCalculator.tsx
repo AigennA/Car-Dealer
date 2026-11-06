@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { calculateMonthlyPayment } from "@/lib/finance";
+import { LOAN_TERMS, quoteLoan } from "@/lib/finance";
 
 /* ── Inline SVG icons (Heroicons outline style, stroke-width 1.75) ── */
 
@@ -49,13 +49,12 @@ function ArrowRightIcon() {
   );
 }
 
-const LOAN_TERMS = [24, 36, 48, 60, 72, 84] as const;
 
 /* Shared input/select styling — solid-ish white fields on the pale coral card,
    dark text so values stay readable. */
 const FIELD_CLASS =
-  "w-full border border-accent/30 rounded-lg px-3 py-2.5 text-navy text-sm font-medium " +
-  "bg-white/70 hover:bg-white transition-colors duration-150 " +
+  "w-full border border-gray-400 rounded-lg px-3 py-2.5 text-navy text-sm font-medium " +
+  "bg-white transition-colors duration-150 " +
   "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent cursor-pointer";
 
 export default function MiniCreditCalculator() {
@@ -65,26 +64,11 @@ export default function MiniCreditCalculator() {
 
   /* Derive result and error without useEffect — no setState inside effects */
   const { result, error } = useMemo(() => {
-    const priceNum = Number(price);
-    const downNum = Number(downPayment);
-
-    if (!price || !priceNum) {
-      return { result: null, error: null };
-    }
-
-    const loanAmount = priceNum - downNum;
-
-    if (downNum >= priceNum || loanAmount <= 0) {
-      return {
-        result: null,
-        error: "Kontantinsatsen måste vara lägre än bilens pris.",
-      };
-    }
-
-    return {
-      result: calculateMonthlyPayment(loanAmount, loanTerm),
-      error: null,
-    };
+    if (!price || !Number(price)) return { result: null, error: null };
+    const r = quoteLoan(Number(price), Number(downPayment || 0), loanTerm);
+    return r.ok
+      ? { result: r.quote.monthlyPayment, error: null }
+      : { result: null, error: r.error };
   }, [price, downPayment, loanTerm]);
 
   return (
@@ -95,9 +79,9 @@ export default function MiniCreditCalculator() {
         <span className="shrink-0 text-accent-dark">
           <CalculatorIcon />
         </span>
-        <h3 className="font-heading font-semibold text-lg leading-tight text-navy">
+        <h2 className="font-heading font-semibold text-lg leading-tight text-navy">
           Snabbkalkyl – billån
-        </h3>
+        </h2>
       </div>
 
       {/* Inputs */}
@@ -107,7 +91,7 @@ export default function MiniCreditCalculator() {
         <div className="flex flex-col gap-1">
           <label
             htmlFor="mini-calc-price"
-            className="text-xs font-semibold text-gray-600 uppercase tracking-wider"
+            className="text-xs font-semibold text-gray-700 uppercase tracking-wider"
           >
             Bilens pris (kr)
           </label>
@@ -119,7 +103,7 @@ export default function MiniCreditCalculator() {
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             placeholder="250 000"
-            className={`${FIELD_CLASS} placeholder:text-gray-400`}
+            className={`${FIELD_CLASS} placeholder:text-gray-500`}
           />
         </div>
 
@@ -127,7 +111,7 @@ export default function MiniCreditCalculator() {
         <div className="flex flex-col gap-1">
           <label
             htmlFor="mini-calc-down"
-            className="text-xs font-semibold text-gray-600 uppercase tracking-wider"
+            className="text-xs font-semibold text-gray-700 uppercase tracking-wider"
           >
             Kontantinsats (kr)
           </label>
@@ -139,7 +123,7 @@ export default function MiniCreditCalculator() {
             value={downPayment}
             onChange={(e) => setDownPayment(e.target.value)}
             placeholder="50 000"
-            className={`${FIELD_CLASS} placeholder:text-gray-400`}
+            className={`${FIELD_CLASS} placeholder:text-gray-500`}
           />
         </div>
 
@@ -147,7 +131,7 @@ export default function MiniCreditCalculator() {
         <div className="flex flex-col gap-1">
           <label
             htmlFor="mini-calc-term"
-            className="text-xs font-semibold text-gray-600 uppercase tracking-wider"
+            className="text-xs font-semibold text-gray-700 uppercase tracking-wider"
           >
             Lånetid
           </label>
@@ -177,28 +161,30 @@ export default function MiniCreditCalculator() {
       )}
 
       {/* Result row — live, no button needed */}
+      <div aria-live="polite">
       {result !== null && !error && (
         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-          <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider">
+          <span className="text-xs font-semibold text-gray-700 uppercase tracking-wider">
             Ca. månadskostnad
           </span>
           <span className="font-heading font-bold text-3xl text-accent-dark tabular-nums leading-none">
             {result.toLocaleString("sv-SE")}
-            <span className="text-base font-semibold text-gray-500 ml-1">kr/mån</span>
+            <span className="text-base font-semibold text-gray-700 ml-1">kr/mån</span>
           </span>
         </div>
       )}
+      </div>
 
       {/* Footer: disclaimer + CTA link */}
       <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-accent/20">
-        <p className="text-[11px] text-gray-500 leading-snug max-w-xs">
+        <p className="text-xs text-gray-700 leading-snug max-w-xs">
           * Indikativ beräkning med 3,95% årsränta. Exakta villkor fastställs vid ansökan.
         </p>
         <Link
           href="/finansiering"
           className="
             inline-flex items-center gap-1.5
-            text-sm font-semibold text-accent-dark
+            text-sm font-semibold text-accent-darker
             underline underline-offset-4 decoration-accent/50 hover:decoration-accent-dark
             transition-colors duration-150
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm

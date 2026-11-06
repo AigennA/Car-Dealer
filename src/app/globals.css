@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Unbounded:wght@400;700;800;900&display=swap');
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-body: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-display: 'Sora', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-bebas: 'Unbounded', 'Trebuchet MS', system-ui, sans-serif; /* logo wordmark — distinctive display face */
+  /* Font families are self-hosted by next/font (see app/layout.tsx) */
+  --font-body: var(--font-hanken), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: var(--font-sora), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-bebas: var(--font-unbounded), 'Trebuchet MS', system-ui, sans-serif; /* logo wordmark */
 }
 
 @theme inline {
@@ -17,13 +17,22 @@
   --font-logo: var(--font-bebas);
   
   /* Custom colors for Car Dealer */
-  --color-primary: #0099cc;
-  --color-primary-dark: #007aa3;
+  /* Brand azure, darkened from #0099cc so white text / text on white
+     passes WCAG 2.2 AA (5.0:1). The bright azure lives on as --color-primary-bright
+     for decorative use only (gradients, glows). */
+  --color-primary: #0077a8;
+  --color-primary-dark: #005f86;
+  --color-primary-bright: #0099cc;
   --color-navy: #1a202c;
   --color-surface: #f7fafc;
   /* Warm accent — coral/amber, complementary to azur */
-  --color-accent: #ff6535;
-  --color-accent-dark: #e0521e;
+  --color-accent: #ff6535;      /* decorative / on dark backgrounds only */
+  --color-accent-dark: #c2410c; /* text on white & filled buttons with white text (5.2:1) */
+  --color-accent-darker: #9a3412;
+}
+
+html {
+  scroll-padding-top: 6rem; /* sticky header must not cover focused/anchored content (WCAG 2.4.11) */
 }
 
 body {
@@ -34,11 +43,88 @@ body {
   overflow-x: hidden;
 }
 
+/* ── Accessibility primitives ─────────────────────────────────────────── */
+
+/* Anything we move focus to or scroll to (error summaries, form fields from
+   the summary's links, #anchors, <main>) must land below the sticky header,
+   not under it (WCAG 2.4.11 Focus Not Obscured). scroll-padding on <html>
+   is not applied to every focus-scroll, so set scroll-margin explicitly. */
+:where(input, select, textarea, [tabindex="-1"], [role="alert"], [role="status"], [id]) {
+  scroll-margin-top: 6.5rem;
+}
+
+/* Skip link — visible only when focused (WCAG 2.4.1) */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: #1a202c;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+.skip-link:focus {
+  top: 1rem;
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Consistent, clearly visible keyboard focus everywhere (WCAG 2.4.7 / 2.4.13) */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.bg-black :where(a, button):focus-visible,
+footer :where(a, button):focus-visible {
+  outline-color: var(--color-accent);
+}
+
+/* Interactive elements get the pointer cursor (Tailwind 4 removed it for buttons) */
+:where(button, [role="button"], select, summary, label[for]) {
+  cursor: pointer;
+}
+:where(button:disabled) {
+  cursor: not-allowed;
+}
+
+/* Windows High Contrast / forced colours: keep focus and custom controls visible */
+@media (forced-colors: active) {
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 3px solid CanvasText;
+  }
+  .skip-link:focus { outline: 3px solid CanvasText; }
+  [role="switch"] { border: 2px solid ButtonText; }
+  .logo-text-main,
+  .hero-h1-accent {
+    -webkit-text-fill-color: CanvasText;
+    background: none;
+  }
+}
+
+/* Global reduced-motion safety net */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Modern typography */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   font-weight: 700;
   letter-spacing: -0.02em;
+  /* Swedish compound words ("finansieringsmöjligheter") must wrap on narrow
+     screens / 400 % zoom instead of causing horizontal scroll (WCAG 1.4.10) */
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 /* Logo styling with unique display font */
@@ -302,10 +388,12 @@ h1, h2, h3, h4, h5, h6 {
 */
 .hero-section {
   background:
-    radial-gradient(ellipse 55% 45% at 88%  8%, rgba(255, 101,  53, 0.18) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 70% at 78% 55%, rgba(  0, 191, 255, 0.55) 0%, transparent 65%),
-    radial-gradient(ellipse 80% 80% at 20% 60%, rgba(  0, 120, 180, 0.75) 0%, transparent 70%),
-    linear-gradient(135deg, #006fa6 0%, #0085bb 35%, #0099cc 60%, #00aadd 100%);
+    radial-gradient(ellipse 55% 45% at 88%  8%, rgba(255, 101,  53, 0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 70% at 78% 55%, rgba(  0, 191, 255, 0.12) 0%, transparent 65%),
+    radial-gradient(ellipse 80% 80% at 20% 60%, rgba(  0,  80, 125, 0.6) 0%, transparent 70%),
+    /* Deep azure: the brightest point (#0077a8) still gives white text 5:1.
+       Verified by tests/e2e/contrast.spec.ts (pixel-based, incl. gradients). */
+    linear-gradient(135deg, #00507a 0%, #005f8c 35%, #006b9c 60%, #0077a8 100%);
   /*
     Stacked (single-col) layout on phones/tablets: content grows naturally,
     min-height just prevents a flash of empty gradient before content loads.
@@ -356,7 +444,7 @@ h1, h2, h3, h4, h5, h6 {
   left: -40px;
   width: 320px;
   height: 320px;
-  background: rgba(255, 101, 53, 0.22);
+  background: rgba(255, 101, 53, 0.14);
 }
 
 /* Bottom-right depth layer */
@@ -365,28 +453,7 @@ h1, h2, h3, h4, h5, h6 {
   right: 5%;
   width: 420px;
   height: 280px;
-  background: rgba(0, 191, 255, 0.28);
-}
-
-/* ── Hero eyebrow line ───────────────────────────────────────────────────── */
-
-.hero-eyebrow-dash {
-  display: block;
-  height: 1px;
-  width: 2rem;  /* w-8 */
-  background: var(--color-accent);
-}
-
-.hero-eyebrow-text {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.95);
-  text-decoration: underline;
-  text-decoration-color: var(--color-accent);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 6px;
+  background: rgba(0, 191, 255, 0.14);
 }
 
 /* ── Hero car thumbnail marquee (slow auto-scroll) ───────────────────────── */
@@ -405,9 +472,38 @@ h1, h2, h3, h4, h5, h6 {
   animation: heroMarquee 55s linear infinite;
 }
 
-/* pause when the user hovers the strip */
-.hero-strip:hover .hero-strip-track {
+/* pause when the user hovers the strip or presses the pause button */
+.hero-strip:hover .hero-strip-track,
+.hero-strip.is-paused .hero-strip-track {
   animation-play-state: paused;
+}
+
+.hero-strip-toggle {
+  position: absolute;
+  right: 0.25rem;
+  bottom: -2.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: background-color 150ms ease;
+}
+.hero-strip-toggle:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+.hero-strip-toggle:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-strip-toggle {
+    display: none; /* nothing moves, so nothing to pause */
+  }
 }
 
 .hero-strip-item {
@@ -482,14 +578,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-h1-accent {
-  /* animated coral → amber shimmer that sweeps across the key word */
+  /* warm amber → cream shimmer. Coral (#ff6535) was only 1.5:1 on the blue
+     hero; these stops stay >= 3.5:1 (large text needs 3:1). */
   background: linear-gradient(
     100deg,
-    #ff6535 0%,
-    #ff8a4d 28%,
-    #ffd27a 50%,
-    #ff8a4d 72%,
-    #ff6535 100%
+    #ffd27a 0%,
+    #ffe2a3 28%,
+    #fff1cf 50%,
+    #ffe2a3 72%,
+    #ffd27a 100%
   );
   background-size: 220% 100%;
   -webkit-background-clip: text;
@@ -514,18 +611,20 @@ h1, h2, h3, h4, h5, h6 {
 /* ── Hero lead paragraph ─────────────────────────────────────────────────── */
 
 .hero-lead {
-  color: rgba(255, 255, 255, 0.82);
+  color: #ffffff;
 }
 
 /* ── Hero primary CTA (accent-filled) ───────────────────────────────────── */
 
 .hero-cta-primary {
-  background: var(--color-accent);
+  /* accent-dark keeps white label text at >= 4.5:1 */
+  background: var(--color-accent-dark);
+  box-shadow: 0 8px 24px rgba(194, 65, 12, 0.35);
 }
 
 .hero-cta-primary:hover {
-  filter: brightness(1.1);
-  transform: scale(1.03);
+  background: var(--color-accent-darker);
+  transform: translateY(-1px);
 }
 
 .hero-cta-primary:focus-visible {
@@ -551,7 +650,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-stat-label {
-  color: rgba(255, 255, 255, 0.6);
+  color: #ffffff;
 }
 
 /* ── Hero image frame ────────────────────────────────────────────────────── */

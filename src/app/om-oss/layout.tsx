@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Om oss | Car Dealer",
+  title: "Om oss",
   description: "Lär känna Car Dealer AB - din pålitliga partner för bilaffärer sedan 2020.",
 };
 

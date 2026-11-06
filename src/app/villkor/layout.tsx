@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Allmänna villkor | Car Dealer",
+  title: "Allmänna villkor",
   description: "Läs våra allmänna villkor för köp och försäljning av fordon.",
 };
 
