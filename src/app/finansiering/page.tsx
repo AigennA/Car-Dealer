@@ -8,185 +8,80 @@ import {
   WrenchIcon,
   ShieldCheckIcon,
   DocumentTextIcon,
-  CheckIcon,
 } from "@/components/ui/icons";
+import { FeatureGrid, type Feature } from "@/components/ui/Features";
+import { BUSINESS, formatPercent } from "@/config/business";
+import { ROUTES } from "@/config/navigation";
+
+const { financing, policies } = BUSINESS;
+const [leaseMin, leaseMax] = financing.leasingTermMonths;
+const LINK = "text-primary underline underline-offset-4";
+
+const MAIN_SERVICES: Feature[] = [
+  {
+    Icon: BanknotesIcon,
+    title: "Finansiering",
+    text: "Vi hjälper dig att hitta den bästa finansieringslösningen för din situation. Flexibla villkor och konkurrenskraftiga räntor.",
+    bullets: [
+      `Ränta från ${formatPercent(financing.annualRate)}`,
+      `Lånetid upp till ${Math.max(...financing.loanTermsMonths)} månader`,
+      "Snabbt beslut",
+      "Ingen kontantinsats krävs",
+    ],
+  },
+  {
+    Icon: CarIcon,
+    title: "Privatleasing",
+    text: "Kör en ny bil utan stora engångskostnader. Allt ingår i en fast månadskostnad med möjlighet att byta bil efter avtalstidens slut.",
+    bullets: ["Fast månadskostnad", "Service och försäkring ingår", "Flexibel körsträcka", `Byt bil efter ${leaseMin}–${leaseMax} månader`],
+  },
+  {
+    Icon: ArrowsRightLeftIcon,
+    title: "Inbyte",
+    text: <>Byt in din gamla bil hos oss och få en rättvis värdering. Vi köper alla bilmärken och modeller. <Link href={ROUTES.tradeIn} className={LINK}>Begär värdering</Link></>,
+    bullets: ["Snabb och enkel värdering", "Rättvisa priser", "Vi köper alla märken", "Smidig avveckling"],
+  },
+];
+
+const EXTRA_SERVICES: Feature[] = [
+  { Icon: ShieldIcon, title: "Försäkring", text: "Vi hjälper dig hitta rätt försäkring för din bil" },
+  { Icon: WrenchIcon, title: "Service & Verkstad", text: <>Professionell service och reparationer. <Link href={ROUTES.workshop} className={LINK}>Boka tid</Link></> },
+  { Icon: ShieldCheckIcon, title: "Garanti", text: `Upp till ${policies.warrantyMonths} månaders garanti på alla bilar` },
+  { Icon: DocumentTextIcon, title: "Öppet köp", text: `${policies.openPurchaseDays} dagars öppet köp på alla bilar` },
+];
 
 export default function FinansieringPage() {
   return (
     <section className="bg-surface min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        {/* Hero Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-navy mb-4">
-            Våra Tjänster
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 pt-12 pb-20 space-y-12">
+        <header className="text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-navy mb-4">Våra Tjänster</h1>
+          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
             Vi erbjuder flexibla finansieringslösningar och tjänster för att göra ditt bilköp enkelt och tryggt
           </p>
-        </div>
+        </header>
 
-        {/* Main Services */}
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
-          <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition">
-            <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
-              <BanknotesIcon className="w-8 h-8 text-primary" />
-            </div>
-            <h2 className="text-2xl font-bold text-navy mb-4">Finansiering</h2>
-            <p className="text-gray-600 mb-4">
-              Vi hjälper dig att hitta den bästa finansieringslösningen för din situation.
-              Flexibla villkor och konkurrensskraftiga räntor.
-            </p>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-                <span>Ränta från 3,95%</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-                <span>Lånetid upp till 84 månader</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-                <span>Snabbt beslut</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-                <span>Ingen kontantinsats krävs</span>
-              </li>
-            </ul>
-          </div>
+        <FeatureGrid items={MAIN_SERVICES} variant="card" headingLevel="h2" />
 
-          <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition">
-            <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
-              <CarIcon className="w-8 h-8 text-primary" />
-            </div>
-            <h2 className="text-2xl font-bold text-navy mb-4">Privatleasing</h2>
-            <p className="text-gray-600 mb-4">
-              Kör en ny bil utan stora engångskostnader. Allt ingår i en fast månadskostnad
-              med möjlighet att byta bil efter avtalstidens slut.
-            </p>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-                <span>Fast månadskostnad</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-                <span>Service och försäkring ingår</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-                <span>Flexibel körsträcka</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-                <span>Byt bil efter 24-48 månader</span>
-              </li>
-            </ul>
-          </div>
+        <section aria-labelledby="extra" className="bg-white rounded-xl p-8 shadow-sm">
+          <h2 id="extra" className="text-2xl font-bold text-navy mb-8 text-center">Ytterligare tjänster</h2>
+          <FeatureGrid items={EXTRA_SERVICES} columns={4} />
+        </section>
 
-          <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition">
-            <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
-              <ArrowsRightLeftIcon className="w-8 h-8 text-primary" />
-            </div>
-            <h2 className="text-2xl font-bold text-navy mb-4">Inbyte</h2>
-            <p className="text-gray-600 mb-4">
-              Byt in din gamla bil hos oss och få en rättvis värdering.
-              Vi köper alla bilmärken och modeller.
-            </p>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-                <span>Snabb och enkel värdering</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-                <span>Rättvisa priser</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-                <span>Vi köper alla märken</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckIcon className="w-5 h-5 shrink-0 text-primary mt-0.5" />
-                <span>Smidig avveckling</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Additional Services */}
-        <div className="bg-white rounded-xl p-8 shadow-sm mb-12">
-          <h2 className="text-2xl font-bold text-navy mb-8 text-center">Ytterligare tjänster</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <ShieldIcon className="w-5 h-5 text-primary" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Försäkring</h3>
-              <p className="text-sm text-gray-600">
-                Vi hjälper dig hitta rätt försäkring för din bil
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <WrenchIcon className="w-5 h-5 text-primary" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Service & Verkstad</h3>
-              <p className="text-sm text-gray-600">
-                Professionell service och reparationer
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <ShieldCheckIcon className="w-5 h-5 text-primary" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Garanti</h3>
-              <p className="text-sm text-gray-600">
-                Upp till 24 månaders garanti på alla bilar
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <DocumentTextIcon className="w-5 h-5 text-primary" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Öppet Köp</h3>
-              <p className="text-sm text-gray-600">
-                14 dagars öppet köp på alla bilar
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Financing Calculator */}
         <CreditCalculator />
 
-        {/* CTA Section */}
-        <div className="bg-white rounded-xl p-8 shadow-sm text-center">
-          <h2 className="text-2xl font-bold text-navy mb-4">
-            Vill du veta mer om våra finansieringsmöjligheter?
-          </h2>
-          <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-            Kontakta oss idag så hjälper vi dig hitta den bästa lösningen för just dig
-          </p>
+        <section aria-labelledby="more" className="bg-white rounded-xl p-8 shadow-sm text-center">
+          <h2 id="more" className="text-2xl font-bold text-navy mb-4">Vill du veta mer om våra finansieringsmöjligheter?</h2>
+          <p className="text-gray-700 mb-6 max-w-2xl mx-auto">Kontakta oss idag så hjälper vi dig hitta den bästa lösningen för just dig</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/kontakt"
-              className="inline-block bg-primary text-white px-8 py-3 rounded-lg hover:bg-primary-dark transition font-medium"
-            >
+            <Link href={ROUTES.contact} className="inline-block bg-primary text-white px-8 py-3 rounded-lg hover:bg-primary-dark transition-colors font-medium">
               Kontakta oss
             </Link>
-            <Link
-              href="/bilar"
-              className="inline-block bg-gray-100 text-navy px-8 py-3 rounded-lg hover:bg-gray-200 transition font-medium"
-            >
+            <Link href={ROUTES.cars} className="inline-block bg-gray-100 text-navy px-8 py-3 rounded-lg hover:bg-gray-200 transition-colors font-medium">
               Se våra bilar
             </Link>
           </div>
-        </div>
+        </section>
       </div>
     </section>
   );

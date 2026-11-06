@@ -1,5 +1,7 @@
 "use client";
 
+import HoursList from "@/components/ui/HoursList";
+import { BUSINESS } from "@/config/business";
 import { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -8,6 +10,7 @@ import MapEmbed from "@/components/MapEmbed";
 import AdvisorCard from "@/components/people/AdvisorCard";
 import { PhoneIcon, MailIcon, MapPinIcon, ClockIcon } from "@/components/ui/icons";
 import { SITE } from "@/lib/site";
+import { ROUTES } from "@/config/navigation";
 
 /** Pre-fills car + subject when arriving from a car page (?bil=slug&amne=provkorning). */
 function ContactFormWithParams() {
@@ -59,7 +62,7 @@ export default function KontaktPage() {
                   <div>
                     <h3 className="font-semibold text-navy mb-1">Telefon</h3>
                     <p><a href={SITE.phoneHref} className="text-primary font-medium underline underline-offset-4">{SITE.phone}</a></p>
-                    <p className="text-sm text-gray-700">Mån-Fre 09:00-18:00</p>
+                    <p className="text-sm text-gray-700">{SITE.openingHours}</p>
                   </div>
                 </div>
 
@@ -80,8 +83,8 @@ export default function KontaktPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-navy mb-1">Besöksadress</h3>
-                    <p className="text-gray-700">Bilvägen 123</p>
-                    <p className="text-gray-700">123 45 Stockholm</p>
+                    <p className="text-gray-700">{SITE.address.street}</p>
+                    <p className="text-gray-700">{SITE.address.postalCode} {SITE.address.city}</p>
                   </div>
                 </div>
 
@@ -91,8 +94,7 @@ export default function KontaktPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-navy mb-1">Öppettider</h3>
-                    <p className="text-gray-700">Måndag-Fredag: 09:00-18:00</p>
-                    <p className="text-gray-700">Lördag: 10:00-15:00</p>
+                    <HoursList week={BUSINESS.showroomHours} />
                     <p className="text-gray-700">Söndag: Stängt</p>
                   </div>
                 </div>
@@ -106,7 +108,7 @@ export default function KontaktPage() {
                 Besök vår showroom och låt våra experter guida dig till rätt bil
               </p>
               <Link
-                href="/bilar"
+                href={ROUTES.cars}
                 className="inline-block bg-white text-primary px-6 py-3 rounded-lg hover:bg-gray-100 transition font-medium"
               >
                 Se vårt lager
@@ -120,7 +122,7 @@ export default function KontaktPage() {
           <h2 id="map-heading" className="text-2xl font-bold text-navy mb-6">Hitta till oss</h2>
           <MapEmbed />
           <p className="text-sm text-gray-700 mt-4">
-            Vi ligger centralt i Stockholm med bra kommunikationer. Kundparkering finns utanför
+            Vi ligger centralt i {SITE.address.city} med bra kommunikationer. Kundparkering finns utanför
             entrén. Välkommen till vår showroom!
           </p>
         </section>

@@ -1,5 +1,6 @@
 "use client";
 
+import { SITE } from "@/lib/site";
 import { useState, useMemo, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useCars } from "@/lib/clientStorage";
@@ -27,7 +28,7 @@ const VALUE_PROPS = [
   {
     Icon: ShieldCheckIcon,
     title: "Trygg garanti",
-    text: "Upp till 24 månaders garanti på alla bilar.",
+    text: `Upp till ${SITE.policies.warrantyMonths} månaders garanti på alla bilar.`,
     img: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&h=500&fit=crop",
   },
   {

@@ -4,16 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { SITE } from "@/lib/site";
+import { MAIN_NAV, ROUTES, isActiveRoute } from "@/config/navigation";
+import Logo from "./Logo";
 
-const NAV_ITEMS = [
-  { href: "/", label: "Hem" },
-  { href: "/bilar", label: "Lager" },
-  { href: "/finansiering", label: "Finansiering" },
-  { href: "/inbyte", label: "Inbyte" },
-  { href: "/verkstad", label: "Verkstad" },
-  { href: "/om-oss", label: "Om oss" },
-  { href: "/kontakt", label: "Kontakt" },
-];
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -21,11 +14,7 @@ export default function Header() {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const headerRef = useRef<HTMLElement>(null);
 
-  // usePathname() has no trailing slash even with trailingSlash: true,
-  // but normalise defensively.
-  const current = pathname.replace(/\/+$/, "") || "/";
-  const isActive = (href: string) =>
-    href === "/" ? current === "/" : current === href || current.startsWith(`${href}/`);
+  const isActive = (href: string) => isActiveRoute(pathname, href);
 
   // While the mobile menu is open:
   // - Escape closes it and returns focus to the toggle (WCAG 2.1.2 / 2.4.3)
@@ -59,38 +48,14 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between gap-4">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group rounded-lg" aria-label="Car Dealer – till startsidan">
-          <div className="logo-icon-wrap">
-          <div className="w-10 h-10 logo-icon rounded-lg flex items-center justify-center">
-            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-              <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
-              {/* Headlight — front-right of car, amber/warm-white */}
-              <circle className="logo-headlight" cx="19.2" cy="14.3" r="2" fill="#ffd27a" />
-              {/* Taillight — rear-left of car, red */}
-              <circle className="logo-taillight" cx="4.8" cy="14.3" r="2" fill="#ff3b30" />
-            </svg>
-          </div>
-          </div>
-          <span className="text-xl sm:text-2xl md:text-3xl logo-text-main" aria-hidden="true">Car Dealer</span>
-          {/* Two road-lane stripes — decorative, flows like a moving road */}
-          <svg
-            className="logo-road shrink-0 ml-0.5 hidden sm:block"
-            width="14"
-            height="44"
-            viewBox="0 0 14 44"
-            fill="none"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <line x1="4" y1="1" x2="4" y2="43" stroke="#ff6535" strokeWidth="2.5" strokeDasharray="5 5" strokeLinecap="round" />
-            <line x1="10" y1="1" x2="10" y2="43" stroke="#ffffff" strokeWidth="2.5" strokeDasharray="5 5" strokeLinecap="round" />
-          </svg>
+        <Link href={ROUTES.home} className="flex items-center gap-3 group rounded-lg" aria-label={`${SITE.name} – till startsidan`}>
+          <Logo variant="header" />
         </Link>
 
         {/* Desktop Menu — active page in coral + animated underline */}
         <nav aria-label="Huvudmeny" className="hidden lg:block">
           <ul className="flex items-center gap-7">
-            {NAV_ITEMS.map(({ href, label }) => {
+            {MAIN_NAV.map(({ href, label }) => {
               const active = isActive(href);
               return (
                 <li key={href}>
@@ -151,7 +116,7 @@ export default function Header() {
       <div id="mobile-menu" hidden={!mobileMenuOpen} className="lg:hidden bg-gray-900 border-t border-gray-800">
         <nav aria-label="Mobilmeny">
           <ul className="flex flex-col py-4">
-            {NAV_ITEMS.map(({ href, label }) => {
+            {MAIN_NAV.map(({ href, label }) => {
               const active = isActive(href);
               return (
                 <li key={href}>
@@ -172,7 +137,7 @@ export default function Header() {
             })}
             <li>
               <a href={SITE.phoneHref} className="block px-4 py-3 font-medium text-white border-l-4 border-transparent hover:bg-gray-800">
-                Ring oss: 070-000 00 00
+                Ring oss: {SITE.phone}
               </a>
             </li>
           </ul>

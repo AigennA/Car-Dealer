@@ -1,238 +1,97 @@
 import Link from "next/link";
 import TradeInForm from "@/components/contact/TradeInForm";
-import {
-  BoltIcon,
-  BanknotesIcon,
-  WrenchIcon,
-  CheckIcon,
-  PhoneIcon,
-} from "@/components/ui/icons";
+import { BoltIcon, BanknotesIcon, WrenchIcon, PhoneIcon } from "@/components/ui/icons";
+import { CheckList, Faq, FeatureGrid, StepList, type Feature } from "@/components/ui/Features";
+import { SITE } from "@/lib/site";
+import { ROUTES } from "@/config/navigation";
+
+const hours = SITE.policies.responseHours;
+
+const BENEFITS: Feature[] = [
+  { Icon: BoltIcon, title: "Snabb värdering", text: `Få en kostnadsfri värdering av din bil inom ${hours} timmar. Enkelt och smidigt online eller på plats.` },
+  { Icon: BanknotesIcon, title: "Rättvisa priser", text: "Vi erbjuder marknadsmässiga priser baserat på bilens skick, årsmodell och utrustning." },
+  { Icon: WrenchIcon, title: "Alla märken", text: "Vi tar emot alla bilmärken och modeller, oavsett ålder eller skick. Kontakta oss för mer information." },
+];
+
+const STEPS = [
+  { title: "Fyll i uppgifter", text: "Ange information om din bil i vårt formulär" },
+  { title: "Få värdering", text: `Vi återkommer med ett prisförslag inom ${hours} timmar` },
+  { title: "Besiktning", text: "Boka tid för besiktning av bilen på plats" },
+  { title: "Klart!", text: "Pengarna sätts in direkt eller används som inbyte" },
+];
+
+const WHY_US = [
+  { title: "Snabb och enkel värdering", text: `Få svar inom ${hours} timmar och boka tid för besiktning som passar dig` },
+  { title: "Rättvisa priser", text: "Vi ger dig ett marknadsmässigt pris baserat på bilens faktiska värde" },
+  { title: "Vi köper alla märken", text: "Oavsett märke, modell eller ålder – vi är intresserade av din bil" },
+  { title: "Smidig avveckling", text: "Vi tar hand om allt pappersarbete och gör processen så enkel som möjligt" },
+];
+
+const FAQ = [
+  { q: "Hur snabbt får jag en värdering?", a: `Vi återkommer normalt inom ${hours} timmar med ett prisförslag baserat på din information.` },
+  { q: "Måste jag köpa en bil hos er?", a: "Nej, du kan sälja din bil till oss även om du inte köper en ny bil. Vi köper in bilar direkt." },
+  { q: "Tar ni emot alla bilmärken?", a: "Ja, vi köper alla bilmärken och modeller oavsett ålder eller miltal." },
+  { q: "Hur betalas pengarna ut?", a: "Pengarna sätts in direkt på ditt konto eller kan användas som inbyte mot en ny bil." },
+  { q: "Vad händer om jag har lån på bilen?", a: "Vi hjälper dig att lösa lånet och tar hand om kontakten med din bank." },
+  { q: "Kostar värderingen något?", a: "Nej, värderingen är helt kostnadsfri och utan förpliktelser." },
+];
+
+const CARD = "bg-white rounded-xl p-8 shadow-sm";
 
 export default function InbytePage() {
   return (
     <section className="bg-surface min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        {/* Hero Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-navy mb-4">
-            Inbyte av din bil
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 pt-12 pb-20 space-y-12">
+        <header className="text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-navy mb-4">Inbyte av din bil</h1>
+          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
             Byt in din gamla bil hos oss och få en rättvis värdering. Vi köper alla bilmärken och modeller.
           </p>
-        </div>
+        </header>
 
-        {/* Main Benefits */}
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
-          <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition text-center">
-            <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-6">
-              <BoltIcon className="w-8 h-8 text-primary" />
-            </div>
-            <h2 className="text-xl font-bold text-navy mb-4">Snabb värdering</h2>
-            <p className="text-gray-600">
-              Få en kostnadsfri värdering av din bil inom 24 timmar. Enkelt och smidigt online eller på plats.
-            </p>
-          </div>
+        <FeatureGrid items={BENEFITS} variant="card" headingLevel="h2" />
 
-          <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition text-center">
-            <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-6">
-              <BanknotesIcon className="w-8 h-8 text-primary" />
-            </div>
-            <h2 className="text-xl font-bold text-navy mb-4">Rättvisa priser</h2>
-            <p className="text-gray-600">
-              Vi erbjuder marknadsmässiga priser baserat på bilens skick, årsmodell och utrustning.
-            </p>
-          </div>
+        <section aria-labelledby="how" className={CARD}>
+          <h2 id="how" className="text-2xl font-bold text-navy mb-8 text-center">Så fungerar inbytet</h2>
+          <StepList steps={STEPS} />
+        </section>
 
-          <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition text-center">
-            <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-6">
-              <WrenchIcon className="w-8 h-8 text-primary" />
-            </div>
-            <h2 className="text-xl font-bold text-navy mb-4">Alla märken</h2>
-            <p className="text-gray-600">
-              Vi tar emot alla bilmärken och modeller, oavsett ålder eller skick. Kontakta oss för mer information.
-            </p>
-          </div>
-        </div>
-
-        {/* How It Works */}
-        <div className="bg-white rounded-xl p-8 shadow-sm mb-12">
-          <h2 className="text-2xl font-bold text-navy mb-8 text-center">Så fungerar inbytet</h2>
-          <div className="grid md:grid-cols-4 gap-6">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
-                1
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Fyll i uppgifter</h3>
-              <p className="text-sm text-gray-600">
-                Ange information om din bil i vårt formulär
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
-                2
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Få värdering</h3>
-              <p className="text-sm text-gray-600">
-                Vi återkommer med ett prisförslag inom 24 timmar
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
-                3
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Besiktning</h3>
-              <p className="text-sm text-gray-600">
-                Boka tid för besiktning av bilen på plats
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
-                4
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Klart!</h3>
-              <p className="text-sm text-gray-600">
-                Pengarna sätts in direkt eller används som inbyte
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Trade-in Form */}
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
-          <div className="bg-white rounded-xl p-8 shadow-sm">
-            <h2 className="text-2xl font-bold text-navy mb-6">Begär värdering</h2>
-
+        <div className="grid md:grid-cols-2 gap-8">
+          <section aria-labelledby="valuation" className={CARD}>
+            <h2 id="valuation" className="text-2xl font-bold text-navy mb-6">Begär värdering</h2>
             <TradeInForm />
-          </div>
+          </section>
 
-          {/* Additional Info */}
           <div className="space-y-6">
-            <div className="bg-white rounded-xl p-8 shadow-sm">
-              <h2 className="text-2xl font-bold text-navy mb-6">Varför välja oss?</h2>
-              
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <CheckIcon className="w-6 h-6 shrink-0 text-primary mt-0.5" />
-                  <div>
-                    <h3 className="font-semibold text-navy mb-1">Snabb och enkel värdering</h3>
-                    <p className="text-gray-600 text-sm">
-                      Få svar inom 24 timmar och boka tid för besiktning som passar dig
-                    </p>
-                  </div>
-                </div>
+            <section aria-labelledby="why" className={CARD}>
+              <h2 id="why" className="text-2xl font-bold text-navy mb-6">Varför välja oss?</h2>
+              <CheckList items={WHY_US} />
+            </section>
 
-                <div className="flex items-start gap-4">
-                  <CheckIcon className="w-6 h-6 shrink-0 text-primary mt-0.5" />
-                  <div>
-                    <h3 className="font-semibold text-navy mb-1">Rättvisa priser</h3>
-                    <p className="text-gray-600 text-sm">
-                      Vi ger dig ett marknadsmässigt pris baserat på bilens faktiska värde
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <CheckIcon className="w-6 h-6 shrink-0 text-primary mt-0.5" />
-                  <div>
-                    <h3 className="font-semibold text-navy mb-1">Vi köper alla märken</h3>
-                    <p className="text-gray-600 text-sm">
-                      Oavsett märke, modell eller ålder - vi är intresserade av din bil
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <CheckIcon className="w-6 h-6 shrink-0 text-primary mt-0.5" />
-                  <div>
-                    <h3 className="font-semibold text-navy mb-1">Smidig avveckling</h3>
-                    <p className="text-gray-600 text-sm">
-                      Vi tar hand om all pappersarbete och gör processen så enkel som möjligt
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-linear-to-br from-primary-dark to-primary rounded-xl p-8 text-white">
-              <h3 className="text-xl font-bold mb-4">Vill du ha råd direkt?</h3>
-              <p className="mb-6 opacity-90">
-                Ring oss så hjälper vi dig med en snabb värdering över telefon
+            <section aria-labelledby="call" className="bg-linear-to-br from-primary-dark to-primary rounded-xl p-8 text-white">
+              <h2 id="call" className="text-xl font-bold mb-4">Vill du ha råd direkt?</h2>
+              <p className="mb-6">Ring oss så hjälper vi dig med en snabb värdering över telefon</p>
+              <p className="font-semibold flex items-center gap-2">
+                <PhoneIcon className="w-5 h-5 shrink-0" />
+                <a href={SITE.phoneHref} className="underline underline-offset-4">{SITE.phone}</a>
               </p>
-              <div className="space-y-2">
-                <p className="font-semibold flex items-center gap-2">
-                  <PhoneIcon className="w-5 h-5 shrink-0" />
-                  <span>070-000 00 00</span>
-                </p>
-                <p className="text-sm opacity-90">Mån-Fre 09:00-18:00</p>
-              </div>
-            </div>
+              <p className="text-sm mt-2">{SITE.openingHours}</p>
+            </section>
 
-            <div className="bg-white rounded-xl p-8 shadow-sm">
-              <h3 className="text-lg font-bold text-navy mb-4">Upptäck våra bilar</h3>
-              <p className="text-gray-600 mb-4">
-                Kanske finns din nästa bil redan i vårt lager?
-              </p>
-              <Link
-                href="/bilar"
-                className="inline-block bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition font-medium"
-              >
+            <section aria-labelledby="discover" className={CARD}>
+              <h2 id="discover" className="text-lg font-bold text-navy mb-4">Upptäck våra bilar</h2>
+              <p className="text-gray-700 mb-4">Kanske finns din nästa bil redan i vårt lager?</p>
+              <Link href={ROUTES.cars} className="inline-block bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors font-medium">
                 Se vårt lager
               </Link>
-            </div>
+            </section>
           </div>
         </div>
 
-        {/* FAQ Section */}
-        <div className="bg-white rounded-xl p-8 shadow-sm">
-          <h2 className="text-2xl font-bold text-navy mb-8 text-center">Vanliga frågor</h2>
-          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            <div>
-              <h3 className="font-semibold text-navy mb-2">Hur snabbt får jag en värdering?</h3>
-              <p className="text-gray-600 text-sm">
-                Vi återkommer normalt inom 24 timmar med ett prisförslag baserat på din information.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-navy mb-2">Måste jag köpa en bil hos er?</h3>
-              <p className="text-gray-600 text-sm">
-                Nej, du kan sälja din bil till oss även om du inte köper en ny bil. Vi köper in bilar direkt.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-navy mb-2">Tar ni emot alla bilmärken?</h3>
-              <p className="text-gray-600 text-sm">
-                Ja, vi köper alla bilmärken och modeller oavsett ålder eller miltal.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-navy mb-2">Hur betalas pengarna ut?</h3>
-              <p className="text-gray-600 text-sm">
-                Pengarna sätts in direkt på ditt konto eller kan användas som inbyte mot en ny bil.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-navy mb-2">Vad händer om jag har lån på bilen?</h3>
-              <p className="text-gray-600 text-sm">
-                Vi hjälper dig att lösa lånet och tar hand om kontakten med din bank.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-navy mb-2">Kostar värderingen något?</h3>
-              <p className="text-gray-600 text-sm">
-                Nej, värderingen är helt kostnadsfri och utan förpliktelser.
-              </p>
-            </div>
-          </div>
-        </div>
+        <section aria-labelledby="faq" className={CARD}>
+          <h2 id="faq" className="text-2xl font-bold text-navy mb-6">Vanliga frågor</h2>
+          <Faq items={FAQ} />
+        </section>
       </div>
     </section>
   );

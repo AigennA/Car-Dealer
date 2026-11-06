@@ -1,7 +1,8 @@
 "use client";
 
 import { useId, useState } from "react";
-import { LOAN_TERMS, quoteLoan } from "@/lib/finance";
+import { DEFAULT_ANNUAL_RATE, DEFAULT_DOWN_PAYMENT_SHARE, DEFAULT_TERM_MONTHS, LOAN_TERMS, quoteLoan } from "@/lib/finance";
+import { formatPercent } from "@/config/business";
 
 interface CarCreditCalculatorProps {
   carPrice: number;
@@ -14,8 +15,8 @@ const FIELD =
 /** Live loan calculator for a specific car — updates as you type, no alert() dialogs. */
 export default function CarCreditCalculator({ carPrice }: CarCreditCalculatorProps) {
   const id = useId();
-  const [downPayment, setDownPayment] = useState<string>(String(Math.round(carPrice * 0.2)));
-  const [loanTerm, setLoanTerm] = useState<number>(60);
+  const [downPayment, setDownPayment] = useState<string>(String(Math.round(carPrice * DEFAULT_DOWN_PAYMENT_SHARE)));
+  const [loanTerm, setLoanTerm] = useState<number>(DEFAULT_TERM_MONTHS);
 
   const result = quoteLoan(carPrice, Number(downPayment || 0), loanTerm);
   const errorId = `${id}-error`;
@@ -98,7 +99,7 @@ export default function CarCreditCalculator({ carPrice }: CarCreditCalculatorPro
       </div>
 
       <p className="text-xs text-gray-600 mt-4">
-        * Beräkning med 3,95 % årsränta. Exakta villkor fastställs vid ansökan.
+        * Beräkning med {formatPercent(DEFAULT_ANNUAL_RATE)} årsränta. Exakta villkor fastställs vid ansökan.
       </p>
     </section>
   );

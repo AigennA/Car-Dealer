@@ -55,6 +55,22 @@ Tjänster, priser, öppettider och kapacitet ligger i [`data/workshop.json`](../
 - Den sista platsen kan inte dubbelbokas: tiden kontrolleras igen i en serialiserbar transaktion (409 om någon hann före)
 - Registreringsnummer valideras (ABC 123 / ABC 12D) och sparas normaliserat
 
+## Kodstruktur
+
+```
+src/CarDealer.Api/
+├── Controllers/      tunna HTTP-adaptrar (inga regler)
+├── Services/         användningsfall bakom interfaces (Car, Lead, TradeIn, Booking, Auth, Dashboard)
+├── Workshop/         katalog + ren schemaläggningsfunktion
+├── Domain/           entiteter, RegistrationNumber, Slug
+├── Common/           Result/Error, svenska meddelanden, valideringsgränser
+├── Configuration/    Options-klasser, BusinessInfo (data/business.json)
+├── Infrastructure/   uppstart per område (persistens, auth, skydd, delad data, tjänster)
+└── Data/             DbContext, migreringar, DatabaseInitializer
+```
+
+Se [docs/arkitektur.md](../docs/arkitektur.md) för principerna.
+
 ## Säkerhet
 
 - Lösenord hashas av ASP.NET Core Identity; minst 12 tecken; kontot låses 15 min efter 5 fel.
@@ -81,7 +97,7 @@ API-dokumentation. Utvecklingskontot är `admin@cardealer.local` / `Dev-Password
 (finns bara i `appsettings.Development.json`).
 
 ```bash
-dotnet test        # 46 tester (integration + schemaläggningsregler) mot en riktig (temporär) databas
+dotnet test        # 53 tester (integration, schemaläggning, domänregler) mot en riktig (temporär) databas
 ```
 
 ## Köra mot SQL Server / Azure SQL

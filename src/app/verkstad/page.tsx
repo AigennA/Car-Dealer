@@ -4,11 +4,12 @@ import BookingWizard from "@/components/workshop/BookingWizard";
 import ServiceList, { OpeningHours } from "@/components/workshop/ServiceList";
 import { CheckIcon, WrenchIcon } from "@/components/ui/icons";
 import { SITE } from "@/lib/site";
+import { ROUTES } from "@/config/navigation";
 
 export const metadata: Metadata = {
   title: "Verkstad – boka service online",
   description:
-    "Service, däckbyte, bromsar, AC och felsökning för alla bilmärken. Se priser och boka verkstadstid online hos Car Dealer i Stockholm.",
+    `Service, däckbyte, bromsar, AC och felsökning för alla bilmärken. Se priser och boka verkstadstid online hos ${SITE.name} i ${SITE.address.city}.`,
 };
 
 const PROMISES = [
@@ -34,7 +35,7 @@ export default function VerkstadPage() {
             <a href="#boka" className="rounded-xl bg-white px-6 py-3 font-semibold text-primary-dark hover:bg-gray-100 transition-colors">
               Boka verkstadstid
             </a>
-            <Link href="/besiktning" className="rounded-xl border border-white/80 px-6 py-3 font-semibold text-white hover:bg-white/10 transition-colors">
+            <Link href={ROUTES.inspection} className="rounded-xl border border-white/80 px-6 py-3 font-semibold text-white hover:bg-white/10 transition-colors">
               Besiktning
             </Link>
           </div>

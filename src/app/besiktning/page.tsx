@@ -3,6 +3,7 @@ import Link from "next/link";
 import BookingWizard from "@/components/workshop/BookingWizard";
 import ServiceList from "@/components/workshop/ServiceList";
 import { ShieldCheckIcon } from "@/components/ui/icons";
+import { ROUTES } from "@/config/navigation";
 
 export const metadata: Metadata = {
   title: "Besiktning – förbesiktning och kontrollbesiktning",
@@ -58,7 +59,7 @@ export default function BesiktningPage() {
           <p className="mt-4 text-sm text-gray-700">
             Besiktningsavgiften betalas enligt besiktningspartnerns prislista. Hittar vi fel vid förbesiktningen får du
             ett prisförslag innan vi gör något. Behöver bilen service samtidigt?{" "}
-            <Link href="/verkstad" className="text-primary underline underline-offset-4">Boka verkstadstid</Link>.
+            <Link href={ROUTES.workshop} className="text-primary underline underline-offset-4">Boka verkstadstid</Link>.
           </p>
         </section>
 

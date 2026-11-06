@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { validateTradeIn, type TradeInErrors, type TradeInInput } from "@/lib/validation";
 import { ErrorSummary, Field, RequiredHint, SuccessMessage, SUBMIT_CLASS } from "@/components/forms/FormKit";
+import { ROUTES } from "@/config/navigation";
 
 const FIELDS: (keyof TradeInInput)[] = ["name", "email", "phone", "brand", "model", "year", "mileage", "message"];
 
@@ -84,7 +85,7 @@ export default function TradeInForm() {
       </button>
       <p className="text-xs text-gray-700">
         Vi behandlar dina uppgifter enligt vår{" "}
-        <Link href="/integritet" className="text-primary underline">
+        <Link href={ROUTES.privacy} className="text-primary underline">
           integritetspolicy
         </Link>
         .

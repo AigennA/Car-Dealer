@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import LegalPage, { Ul } from "@/components/legal/LegalPage";
 import { SITE } from "@/lib/site";
+import { ROUTES } from "@/config/navigation";
 
 export const metadata: Metadata = {
   title: "Tillgänglighetsredogörelse",
   description:
-    "Hur Car Dealers webbplats uppfyller WCAG 2.2 nivå AA, kända brister, hur vi testar och hur du kontaktar oss om något inte fungerar.",
+    `Hur ${SITE.name}s webbplats uppfyller WCAG 2.2 nivå AA, kända brister, hur vi testar och hur du kontaktar oss om något inte fungerar.`,
 };
 
 const a = "text-primary underline underline-offset-4";
@@ -107,7 +108,7 @@ export default function TillganglighetPage() {
                   Telefon: <a className={a} href={SITE.phoneHref}>{SITE.phone}</a> ({SITE.openingHours})
                 </li>
                 <li>
-                  <Link className={a} href="/kontakt">Kontaktformuläret</Link>
+                  <Link className={a} href={ROUTES.contact}>Kontaktformuläret</Link>
                 </li>
               </Ul>
               <p>Vi svarar inom två arbetsdagar.</p>

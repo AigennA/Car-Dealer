@@ -1,17 +1,25 @@
-/** Central site constants — used by metadata, sitemap, JSON-LD and UI. */
+import { BUSINESS, fullAddress, hoursSummary, phoneHref } from "@/config/business";
+
+/**
+ * Site-wide facts, derived from data/business.json (see src/config/business.ts).
+ * Kept as `SITE` so components have one short import.
+ */
 export const SITE = {
-  name: "Car Dealer",
-  legalName: "Car Dealer AB",
-  /** Copyright holder shown in the footer (the site's developer/owner). */
-  copyrightHolder: "Globamart ZM",
-  url: "https://aigenna.github.io/Car-Dealer",
-  description:
-    "Kvalitetskontrollerade begagnade bilar med garanti, finansiering och inbyte. Hitta din nästa bil hos Car Dealer i Stockholm.",
-  phone: "070-000 00 00",
-  phoneHref: "tel:+46700000000",
-  email: "info@cardealer.se",
-  address: { street: "Bilvägen 123", postalCode: "123 45", city: "Stockholm", country: "SE" },
-  openingHours: "Mån–Fre 09–18, Lör 10–15",
+  name: BUSINESS.name,
+  legalName: BUSINESS.legalName,
+  orgNumber: BUSINESS.orgNumber,
+  foundedYear: BUSINESS.foundedYear,
+  copyrightHolder: BUSINESS.copyrightHolder,
+  url: BUSINESS.url,
+  description: BUSINESS.description,
+  tagline: BUSINESS.tagline,
+  phone: BUSINESS.contact.phone,
+  phoneHref,
+  email: BUSINESS.contact.email,
+  address: BUSINESS.address,
+  fullAddress,
+  openingHours: hoursSummary(BUSINESS.showroomHours),
+  policies: BUSINESS.policies,
 } as const;
 
 export type Person = { name: string; role: string; photo: string; bio?: string };

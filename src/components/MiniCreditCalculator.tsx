@@ -2,7 +2,9 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { LOAN_TERMS, quoteLoan } from "@/lib/finance";
+import { DEFAULT_ANNUAL_RATE, DEFAULT_TERM_MONTHS, LOAN_TERMS, quoteLoan } from "@/lib/finance";
+import { formatPercent } from "@/config/business";
+import { ROUTES } from "@/config/navigation";
 
 /* ── Inline SVG icons (Heroicons outline style, stroke-width 1.75) ── */
 
@@ -60,7 +62,7 @@ const FIELD_CLASS =
 export default function MiniCreditCalculator() {
   const [price, setPrice] = useState<string>("250000");
   const [downPayment, setDownPayment] = useState<string>("50000");
-  const [loanTerm, setLoanTerm] = useState<number>(60);
+  const [loanTerm, setLoanTerm] = useState<number>(DEFAULT_TERM_MONTHS);
 
   /* Derive result and error without useEffect — no setState inside effects */
   const { result, error } = useMemo(() => {
@@ -178,10 +180,10 @@ export default function MiniCreditCalculator() {
       {/* Footer: disclaimer + CTA link */}
       <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-accent/20">
         <p className="text-xs text-gray-700 leading-snug max-w-xs">
-          * Indikativ beräkning med 3,95% årsränta. Exakta villkor fastställs vid ansökan.
+          * Indikativ beräkning med {formatPercent(DEFAULT_ANNUAL_RATE)} årsränta. Exakta villkor fastställs vid ansökan.
         </p>
         <Link
-          href="/finansiering"
+          href={ROUTES.financing}
           className="
             inline-flex items-center gap-1.5
             text-sm font-semibold text-accent-darker

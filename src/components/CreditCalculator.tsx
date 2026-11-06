@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { LOAN_TERMS, quoteLoan } from "@/lib/finance";
+import { DEFAULT_ANNUAL_RATE, DEFAULT_TERM_MONTHS, LOAN_TERMS, quoteLoan } from "@/lib/finance";
+import { formatPercent } from "@/config/business";
 
 const FIELD =
   "w-full bg-white border border-white rounded-lg px-4 py-3 text-navy " +
@@ -11,14 +12,14 @@ const FIELD =
 export default function CreditCalculator() {
   const [carPrice, setCarPrice] = useState<string>("250000");
   const [downPayment, setDownPayment] = useState<string>("50000");
-  const [loanTerm, setLoanTerm] = useState<number>(60);
+  const [loanTerm, setLoanTerm] = useState<number>(DEFAULT_TERM_MONTHS);
 
   const result = quoteLoan(Number(carPrice || 0), Number(downPayment || 0), loanTerm);
 
   return (
     <section
       aria-labelledby="calc-heading"
-      className="bg-linear-to-br from-primary-dark to-primary rounded-xl p-8 md:p-12 text-white mb-12"
+      className="bg-linear-to-br from-primary-dark to-primary rounded-xl p-8 md:p-12 text-white"
     >
       <div className="max-w-3xl mx-auto">
         <h2 id="calc-heading" className="text-3xl font-bold mb-4 text-center">Räkna på ditt billån</h2>
@@ -68,7 +69,7 @@ export default function CreditCalculator() {
                     <dd className="font-medium tabular-nums">{result.quote.totalCost.toLocaleString("sv-SE")} kr</dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="text-gray-700">Ränta (3,95 % årsränta)</dt>
+                    <dt className="text-gray-700">Ränta ({formatPercent(DEFAULT_ANNUAL_RATE)} årsränta)</dt>
                     <dd className="font-medium tabular-nums">{result.quote.interestCost.toLocaleString("sv-SE")} kr</dd>
                   </div>
                 </dl>
@@ -82,7 +83,7 @@ export default function CreditCalculator() {
         </div>
 
         <p className="text-center text-sm mt-6">
-          * Detta är endast en indikativ beräkning med 3,95 % årsränta. Exakt pris och villkor fastställs vid ansökan.
+          * Detta är endast en indikativ beräkning med {formatPercent(DEFAULT_ANNUAL_RATE)} årsränta. Exakt pris och villkor fastställs vid ansökan.
         </p>
       </div>
     </section>

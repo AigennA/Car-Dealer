@@ -1,13 +1,14 @@
 "use client";
 
+import { BUSINESS } from "@/config/business";
 import { useId, useState } from "react";
 import Link from "next/link";
 import { setConsent, useConsent } from "@/lib/consent";
 import { MapPinIcon } from "@/components/ui/icons";
 import { SITE } from "@/lib/site";
+import { ROUTES } from "@/config/navigation";
 
-const EMBED_SRC =
-  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2034.8586469344943!2d18.063159076707843!3d59.32932877463129!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x465f9d5e77f45a4d%3A0x4019078290e7c40!2sStockholm%2C%20Sweden!5e0!3m2!1ssv!2sse!4v1707427200000!5m2!1ssv!2sse";
+const EMBED_SRC = BUSINESS.maps.embedUrl;
 const DIRECTIONS = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
   `${SITE.address.street}, ${SITE.address.postalCode} ${SITE.address.city}`,
 )}`;
@@ -56,7 +57,7 @@ export default function MapEmbed() {
             <p id={`${id}-desc`} className="text-sm text-gray-700 max-w-md">
               Kartan visas via Google Maps. När den laddas skickas din IP-adress till Google och
               Google kan sätta cookies. Läs mer i vår{" "}
-              <Link href="/cookies" className="text-primary underline underline-offset-4">
+              <Link href={ROUTES.cookies} className="text-primary underline underline-offset-4">
                 cookiepolicy
               </Link>
               .

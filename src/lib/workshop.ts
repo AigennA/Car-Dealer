@@ -1,11 +1,11 @@
 import catalogJson from "../../data/workshop.json";
-import { apiEnabled, apiFetch } from "./api";
 
 /**
  * Workshop ("Verkstad") & inspection ("Besiktning") catalogue and booking.
  * data/workshop.json is shared with the API, so prices, durations and opening
  * hours are identical. The scheduling rules below mirror
- * backend/src/CarDealer.Api/Workshop/Availability.cs and are used in demo mode.
+ * backend/src/CarDealer.Api/Workshop/Availability.cs (used by the demo
+ * repository in src/lib/booking/repository.ts).
  */
 export type ServiceCategory = "verkstad" | "besiktning";
 export type WorkshopService = {
@@ -29,8 +29,6 @@ export type Catalog = {
 export const catalog = catalogJson as unknown as Catalog;
 export const servicesIn = (category: ServiceCategory) => catalog.services.filter((s) => s.category === category);
 export const findService = (code: string) => catalog.services.find((s) => s.code === code);
-
-export type BookableDay = { date: string; freeSlots: number };
 
 const toMin = (hhmm: string) => {
   const [h, m] = hhmm.split(":").map(Number);
@@ -93,71 +91,6 @@ export function freeStarts(
   return result;
 }
 
-/* ── Data access: API when configured, otherwise demo (computed locally) ── */
-
-export async function loadDays(serviceCode: string): Promise<BookableDay[]> {
-  if (apiEnabled) return apiFetch<BookableDay[]>(`/api/workshop/days?service=${encodeURIComponent(serviceCode)}`);
-  const svc = findService(serviceCode);
-  if (!svc) return [];
-  const today = zonedNow().date;
-  const days: BookableDay[] = [];
-  for (let i = 0; i <= catalog.bookingHorizonDays; i++) {
-    const date = addDays(today, i);
-    if (!catalog.openingHours[String(isoWeekday(date))]) continue;
-    days.push({ date, freeSlots: freeStarts(svc, date).length });
-  }
-  return days;
-}
-
-export async function loadSlots(serviceCode: string, date: string): Promise<string[]> {
-  if (apiEnabled) {
-    const res = await apiFetch<{ slots: string[] }>(
-      `/api/workshop/availability?service=${encodeURIComponent(serviceCode)}&date=${date}`,
-    );
-    return res.slots;
-  }
-  const svc = findService(serviceCode);
-  return svc ? freeStarts(svc, date) : [];
-}
-
-export type BookingRequest = {
-  serviceCode: string;
-  date: string;
-  time: string;
-  name: string;
-  email: string;
-  phone: string;
-  regNumber: string;
-  message: string;
-};
-export type BookingConfirmation = {
-  reference: string;
-  serviceName: string;
-  date: string;
-  time: string;
-  durationMinutes: number;
-  demo: boolean;
-};
-
-export async function createBooking(req: BookingRequest): Promise<BookingConfirmation> {
-  if (apiEnabled) {
-    const res = await apiFetch<Omit<BookingConfirmation, "demo">>("/api/workshop/bookings", {
-      method: "POST",
-      body: JSON.stringify(req),
-    });
-    return { ...res, demo: false };
-  }
-  const svc = findService(req.serviceCode)!;
-  return {
-    reference: "DEMO",
-    serviceName: svc.name,
-    date: req.date,
-    time: req.time,
-    durationMinutes: svc.minutes,
-    demo: true,
-  };
-}
-
 /** "2026-11-10" → "tisdag 10 november". */
 export function formatDay(date: string, opts: Intl.DateTimeFormatOptions = { weekday: "long", day: "numeric", month: "long" }) {
   return new Date(`${date}T12:00:00Z`).toLocaleDateString("sv-SE", { ...opts, timeZone: "UTC" });
@@ -166,6 +99,5 @@ export function formatDay(date: string, opts: Intl.DateTimeFormatOptions = { wee
 export const formatDuration = (min: number) =>
   min < 60 ? `${min} min` : min % 60 === 0 ? `${min / 60} h` : `${Math.floor(min / 60)} h ${min % 60} min`;
 
-/** Swedish registration number: ABC 123 or ABC 12D (spaces/case ignored). */
-export const REG_RE = /^\s*[A-Za-z]{3}\s?\d{2}[A-Za-z0-9]\s*$/;
+export { REG_NUMBER_RE as REG_RE } from "./validation";
 export const normalizeReg = (reg: string) => reg.replace(/[^A-Za-z0-9]/g, "").toUpperCase();

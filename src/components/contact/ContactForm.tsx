@@ -5,6 +5,7 @@ import Link from "next/link";
 import { cars } from "@/lib/cars";
 import { validateContact, type ContactErrors, type ContactInput } from "@/lib/validation";
 import { ErrorSummary, Field, RequiredHint, SELECT_CLASS, SuccessMessage, SUBMIT_CLASS } from "@/components/forms/FormKit";
+import { ROUTES } from "@/config/navigation";
 
 const SUBJECTS = [
   { value: "provkorning", label: "Boka provkörning" },
@@ -102,7 +103,7 @@ export default function ContactForm({ carSlug = "", subject = "" }: Props) {
       </button>
       <p className="text-xs text-gray-700">
         Vi behandlar dina uppgifter enligt vår{" "}
-        <Link href="/integritet" className="text-primary underline">integritetspolicy</Link>.
+        <Link href={ROUTES.privacy} className="text-primary underline">integritetspolicy</Link>.
       </p>
     </form>
   );

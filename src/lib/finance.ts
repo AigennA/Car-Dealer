@@ -1,5 +1,11 @@
-export const DEFAULT_ANNUAL_RATE = 0.0395;
-export const LOAN_TERMS = [24, 36, 48, 60, 72, 84] as const;
+import { BUSINESS } from "@/config/business";
+import { MESSAGES } from "@/lib/messages";
+
+/** Financing terms come from data/business.json — never hard-coded here. */
+export const DEFAULT_ANNUAL_RATE = BUSINESS.financing.annualRate;
+export const LOAN_TERMS: readonly number[] = BUSINESS.financing.loanTermsMonths;
+export const DEFAULT_TERM_MONTHS = BUSINESS.financing.defaultTermMonths;
+export const DEFAULT_DOWN_PAYMENT_SHARE = BUSINESS.financing.defaultDownPaymentShare;
 
 /** Annuity formula. Returns a whole-krona monthly payment (0 for invalid input). */
 export function calculateMonthlyPayment(
@@ -32,14 +38,14 @@ export function quoteLoan(
   annualRate: number = DEFAULT_ANNUAL_RATE
 ): LoanResult {
   if (!Number.isFinite(price) || price <= 0) {
-    return { ok: false, error: "Ange bilens pris." };
+    return { ok: false, error: MESSAGES.loan.priceRequired };
   }
   if (!Number.isFinite(downPayment) || downPayment < 0) {
-    return { ok: false, error: "Kontantinsatsen kan inte vara negativ." };
+    return { ok: false, error: MESSAGES.loan.downPaymentNegative };
   }
   const loanAmount = price - downPayment;
   if (loanAmount <= 0) {
-    return { ok: false, error: "Kontantinsatsen måste vara lägre än bilens pris." };
+    return { ok: false, error: MESSAGES.loan.downPaymentTooHigh };
   }
   const monthlyPayment = calculateMonthlyPayment(loanAmount, months, annualRate);
   const totalCost = monthlyPayment * months;

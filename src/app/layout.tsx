@@ -1,3 +1,4 @@
+import { BUSINESS, schemaOpeningHours } from "@/config/business";
 import type { Metadata, Viewport } from "next";
 import { preconnect } from "react-dom";
 import { Hanken_Grotesk, Sora, Unbounded } from "next/font/google";
@@ -22,8 +23,8 @@ const logo = Unbounded({
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE.url}/`),
   title: {
-    default: "Car Dealer | Kvalitetskontrollerade begagnade bilar",
-    template: "%s | Car Dealer",
+    default: `${SITE.name} | Kvalitetskontrollerade begagnade bilar`,
+    template: `%s | ${SITE.name}`,
   },
   description: SITE.description,
   applicationName: SITE.name,
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "sv_SE",
     siteName: SITE.name,
-    title: "Car Dealer | Kvalitetskontrollerade begagnade bilar",
+    title: `${SITE.name} | Kvalitetskontrollerade begagnade bilar`,
     description: SITE.description,
     url: "./",
     images: [
@@ -40,7 +41,7 @@ export const metadata: Metadata = {
         url: "https://images.unsplash.com/photo-1614200187524-dc4b892acf16?w=1200&h=630&fit=crop&q=70&auto=format",
         width: 1200,
         height: 630,
-        alt: "Bil i showroom hos Car Dealer",
+        alt: `Bil i showroom hos ${SITE.name}`,
       },
     ],
   },
@@ -68,7 +69,7 @@ const organizationJsonLd = {
     addressLocality: SITE.address.city,
     addressCountry: SITE.address.country,
   },
-  openingHours: ["Mo-Fr 09:00-18:00", "Sa 10:00-15:00"],
+  openingHours: schemaOpeningHours(BUSINESS.showroomHours),
 };
 
 export default function RootLayout({

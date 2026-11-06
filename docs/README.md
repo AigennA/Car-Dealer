@@ -9,6 +9,7 @@ på 58 till produktionskvalitet.
 | [wcag-granskning.md](wcag-granskning.md) | WCAG 2.2 nivå AA – automatiska resultat + manuell checklista per kriterium |
 | [heuristisk-utvardering.md](heuristisk-utvardering.md) | Heuristisk utvärdering enligt Nielsens 10 heuristiker, med allvarlighetsgrad |
 | [kodgranskning.md](kodgranskning.md) | Kodgranskning: buggar, arkitektur, säkerhet, rekommendationer |
+| [arkitektur.md](arkitektur.md) | Clean Code & SOLID, var all konfiguration finns (ingen hårdkodning) |
 | [teststrategi.md](teststrategi.md) | Testpyramid, vad som testas, hur man kör testerna, CI |
 
 Snabbstart:

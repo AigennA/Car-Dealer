@@ -150,7 +150,7 @@ public class CarsTests(ApiFactory factory) : IClassFixture<ApiFactory>
     [InlineData("Škoda Kodiaq 2.0 TDI", "koda-kodiaq-2-0-tdi")]
     [InlineData("Räv Öl Å", "rav-ol-a")]
     [InlineData("!!!", "bil")]
-    public void Slugify(string input, string expected) => Assert.Equal(expected, CarsController.Slugify(input));
+    public void Slugify(string input, string expected) => Assert.Equal(expected, Domain.Slug.Create(input));
 
     private static CarUpsertRequest NewCar(string make = "Skoda", string model = "Octavia RS") => new()
     {

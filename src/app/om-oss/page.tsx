@@ -1,12 +1,21 @@
 import Link from "next/link";
 import PersonPhoto from "@/components/people/PersonPhoto";
-import { TEAM } from "@/lib/site";
+import { FeatureGrid, type Feature } from "@/components/ui/Features";
+import { SITE, TEAM } from "@/lib/site";
 import {
   TargetIcon,
   ShieldCheckIcon,
   DiamondIcon,
   StarOutlineIcon,
 } from "@/components/ui/icons";
+import { ROUTES } from "@/config/navigation";
+
+const VALUES: Feature[] = [
+  { Icon: TargetIcon, title: "Kvalitet", text: "Alla våra bilar genomgår noggrann kontroll och uppfyller högsta kvalitetsstandarder" },
+  { Icon: ShieldCheckIcon, title: "Trygghet", text: "Vi erbjuder garanti, försäkring och öppet köp för din trygghet" },
+  { Icon: DiamondIcon, title: "Transparens", text: "Öppen och ärlig kommunikation i alla våra affärer" },
+  { Icon: StarOutlineIcon, title: "Service", text: "Professionell service och support under hela din kundresa" },
+];
 
 export default function OmOssPage() {
   return (
@@ -26,7 +35,7 @@ export default function OmOssPage() {
         <div className="bg-white rounded-xl p-8 shadow-sm mb-8">
           <h2 className="text-2xl font-bold text-navy mb-4">Vår historia</h2>
           <p className="text-gray-600 mb-4">
-            Car Dealer AB grundades 2020 med en vision om att göra bilaffärer enklare, tryggare och mer transparent. 
+            {SITE.legalName} grundades {SITE.foundedYear} med en vision om att göra bilaffärer enklare, tryggare och mer transparent. 
             Vi är en modern bilhandel som kombinerar traditionell service med digital innovation för att ge våra kunder 
             den bästa upplevelsen.
           </p>
@@ -42,50 +51,10 @@ export default function OmOssPage() {
         </div>
 
         {/* Values */}
-        <div className="bg-white rounded-xl p-8 shadow-sm mb-8">
-          <h2 className="text-2xl font-bold text-navy mb-6">Våra värderingar</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <TargetIcon className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Kvalitet</h3>
-              <p className="text-sm text-gray-600">
-                Alla våra bilar genomgår noggrann kontroll och uppfyller högsta kvalitetsstandarder
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <ShieldCheckIcon className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Trygghet</h3>
-              <p className="text-sm text-gray-600">
-                Vi erbjuder garanti, försäkring och öppet köp för din trygghet
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <DiamondIcon className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Transparens</h3>
-              <p className="text-sm text-gray-600">
-                Öppen och ärlig kommunikation i alla våra affärer
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <StarOutlineIcon className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Service</h3>
-              <p className="text-sm text-gray-600">
-                Professionell service och support under hela din kundresa
-              </p>
-            </div>
-          </div>
-        </div>
+        <section aria-labelledby="values" className="bg-white rounded-xl p-8 shadow-sm mb-8">
+          <h2 id="values" className="text-2xl font-bold text-navy mb-6">Våra värderingar</h2>
+          <FeatureGrid items={VALUES} columns={4} />
+        </section>
 
         {/* Team */}
         <div className="bg-white rounded-xl p-8 shadow-sm mb-8">
@@ -116,13 +85,13 @@ export default function OmOssPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/bilar"
+              href={ROUTES.cars}
               className="inline-block bg-white text-primary px-8 py-3 rounded-lg hover:bg-gray-100 transition font-medium"
             >
               Se våra bilar
             </Link>
             <Link
-              href="/kontakt"
+              href={ROUTES.contact}
               className="inline-block bg-black/20 text-white px-8 py-3 rounded-lg hover:bg-black/30 transition font-medium border border-white/30"
             >
               Kontakta oss

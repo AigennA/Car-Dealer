@@ -10,6 +10,7 @@ import ImageGallery from "@/components/ui/ImageGallery";
 import { CheckIcon } from "@/components/ui/icons";
 import { SITE } from "@/lib/site";
 import AdvisorCard from "@/components/people/AdvisorCard";
+import { ROUTES } from "@/config/navigation";
 
 export default function CarDetailClient({ slug }: { slug: string }) {
   const cars = useCars();
@@ -23,7 +24,7 @@ export default function CarDetailClient({ slug }: { slug: string }) {
           <p className="text-gray-700 mt-2">
             Bilen kan redan vara såld eller så har länken ändrats.
           </p>
-          <Link href="/bilar" className="text-primary underline underline-offset-4 mt-6 inline-block">
+          <Link href={ROUTES.cars} className="text-primary underline underline-offset-4 mt-6 inline-block">
             Se alla bilar i lager
           </Link>
         </div>
@@ -34,7 +35,7 @@ export default function CarDetailClient({ slug }: { slug: string }) {
   const similarCars = cars
     .filter((c) => c.id !== car.id && (c.bodyType === car.bodyType || c.fuel === car.fuel))
     .slice(0, 3);
-  const contactHref = `/kontakt?bil=${encodeURIComponent(car.slug)}`;
+  const contactHref = `${ROUTES.contact}?bil=${encodeURIComponent(car.slug)}`;
 
   return (
     <section className="bg-surface min-h-screen">
@@ -43,11 +44,11 @@ export default function CarDetailClient({ slug }: { slug: string }) {
         <nav aria-label="Brödsmulor" className="mb-6 text-sm">
           <ol className="flex flex-wrap items-center gap-1.5 text-gray-700">
             <li>
-              <Link href="/" className="text-primary underline-offset-4 hover:underline">Hem</Link>
+              <Link href={ROUTES.home} className="text-primary underline-offset-4 hover:underline">Hem</Link>
             </li>
             <li aria-hidden="true">/</li>
             <li>
-              <Link href="/bilar" className="text-primary underline-offset-4 hover:underline">Lager</Link>
+              <Link href={ROUTES.cars} className="text-primary underline-offset-4 hover:underline">Lager</Link>
             </li>
             <li aria-hidden="true">/</li>
             <li aria-current="page" className="text-gray-800 font-medium truncate max-w-[60vw]">{car.title}</li>
@@ -106,8 +107,8 @@ export default function CarDetailClient({ slug }: { slug: string }) {
               </div>
 
               <ul className="mt-6 flex flex-wrap gap-2" aria-label="Ingår vid köp">
-                <li><Badge>24 mån garanti</Badge></li>
-                <li><Badge>14 dagars öppet köp</Badge></li>
+                <li><Badge>{SITE.policies.warrantyMonths} mån garanti</Badge></li>
+                <li><Badge>{SITE.policies.openPurchaseDays} dagars öppet köp</Badge></li>
                 <li><Badge>Hemleverans</Badge></li>
               </ul>
 
@@ -149,7 +150,7 @@ export default function CarDetailClient({ slug }: { slug: string }) {
               {similarCars.map((c) => (
                 <li key={c.id} className="group bg-white rounded-2xl shadow-sm p-5">
                   <Link
-                    href={`/bilar/${c.slug}`}
+                    href={`${ROUTES.cars}/${c.slug}`}
                     tabIndex={-1}
                     aria-hidden="true"
                     className="block relative aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden"
@@ -165,7 +166,7 @@ export default function CarDetailClient({ slug }: { slug: string }) {
 
                   <div className="mt-4">
                     <h3 className="font-semibold text-navy">
-                      <Link href={`/bilar/${c.slug}`} className="hover:text-primary transition-colors">
+                      <Link href={`${ROUTES.cars}/${c.slug}`} className="hover:text-primary transition-colors">
                         {c.title}
                       </Link>
                     </h3>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/config/navigation';
 
 interface SearchFormProps {
   makes: string[];
@@ -28,7 +29,7 @@ export default function SearchForm({ makes, bodyTypes, fuels }: SearchFormProps)
     if (bodyType) params.set('bodyType', bodyType);
     if (fuel) params.set('fuel', fuel);
     const query = params.toString();
-    router.push(`/bilar${query ? `?${query}` : ''}`);
+    router.push(`${ROUTES.cars}${query ? `?${query}` : ''}`);
   }
 
   return (

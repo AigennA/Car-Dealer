@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using CarDealer.Api.Common;
 using CarDealer.Api.Domain;
 
 namespace CarDealer.Api.Contracts;
@@ -43,16 +44,16 @@ public class CarQuery
 
 public class CarUpsertRequest
 {
-    [Required(ErrorMessage = "Ange märke."), StringLength(60)] public string Make { get; set; } = "";
-    [Required(ErrorMessage = "Ange modell."), StringLength(80)] public string Model { get; set; } = "";
-    [Range(1950, 2100, ErrorMessage = "Årsmodellen ska vara mellan 1950 och 2100.")] public int Year { get; set; }
-    [Range(0, 100000, ErrorMessage = "Miltal ska anges i mil (0–100 000).")] public int Mileage { get; set; }
+    [Required(ErrorMessage = Messages.MakeRequired), StringLength(60)] public string Make { get; set; } = "";
+    [Required(ErrorMessage = Messages.ModelRequiredStaff), StringLength(80)] public string Model { get; set; } = "";
+    [Range(Limits.CarMinYear, Limits.CarMaxYear, ErrorMessage = Messages.CarYearRange)] public int Year { get; set; }
+    [Range(0, Limits.MaxMileage, ErrorMessage = Messages.CarMileageRange)] public int Mileage { get; set; }
     [Required, StringLength(30)] public string Fuel { get; set; } = "";
     [Required, StringLength(30)] public string Transmission { get; set; } = "";
     [Required, StringLength(10)] public string Drivetrain { get; set; } = "";
     [Required, StringLength(30)] public string BodyType { get; set; } = "";
-    [Required(ErrorMessage = "Ange färg."), StringLength(30)] public string Color { get; set; } = "";
-    [Range(1, 20_000_000, ErrorMessage = "Ange ett pris i kronor.")] public int Price { get; set; }
+    [Required(ErrorMessage = Messages.ColorRequired), StringLength(30)] public string Color { get; set; } = "";
+    [Range(1, Limits.MaxPrice, ErrorMessage = Messages.PriceRequired)] public int Price { get; set; }
     public bool Featured { get; set; }
     [StringLength(4000)] public string Description { get; set; } = "";
     public List<string> Features { get; set; } = [];
@@ -62,13 +63,13 @@ public class CarUpsertRequest
 
 public class CreateLeadRequest
 {
-    [Required(ErrorMessage = "Fyll i ditt namn."), StringLength(100)] public string Name { get; set; } = "";
-    [Required(ErrorMessage = "Fyll i din e-postadress."), EmailAddress(ErrorMessage = "E-postadressen verkar inte stämma. Exempel: namn@exempel.se"), StringLength(254)]
+    [Required(ErrorMessage = Messages.NameRequired), StringLength(100)] public string Name { get; set; } = "";
+    [Required(ErrorMessage = Messages.EmailRequired), EmailAddress(ErrorMessage = Messages.EmailInvalid), StringLength(254)]
     public string Email { get; set; } = "";
-    [RegularExpression(@"^[+\d][\d\s-]{6,}$", ErrorMessage = "Telefonnumret får bara innehålla siffror, mellanslag och bindestreck."), StringLength(30)]
+    [RegularExpression(Limits.PhonePattern, ErrorMessage = Messages.PhoneInvalid), StringLength(30)]
     public string? Phone { get; set; }
     [StringLength(40)] public string? Subject { get; set; }
-    [Required(ErrorMessage = "Skriv ett meddelande på minst 10 tecken."), MinLength(10, ErrorMessage = "Skriv ett meddelande på minst 10 tecken."), StringLength(4000)]
+    [Required(ErrorMessage = Messages.MessageTooShort), MinLength(Limits.MessageMinLength, ErrorMessage = Messages.MessageTooShort), StringLength(4000)]
     public string Message { get; set; } = "";
     /// <summary>Slug of the car the message is about (from "Boka provkörning").</summary>
     [StringLength(120)] public string? CarSlug { get; set; }
@@ -78,15 +79,15 @@ public class CreateLeadRequest
 
 public class CreateTradeInRequest
 {
-    [Required(ErrorMessage = "Fyll i ditt namn."), StringLength(100)] public string Name { get; set; } = "";
-    [Required(ErrorMessage = "Fyll i din e-postadress."), EmailAddress(ErrorMessage = "E-postadressen verkar inte stämma. Exempel: namn@exempel.se"), StringLength(254)]
+    [Required(ErrorMessage = Messages.NameRequired), StringLength(100)] public string Name { get; set; } = "";
+    [Required(ErrorMessage = Messages.EmailRequired), EmailAddress(ErrorMessage = Messages.EmailInvalid), StringLength(254)]
     public string Email { get; set; } = "";
-    [RegularExpression(@"^[+\d][\d\s-]{6,}$", ErrorMessage = "Telefonnumret får bara innehålla siffror, mellanslag och bindestreck."), StringLength(30)]
+    [RegularExpression(Limits.PhonePattern, ErrorMessage = Messages.PhoneInvalid), StringLength(30)]
     public string? Phone { get; set; }
-    [Required(ErrorMessage = "Fyll i bilens märke, t.ex. Volvo."), StringLength(60)] public string Brand { get; set; } = "";
-    [Required(ErrorMessage = "Fyll i bilens modell, t.ex. V60."), StringLength(80)] public string Model { get; set; } = "";
-    [Range(1950, 2100, ErrorMessage = "Årsmodellen ska vara ett årtal mellan 1950 och nästa år.")] public int Year { get; set; }
-    [Range(0, 100000, ErrorMessage = "Ange miltal i mil som en siffra, t.ex. 8500.")] public int Mileage { get; set; }
+    [Required(ErrorMessage = Messages.BrandRequired), StringLength(60)] public string Brand { get; set; } = "";
+    [Required(ErrorMessage = Messages.ModelRequired), StringLength(80)] public string Model { get; set; } = "";
+    [Range(Limits.TradeInMinYear, Limits.CarMaxYear, ErrorMessage = Messages.TradeInYearRange)] public int Year { get; set; }
+    [Range(0, Limits.MaxMileage, ErrorMessage = Messages.MileageInvalid)] public int Mileage { get; set; }
     [StringLength(4000)] public string? Message { get; set; }
     public string? Website { get; set; }
 }
@@ -102,8 +103,8 @@ public record UpdateStatusRequest([Required] RequestStatus Status);
 public record CreatedResponse(int Id, string Message);
 
 public record LoginRequest(
-    [Required(ErrorMessage = "Ange e-post."), EmailAddress] string Email,
-    [Required(ErrorMessage = "Ange lösenord.")] string Password);
+    [Required(ErrorMessage = Messages.EmailRequiredLogin), EmailAddress] string Email,
+    [Required(ErrorMessage = Messages.PasswordRequired)] string Password);
 
 public record LoginResponse(string AccessToken, DateTime ExpiresAt, string Email, string[] Roles);
 
@@ -115,18 +116,18 @@ public record BookableDayDto(DateOnly Date, int FreeSlots);
 
 public class CreateBookingRequest
 {
-    [Required(ErrorMessage = "Välj en tjänst.")] public string ServiceCode { get; set; } = "";
-    [Required(ErrorMessage = "Välj en dag.")] public DateOnly? Date { get; set; }
-    [Required(ErrorMessage = "Välj en tid."), RegularExpression(@"^\d{2}:\d{2}$", ErrorMessage = "Välj en tid.")]
+    [Required(ErrorMessage = Messages.ServiceRequired)] public string ServiceCode { get; set; } = "";
+    [Required(ErrorMessage = Messages.DateRequired)] public DateOnly? Date { get; set; }
+    [Required(ErrorMessage = Messages.TimeRequired), RegularExpression(Limits.TimePattern, ErrorMessage = Messages.TimeRequired)]
     public string Time { get; set; } = "";
-    [Required(ErrorMessage = "Fyll i ditt namn."), StringLength(100)] public string Name { get; set; } = "";
-    [Required(ErrorMessage = "Fyll i din e-postadress."), EmailAddress(ErrorMessage = "E-postadressen verkar inte stämma. Exempel: namn@exempel.se"), StringLength(254)]
+    [Required(ErrorMessage = Messages.NameRequired), StringLength(100)] public string Name { get; set; } = "";
+    [Required(ErrorMessage = Messages.EmailRequired), EmailAddress(ErrorMessage = Messages.EmailInvalid), StringLength(254)]
     public string Email { get; set; } = "";
-    [Required(ErrorMessage = "Fyll i ditt telefonnummer så att verkstaden kan nå dig."),
-     RegularExpression(@"^[+\d][\d\s-]{6,}$", ErrorMessage = "Telefonnumret får bara innehålla siffror, mellanslag och bindestreck."), StringLength(30)]
+    [Required(ErrorMessage = Messages.PhoneRequiredForWorkshop),
+     RegularExpression(Limits.PhonePattern, ErrorMessage = Messages.PhoneInvalid), StringLength(30)]
     public string Phone { get; set; } = "";
-    [Required(ErrorMessage = "Fyll i bilens registreringsnummer."),
-     RegularExpression(@"^\s*[A-Za-z]{3}\s?\d{2}[A-Za-z0-9]\s*$", ErrorMessage = "Registreringsnumret ska ha formatet ABC 123 eller ABC 12D.")]
+    [Required(ErrorMessage = Messages.RegRequired),
+     RegularExpression(RegistrationNumber.Pattern, ErrorMessage = Messages.RegInvalid)]
     public string RegNumber { get; set; } = "";
     [StringLength(2000)] public string? Message { get; set; }
     public string? Website { get; set; }
@@ -138,3 +139,5 @@ public record BookingDto(int Id, string Reference, string ServiceCode, string Se
     int DurationMinutes, string Name, string Email, string Phone, string RegNumber, string? Message, string Status, DateTime CreatedAt);
 
 public record UpdateBookingStatusRequest([Required] BookingStatus Status);
+
+public record CarFacetsDto(List<string> Makes, List<string> Fuels, List<string> Transmissions, List<string> BodyTypes);

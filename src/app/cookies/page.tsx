@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import LegalPage, { Table } from "@/components/legal/LegalPage";
 import CookieSettings from "@/components/legal/CookieSettings";
+import { ROUTES } from "@/config/navigation";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Cookies och lagring",
-  description: "Vilka cookies och vilken lokal lagring Car Dealer använder, och hur du ändrar ditt samtycke.",
+  description: `Vilka cookies och vilken lokal lagring ${SITE.name} använder, och hur du ändrar ditt samtycke.`,
 };
 
 const a = "text-primary underline underline-offset-4";
@@ -86,7 +88,7 @@ export default function CookiesPage() {
             <p>
               Du kan också ta bort all lagrad data för webbplatsen i webbläsarens inställningar (ofta under
               ”Sekretess” → ”Webbplatsdata”). Läs mer om hur vi behandlar personuppgifter i vår{" "}
-              <Link className={a} href="/integritet">
+              <Link className={a} href={ROUTES.privacy}>
                 integritetspolicy
               </Link>
               .

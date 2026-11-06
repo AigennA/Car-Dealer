@@ -1,3 +1,4 @@
+import { SITE } from "@/lib/site";
 import Link from "next/link";
 import Image from "next/image";
 import { cars, getUniqueMakes, getUniqueFuels, getUniqueBodyTypes } from "@/lib/cars";
@@ -8,12 +9,22 @@ import HeroCarStrip from "@/components/HeroCarStrip";
 
 import SearchForm from "@/components/ui/SearchForm";
 import AdvisorCard from "@/components/people/AdvisorCard";
-import {
-  ShieldCheckIcon,
-  BanknotesIcon,
-  ArrowsRightLeftIcon,
-  CheckIcon,
-} from "@/components/ui/icons";
+import { ShieldCheckIcon, BanknotesIcon, ArrowsRightLeftIcon } from "@/components/ui/icons";
+import { CheckList, FeatureGrid, type Feature } from "@/components/ui/Features";
+import { ROUTES } from "@/config/navigation";
+
+const USPS: Feature[] = [
+  { Icon: ShieldCheckIcon, title: "Kvalitetskontrollerade bilar", text: "Alla bilar genomgår noggrann kontroll före försäljning" },
+  { Icon: BanknotesIcon, title: "Finansiering & Leasing", text: "Flexibla finansieringsmöjligheter anpassade efter dina behov" },
+  { Icon: ArrowsRightLeftIcon, title: "Inbyte & Garanti", text: "Byt in din gamla bil och få trygg garanti på din nya" },
+];
+
+const WHY_US = [
+  { title: "Transparent prissättning", text: "Inga dolda avgifter eller överraskningar" },
+  { title: "Personlig service", text: "Vi guidar dig genom hela köpprocessen" },
+  { title: "Flexibla lösningar", text: "Anpassade finansierings- och försäkringslösningar" },
+  { title: "Trygg affär", text: "Garanti och ångerrätt på alla bilar" },
+];
 
 
 export default function HomePage() {
@@ -66,7 +77,7 @@ export default function HomePage() {
               <div className="hero-reveal hero-delay-3 flex flex-wrap items-center gap-4">
                 {/* Primary CTA — accent filled */}
                 <Link
-                  href="/bilar"
+                  href={ROUTES.cars}
                   className="hero-cta-primary inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-white transition-all duration-200 cursor-pointer"
                 >
                   <span>Se alla bilar</span>
@@ -86,7 +97,7 @@ export default function HomePage() {
 
                 {/* Secondary ghost CTA — a different task than the primary one */}
                 <Link
-                  href="/finansiering"
+                  href={ROUTES.financing}
                   className="hero-cta-ghost inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-medium text-white border border-white/60 hover:bg-white/10 transition-colors duration-200 cursor-pointer"
                 >
                   <span>Räkna på billån</span>
@@ -98,8 +109,8 @@ export default function HomePage() {
               <dl className="hero-reveal hero-delay-4 hero-stats-row flex flex-wrap gap-6 mt-6 pt-6">
                 {[
                   { value: String(cars.length), label: "Bilar i lager" },
-                  { value: "24 mån", label: "Garanti" },
-                  { value: "14 dagar", label: "Öppet köp" },
+                  { value: `${SITE.policies.warrantyMonths} mån`, label: "Garanti" },
+                  { value: `${SITE.policies.openPurchaseDays} dagar`, label: "Öppet köp" },
                 ].map(({ value, label }) => (
                   <div key={label} className="flex flex-col-reverse">
                     <dt className="hero-stat-label text-xs tracking-wide">{label}</dt>
@@ -171,7 +182,7 @@ export default function HomePage() {
 
           <div className="text-center">
             <Link
-              href="/bilar"
+              href={ROUTES.cars}
               className="inline-flex items-center gap-2 bg-primary text-white px-8 py-3 rounded-xl font-semibold hover:bg-primary-dark transition-colors"
             >
               Visa alla {cars.length} bilar
@@ -194,43 +205,7 @@ export default function HomePage() {
       <section aria-labelledby="usp-heading" className="bg-surface py-16">
         <div className="max-w-7xl 2xl:max-w-400 mx-auto px-4 2xl:px-16">
           <h2 id="usp-heading" className="sr-only">Våra tjänster</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="mb-4 flex justify-center">
-                <ShieldCheckIcon className="w-12 h-12 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold text-navy mb-2">
-                Kvalitetskontrollerade bilar
-              </h3>
-              <p className="text-gray-600">
-                Alla bilar genomgår noggrann kontroll före försäljning
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="mb-4 flex justify-center">
-                <BanknotesIcon className="w-12 h-12 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold text-navy mb-2">
-                Finansiering & Leasing
-              </h3>
-              <p className="text-gray-600">
-                Flexibla finansieringsmöjligheter anpassade efter dina behov
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="mb-4 flex justify-center">
-                <ArrowsRightLeftIcon className="w-12 h-12 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold text-navy mb-2">
-                Inbyte & Garanti
-              </h3>
-              <p className="text-gray-600">
-                Byt in din gamla bil och få trygg garanti på din nya
-              </p>
-            </div>
-          </div>
+          <FeatureGrid items={USPS} />
         </div>
       </section>
 
@@ -243,64 +218,7 @@ export default function HomePage() {
           <h2 id="why-heading" className="text-3xl font-bold text-navy mb-8 text-center">
             Varför välja oss?
           </h2>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="flex gap-4">
-              <div className="text-primary shrink-0">
-                <CheckIcon className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-navy mb-1">
-                  Transparent prissättning
-                </h3>
-                <p className="text-gray-600">
-                  Inga dolda avgifter eller överraskningar
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <div className="text-primary shrink-0">
-                <CheckIcon className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-navy mb-1">
-                  Personlig service
-                </h3>
-                <p className="text-gray-600">
-                  Vi guidar dig genom hela köpprocessen
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <div className="text-primary shrink-0">
-                <CheckIcon className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-navy mb-1">
-                  Flexibla lösningar
-                </h3>
-                <p className="text-gray-600">
-                  Anpassade finansierings- och försäkringslösningar
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <div className="text-primary shrink-0">
-                <CheckIcon className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-navy mb-1">
-                  Trygg affär
-                </h3>
-                <p className="text-gray-600">
-                  Garanti och ångerrätt på alla bilar
-                </p>
-              </div>
-            </div>
-          </div>
+          <CheckList items={WHY_US} columns={2} />
         </div>
       </section>
     </>
