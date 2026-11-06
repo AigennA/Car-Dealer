@@ -117,6 +117,23 @@ Status: ✅ uppfyllt · ⚠️ delvis / se kommentar · ➖ ej tillämpligt
 | 4.1.2 Namn, roll, värde | ✅ | `aria-expanded`/`aria-controls` på menyknapp och mobilfilter, `aria-pressed` på galleriminiatyrer och paus-knapp, `aria-current="page"` i menyn och brödsmulor. |
 | 4.1.3 Statusmeddelanden | ✅ | Antal träffar i listan är `role="status"` (läses upp när filter ändras). Kalkylatorresultat i `aria-live="polite"`. Admin-notiser i `role="status"`. |
 
+## Skärmläsar- och tangentbordsanpassningar (november 2026, omgång 2)
+
+| Område | Före | Efter | WCAG |
+|---|---|---|---|
+| Admin: dialog för att lägga till/redigera bil | `div` utan roll; fokus kunde lämna dialogen; Escape fungerade inte; stängknappen hette "×" | Inbyggd `<dialog>` med `showModal()`: fokusfälla, bakgrunden inert, Escape stänger, fokus återgår till knappen som öppnade, namngiven ("Lägg till ny bil"), stängknapp "Stäng dialogen" 44×44 px | 2.1.2, 2.4.3, 4.1.2 |
+| Admin: tabell | Rubriker utan `scope`, ingen `caption`, knappar "Redigera"/"Ta bort" ×24 utan sammanhang | `caption`, `scope="col"`, knappnamn "Redigera Volvo V90 D4 AWD" | 1.3.1, 2.4.6 |
+| Admin: inloggning | Ingen `autocomplete` | `username`, `current-password`/`new-password` – fungerar med lösenordshanterare | 1.3.5, 3.3.8 |
+| Inbytesformulär | Ingen validering alls, "Tack!" även med tomma fält; "km" fast sajten använder "mil" | Fält grupperade i `fieldset` ("Dina uppgifter", "Din bil"), felsammanfattning som tar fokus, fel kopplade med `aria-describedby`, hjälptext "1 mil = 10 km" | 1.3.1, 3.3.1–3.3.3 |
+| Felmeddelanden | Läses som vanlig text | Inleds med dold text "Fel:" så att skärmläsare skiljer fel från hjälptext | 3.3.1 |
+| Sidbyte | Fokus blev kvar på klickad länk / `body` | Fokus flyttas till `main`; Next.js route-announcer läser upp sidtiteln | 2.4.3 |
+| Policysidor | Lång text utan navigering | Innehållsförteckning (`nav` "Innehåll"), numrerade `h2` med ankare, tabeller med `caption` och `scope` | 1.3.1, 2.4.5 |
+| Cookieinställningar | – | Växlingsknapp med `role="switch"` + `aria-checked`, fungerar med Mellanslag; statusmeddelande vid ändring | 4.1.2, 4.1.3 |
+| Kartan | Google Maps-iframe laddades alltid (otillgänglig för tangentbord, satte cookies utan samtycke) | Laddas bara efter samtycke; adress och länk till vägbeskrivning ("öppnas i ny flik") finns alltid som text | 1.1.1, 3.2.5 |
+| Windows högkontrastläge | Gradienttext (logotyp, "BIL") kunde bli osynlig | `@media (forced-colors: active)`: systemfärger för fokus, switch och gradienttext | 1.4.11 |
+
+Alla punkter ovan har automatiska tester (`tests/e2e/privacy-keyboard.spec.ts`, `tests/unit/components.test.tsx`).
+
 ## Inte testat / rekommenderas
 
 - ⚠️ **Skärmläsartest med riktiga hjälpmedel** (NVDA + Firefox, VoiceOver + Safari på iOS)
@@ -127,5 +144,4 @@ Status: ✅ uppfyllt · ⚠️ delvis / se kommentar · ➖ ej tillämpligt
   som text, så informationen är tillgänglig utan kartan.
 - ⚠️ Admin-tabellen (`/admin`) är gjord för desktop; den scrollar horisontellt på små skärmar
   (tillåtet för datatabeller enligt 1.4.10, men kan förbättras med kortlayout).
-- En **tillgänglighetsredogörelse** (krävs för offentlig sektor, rekommenderas för EAA) bör
-  publiceras på sajten.
+- ✅ En **tillgänglighetsredogörelse** finns nu på `/tillganglighet` (länkad från sidfoten).

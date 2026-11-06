@@ -82,6 +82,20 @@ footer :where(a, button):focus-visible {
   cursor: not-allowed;
 }
 
+/* Windows High Contrast / forced colours: keep focus and custom controls visible */
+@media (forced-colors: active) {
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 3px solid CanvasText;
+  }
+  .skip-link:focus { outline: 3px solid CanvasText; }
+  [role="switch"] { border: 2px solid ButtonText; }
+  .logo-text-main,
+  .hero-h1-accent {
+    -webkit-text-fill-color: CanvasText;
+    background: none;
+  }
+}
+
 /* Global reduced-motion safety net */
 @media (prefers-reduced-motion: reduce) {
   *,

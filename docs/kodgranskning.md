@@ -23,6 +23,7 @@ export till GitHub Pages).
 | 12 | 🟡 | Död kod: `src/lib/storage.ts` (oanvänd), `prepare-build`/`postbuild` som flyttar en `src/app/api`-mapp som inte finns. README beskrev API-endpoints som inte finns. | | Borttaget, README rättad. |
 | 13 | 🟡 | Kontaktuppgifter hårdkodade på 5+ ställen. | header, footer, kontakt | `lib/site.ts`. |
 | 14 | 🟡 | Ingen SEO-grund: samma `<title>` för alla bilar, ingen sitemap/robots, ingen Open Graph, ingen strukturerad data. | | `generateMetadata` per bil, `sitemap.ts`, `robots.ts`, OG, JSON-LD (`AutoDealer`, `Car`). |
+| 16 | 🟡 | Admin-tabellen formaterade fortfarande pris/miltal utan `sv-SE` (missades i första omgången). | `admin/page.tsx` | Rättat. |
 | 15 | ⚪ | `<img>` i admin och "liknande bilar" (lint-varning). | | `next/image`. |
 
 ## Kvarstående fynd (inte åtgärdade)
@@ -30,7 +31,7 @@ export till GitHub Pages).
 | # | Allvar | Fynd | Rekommendation |
 |---|---|---|---|
 | A | 🔴 | **Admin-inloggningen är inte säker.** Användare och lösenord lagras i klartext i `localStorage`, standardkontot `admin/admin123` står på sidan, och "inloggad" är bara `sessionStorage.admin_auth = "true"` – vem som helst kan sätta den i devtools. Ändringar sparas bara i den egna webbläsaren. | OK som **demo**. För produktion: riktig backend med autentisering (t.ex. Supabase/Firebase Auth, NextAuth på Vercel) och server-side lagring. Använd aldrig lösenord som valideras i klienten. |
-| B | 🔴 | **Formulären skickar inga data** (kontakt, inbyte). Användaren får ett "Tack!" men ingen tar emot meddelandet. | Koppla till Formspree/Resend/eget API, eller ändra texten tills det finns en mottagare. |
+| B | 🔴 | **Formulären skickar inga data** (kontakt, inbyte). När de kopplas till en tjänst måste den läggas till som mottagare/personuppgiftsbiträde i integritetspolicyn. Användaren får ett "Tack!" men ingen tar emot meddelandet. | Koppla till Formspree/Resend/eget API, eller ändra texten tills det finns en mottagare. |
 | C | 🟠 | Alla bilder hämtas från en extern tjänst (Unsplash). Om den är nere eller ändrar villkor försvinner bilderna; LCP-bilden kostar en extra anslutning. | Lagra egna bilder (riktiga bilder av bilarna!) i `public/` eller ett CDN, i AVIF/WebP. |
 | D | 🟡 | `tailwind.config.ts` läses inte av Tailwind 4 (temat ligger i `@theme` i `globals.css`). Två källor för färger kan glida isär. | Ta bort filen eller lägg till `@config`. |
 | E | 🟡 | `globals.css` är ~700 rader med mycket hero-specifik CSS. | Flytta hero-stilar till en CSS-modul bredvid komponenten. |
@@ -48,7 +49,7 @@ export till GitHub Pages).
 ```
 npm run lint        ✔ 0 fel, 0 varningar
 npm run typecheck   ✔
-npm test            ✔ 58 enhets-/komponenttester
-npm run test:e2e    ✔ 94 E2E-/WCAG-/kontrasttester (desktop + mobil)
+npm test            ✔ 69 enhets-/komponenttester
+npm run test:e2e    ✔ 118 E2E-/WCAG-/kontrasttester (desktop + mobil)
 npm run build       ✔ 38 statiska sidor
 ```

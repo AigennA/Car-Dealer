@@ -52,7 +52,8 @@ describe("<ContactForm>", () => {
     expect(summary).toHaveTextContent("Formuläret innehåller 3 fel");
     const name = screen.getByLabelText(/Namn/);
     expect(name).toHaveAttribute("aria-invalid", "true");
-    expect(name).toHaveAccessibleDescription("Fyll i ditt namn.");
+    // "Fel:" prefix tells screen-reader users it is an error, not a hint
+    expect(name).toHaveAccessibleDescription("Fel: Fyll i ditt namn.");
   });
 
   it("submits a valid message and confirms it", async () => {
@@ -68,7 +69,7 @@ describe("<ContactForm>", () => {
   it("pre-fills the car when arriving from a car page", () => {
     render(<ContactForm carSlug={car.slug} subject="provkorning" />);
     expect(screen.getByText(`${car.title} (${car.year})`)).toBeInTheDocument();
-    expect(screen.getByLabelText("Ämne")).toHaveValue("provkorning");
+    expect(screen.getByLabelText(/^Ämne/)).toHaveValue("provkorning");
     expect((screen.getByLabelText(/Meddelande/) as HTMLTextAreaElement).value).toContain(car.title);
   });
 });
@@ -93,5 +94,69 @@ describe("<FilterPanel>", () => {
     for (const el of screen.getAllByRole("spinbutton")) expect(el).toHaveAccessibleName();
     for (const el of screen.getAllByRole("combobox")) expect(el).toHaveAccessibleName();
     expect(screen.getByRole("searchbox", { name: "Sök märke eller modell" })).toBeInTheDocument();
+  });
+});
+
+import TradeInForm from "@/components/contact/TradeInForm";
+import MapEmbed from "@/components/MapEmbed";
+import CookieSettings from "@/components/legal/CookieSettings";
+
+describe("<TradeInForm>", () => {
+  it("validates car details and groups fields with fieldsets", async () => {
+    const user = userEvent.setup();
+    render(<TradeInForm />);
+    expect(screen.getByRole("group", { name: "Dina uppgifter" })).toBeInTheDocument();
+    expect(screen.getByRole("group", { name: "Din bil" })).toBeInTheDocument();
+    await user.type(screen.getByLabelText(/^Årsmodell/), "1800");
+    await user.click(screen.getByRole("button", { name: "Skicka förfrågan" }));
+    const summary = await screen.findByRole("alert");
+    expect(summary).toHaveTextContent("Årsmodellen ska vara ett årtal mellan 1950");
+    expect(screen.getByLabelText(/^Miltal/)).toHaveAccessibleDescription(/1 mil = 10 km.*Fyll i miltal/);
+  });
+
+  it("accepts a complete request", async () => {
+    const user = userEvent.setup();
+    render(<TradeInForm />);
+    await user.type(screen.getByLabelText(/^Namn/), "Ali");
+    await user.type(screen.getByLabelText(/^E-post/), "ali@example.se");
+    await user.type(screen.getByLabelText(/^Märke/), "Volvo");
+    await user.type(screen.getByLabelText(/^Modell/), "V60");
+    await user.type(screen.getByLabelText(/^Årsmodell/), "2019");
+    await user.type(screen.getByLabelText(/^Miltal/), "8 500");
+    await user.click(screen.getByRole("button", { name: "Skicka förfrågan" }));
+    expect(await screen.findByRole("status")).toHaveTextContent("Tack för din förfrågan!");
+  });
+});
+
+describe("<MapEmbed> och samtycke", () => {
+  it("laddar inte Google Maps förrän besökaren godkänner", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<MapEmbed />);
+    expect(container.querySelector("iframe")).toBeNull();
+    expect(screen.getByRole("link", { name: /Vägbeskrivning.*ny flik/ })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Visa karta (Google Maps)" }));
+    expect(container.querySelector("iframe")).toHaveAttribute("title", expect.stringContaining("Karta"));
+    expect(localStorage.getItem("car_dealer_consent")).toContain('"maps":true');
+  });
+
+  it("utan 'Kom ihåg' sparas inget samtycke", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<MapEmbed />);
+    await user.click(screen.getByLabelText("Kom ihåg mitt val"));
+    await user.click(screen.getByRole("button", { name: "Visa karta (Google Maps)" }));
+    expect(container.querySelector("iframe")).not.toBeNull();
+    expect(localStorage.getItem("car_dealer_consent")).toBeNull();
+  });
+
+  it("samtycket kan återkallas i cookieinställningarna (switch)", async () => {
+    const user = userEvent.setup();
+    render(<CookieSettings />);
+    const sw = screen.getByRole("switch", { name: "Visa Google Maps-karta" });
+    expect(sw).toHaveAttribute("aria-checked", "false");
+    await user.click(sw);
+    expect(sw).toHaveAttribute("aria-checked", "true");
+    await user.click(sw);
+    expect(sw).toHaveAttribute("aria-checked", "false");
+    expect(screen.getByRole("status")).toHaveTextContent("återkallat");
   });
 });

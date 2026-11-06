@@ -13,7 +13,7 @@ export const test = base.extend({
       route.fulfill({ status: 200, contentType: "image/png", body: PIXEL }),
     );
     await page.route(/google\.com\/maps/, (route) =>
-      route.fulfill({ status: 200, contentType: "text/html", body: "<html><body>Karta</body></html>" }),
+      route.fulfill({ status: 200, contentType: "text/html", body: "<html lang=\"sv\"><head><title>Karta</title></head><body>Karta</body></html>" }),
     );
     await use(page);
   },
@@ -31,5 +31,7 @@ export const PAGES = [
   { path: "/kontakt/", h1: "Kontakta oss" },
   { path: "/villkor/", h1: /villkor/i },
   { path: "/integritet/", h1: /integritet/i },
+  { path: "/cookies/", h1: "Cookies och lagring" },
+  { path: "/tillganglighet/", h1: "Tillgänglighetsredogörelse" },
   { path: "/admin/", h1: "Admin Login" },
 ];

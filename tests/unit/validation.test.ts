@@ -23,3 +23,21 @@ describe("validateContact", () => {
     expect(validateContact({ ...valid, email: "anna.se" }).email).toMatch(/verkar inte stämma/);
   });
 });
+
+import { validateTradeIn } from "@/lib/validation";
+
+describe("validateTradeIn", () => {
+  const ok = { name: "Ali", email: "ali@example.se", phone: "", message: "", brand: "Volvo", model: "V60", year: "2019", mileage: "8 500" };
+  it("accepts valid input, message optional, spaces in mileage", () => {
+    expect(validateTradeIn(ok, 2026)).toEqual({});
+  });
+  it.each([
+    ["year", "1800"],
+    ["year", "2030"],
+    ["year", "abc"],
+    ["mileage", "-5"],
+    ["mileage", "massor"],
+  ])("%s = %s is rejected", (field, value) => {
+    expect(validateTradeIn({ ...ok, [field]: value }, 2026)).toHaveProperty(field);
+  });
+});

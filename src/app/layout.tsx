@@ -4,6 +4,7 @@ import { Hanken_Grotesk, Sora, Unbounded } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import RouteFocus from "@/components/layout/RouteFocus";
 import { SITE } from "@/lib/site";
 
 // Self-hosted via next/font: no render-blocking request to Google Fonts,
@@ -91,6 +92,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <RouteFocus />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}

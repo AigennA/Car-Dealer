@@ -23,47 +23,56 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h2 className="text-white font-semibold mb-4">Snabblänkar</h2>
-            <nav aria-label="Snabblänkar" className="space-y-2 text-sm">
-              <Link href="/bilar" className="block hover:text-white hover:underline underline-offset-4 transition">
-                Lager
-              </Link>
-              <Link href="/finansiering" className="block hover:text-white hover:underline underline-offset-4 transition">
-                Finansiering
-              </Link>
-              <Link href="/inbyte" className="block hover:text-white hover:underline underline-offset-4 transition">
-                Inbyte
-              </Link>
-              <Link href="/om-oss" className="block hover:text-white hover:underline underline-offset-4 transition">
-                Om oss
-              </Link>
-            </nav>
-          </div>
+          <nav aria-labelledby="footer-quick">
+            <h2 id="footer-quick" className="text-white font-semibold mb-4">Snabblänkar</h2>
+            <ul className="space-y-1 text-sm">
+                <li><Link href="/bilar" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Lager</Link></li>
+                <li><Link href="/finansiering" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Finansiering</Link></li>
+                <li><Link href="/inbyte" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Inbyte</Link></li>
+                <li><Link href="/om-oss" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Om oss</Link></li>
+                <li><Link href="/kontakt" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Kontakt</Link></li>
+            </ul>
+          </nav>
 
-          {/* Contact */}
+          {/* Contact — summary + clear route to the contact page */}
           <div>
             <h2 className="text-white font-semibold mb-4">Kontakt</h2>
             <address className="not-italic space-y-2 text-sm">
-              <p>Telefon: <a href={SITE.phoneHref} className="underline underline-offset-4 hover:text-white">{SITE.phone}</a></p>
-              <p>E-post: <a href={`mailto:${SITE.email}`} className="underline underline-offset-4 hover:text-white">{SITE.email}</a></p>
-              <p>{SITE.address.street}, {SITE.address.postalCode} {SITE.address.city}</p>
-              <p>Öppettider: {SITE.openingHours}</p>
+              <p>
+                <span className="block text-gray-400 text-xs uppercase tracking-wider">Telefon</span>
+                <a href={SITE.phoneHref} className="underline underline-offset-4 hover:text-white">{SITE.phone}</a>
+              </p>
+              <p>
+                <span className="block text-gray-400 text-xs uppercase tracking-wider">E-post</span>
+                <a href={`mailto:${SITE.email}`} className="underline underline-offset-4 hover:text-white">{SITE.email}</a>
+              </p>
+              <p>
+                <span className="block text-gray-400 text-xs uppercase tracking-wider">Besöksadress</span>
+                {SITE.address.street}, {SITE.address.postalCode} {SITE.address.city}
+              </p>
+              <p>
+                <span className="block text-gray-400 text-xs uppercase tracking-wider">Öppettider</span>
+                {SITE.openingHours}
+              </p>
             </address>
+            <Link
+              href="/kontakt"
+              className="mt-5 inline-flex items-center gap-2 rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold text-white hover:border-white hover:bg-white/10 transition-colors"
+            >
+              Kontakta oss <span aria-hidden="true">→</span>
+            </Link>
           </div>
 
           {/* Information */}
-          <div>
-            <h2 className="text-white font-semibold mb-4">Information</h2>
-            <nav aria-label="Information" className="space-y-2 text-sm">
-              <Link href="/villkor" className="block hover:text-white hover:underline underline-offset-4 transition">
-                Villkor
-              </Link>
-              <Link href="/integritet" className="block hover:text-white hover:underline underline-offset-4 transition">
-                Integritetspolicy
-              </Link>
-            </nav>
-          </div>
+          <nav aria-labelledby="footer-info">
+            <h2 id="footer-info" className="text-white font-semibold mb-4">Information</h2>
+            <ul className="space-y-1 text-sm">
+                <li><Link href="/villkor" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Allmänna villkor</Link></li>
+                <li><Link href="/integritet" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Integritetspolicy</Link></li>
+                <li><Link href="/cookies" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Cookies och lagring</Link></li>
+                <li><Link href="/tillganglighet" className="block py-1 hover:text-white hover:underline underline-offset-4 transition-colors">Tillgänglighetsredogörelse</Link></li>
+            </ul>
+          </nav>
 
         </div>
 

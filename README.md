@@ -18,6 +18,7 @@ Visit the live site: [https://AigennA.github.io/Car-Dealer/](https://AigennA.git
 - ♿ **Accessible** – WCAG 2.2 AA: 0 axe violations, keyboard & screen-reader friendly
 - ⚡ **Fast** – responsive AVIF/WebP images, self-hosted fonts, Lighthouse 91–100 (mobile)
 - 🔎 **SEO** – per-car titles/descriptions, Open Graph, sitemap, robots, schema.org JSON-LD
+- 🍪 **Privacy** – no tracking cookies; Google Maps loads only after consent; privacy policy, cookie page and accessibility statement
 - 🔧 **Admin demo** – add/edit/delete cars (stored in your browser's localStorage)
 
 ## 📊 Quality
@@ -29,7 +30,7 @@ Visit the live site: [https://AigennA.github.io/Car-Dealer/](https://AigennA.git
 | axe WCAG 2.2 AA violations | 237 | **0** |
 | Contrast failures on gradients/photos (pixel test) | 10 | **0** |
 | ESLint errors | 10 | **0** |
-| Automated tests | 0 | **58 unit + 94 E2E/a11y/contrast** |
+| Automated tests | 0 | **69 unit + 118 E2E/a11y/contrast** |
 
 Reports (Swedish): [docs/](docs/README.md) – Lighthouse, WCAG audit, heuristic evaluation, code review, test strategy.
 

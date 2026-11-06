@@ -67,7 +67,7 @@ kompletteras med användartester (se sist).
 | # | Problem (före) | Grad | Åtgärd | Status |
 |---|---|---|---|---|
 | 5.1 | Sifferfält tillät negativa värden (pris, år, miltal, kontantinsats). | 2 | `min`, `step`, `inputMode="numeric"` och värden < 0 klampas till 0. | ✅ |
-| 5.2 | Kontaktformuläret validerade bara namnet; felaktig e-post gick igenom. | 3 | Validering av namn, e-post (format), telefon (format) och meddelande (minst 10 tecken). | ✅ |
+| 5.2 | Kontaktformuläret validerade bara namnet; felaktig e-post gick igenom. Inbytesformuläret validerade ingenting. | 3 | Validering av namn, e-post (format), telefon (format) och meddelande (minst 10 tecken). | ✅ |
 
 ### H6 – Känna igen hellre än att minnas
 

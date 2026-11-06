@@ -23,3 +23,29 @@ export function validateContact(input: ContactInput): ContactErrors {
     errors.message = "Skriv ett meddelande på minst 10 tecken.";
   return errors;
 }
+
+export type TradeInInput = ContactInput & {
+  brand: string;
+  model: string;
+  year: string;
+  mileage: string;
+};
+export type TradeInErrors = Partial<Record<keyof TradeInInput, string>>;
+
+/** Trade-in request: contact details + enough about the car to value it. */
+export function validateTradeIn(input: TradeInInput, currentYear = new Date().getFullYear()): TradeInErrors {
+  const { message: _ignored, ...contactErrors } = validateContact({ ...input, message: "x".repeat(10) });
+  void _ignored;
+  const errors: TradeInErrors = { ...contactErrors };
+  if (!input.brand.trim()) errors.brand = "Fyll i bilens märke, t.ex. Volvo.";
+  if (!input.model.trim()) errors.model = "Fyll i bilens modell, t.ex. V60.";
+  const year = Number(input.year);
+  if (!input.year.trim()) errors.year = "Fyll i årsmodell.";
+  else if (!Number.isInteger(year) || year < 1950 || year > currentYear + 1)
+    errors.year = `Årsmodellen ska vara ett årtal mellan 1950 och ${currentYear + 1}.`;
+  const mileage = Number(input.mileage.replace(/\s/g, ""));
+  if (!input.mileage.trim()) errors.mileage = "Fyll i miltal.";
+  else if (!Number.isFinite(mileage) || mileage < 0 || mileage > 100000)
+    errors.mileage = "Ange miltal i mil som en siffra, t.ex. 8500.";
+  return errors;
+}
