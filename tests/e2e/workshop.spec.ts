@@ -150,6 +150,6 @@ test.describe("verkstad & besiktning – bokning", () => {
 
   test("demo-banderollen talar om att webbplatsen är ett exempel", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByText(/Demowebbplats:/)).toBeVisible();
+    await expect(page.getByRole("complementary", { name: "Om webbplatsen" })).toBeVisible();
   });
 });

@@ -7,10 +7,13 @@ import { SITE } from "@/lib/site";
 import { MAIN_NAV, MY_BOOKING_LINK, ROUTES, isActiveRoute } from "@/config/navigation";
 import Logo from "./Logo";
 
-/** Red call to action; white on red-600 = 4.8:1 (WCAG AA). */
+/**
+ * The one accent in the header: the brand coral, in its darker shade so white
+ * text passes WCAG AA (5.2:1). Everything else is navy and white.
+ */
 const MY_BOOKING_CLASS =
-  "inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-lg bg-red-600 font-semibold text-white transition-colors hover:bg-red-700 " +
-  "focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black";
+  "inline-flex h-10 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-accent-dark font-semibold text-white " +
+  "transition-colors hover:bg-accent-darker focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy";
 
 function CalendarIcon() {
   return (
@@ -57,11 +60,11 @@ export default function Header() {
   const closeMenu = () => setMobileMenuOpen(false);
 
   return (
-    <header ref={headerRef} className="bg-black text-white sticky top-0 z-50 border-b border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between gap-4">
+    <header ref={headerRef} className="sticky top-0 z-50 border-b border-white/10 bg-navy text-white">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 md:h-[4.5rem]">
 
         {/* Logo */}
-        <Link href={ROUTES.home} className="flex items-center gap-3 group rounded-lg" aria-label={`${SITE.name} – till startsidan`}>
+        <Link href={ROUTES.home} className="group flex items-center gap-2.5 rounded-lg" aria-label={`${SITE.name} – till startsidan`}>
           <Logo variant="header" />
         </Link>
 
@@ -99,17 +102,17 @@ export default function Header() {
         <Link
           href={MY_BOOKING_LINK.href}
           aria-current={isActive(MY_BOOKING_LINK.href) ? "page" : undefined}
-          className={`${MY_BOOKING_CLASS} px-3 py-2 text-sm`}
+          className={`${MY_BOOKING_CLASS} w-10 text-sm sm:w-auto sm:px-4`}
         >
           <CalendarIcon />
-          {/* Icon only on the narrowest phones; the name stays for screen readers. */}
-          <span className="sr-only min-[380px]:not-sr-only">{MY_BOOKING_LINK.label}</span>
+          {/* Icon only on phones; the name stays for screen readers. */}
+          <span className="sr-only sm:not-sr-only">{MY_BOOKING_LINK.label}</span>
         </Link>
 
         {/* Phone — desktop (wide screens) */}
         <a
           href={SITE.phoneHref}
-          className="hidden xl:inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border border-white/40 text-white hover:border-white hover:bg-white/10 transition-colors"
+          className="hidden h-10 items-center gap-2 rounded-lg border border-white/30 px-4 text-sm font-semibold text-white transition-colors hover:border-white hover:bg-white/10 xl:inline-flex"
         >
           <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.1 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
@@ -139,7 +142,7 @@ export default function Header() {
       </div>
 
       {/* Mobile Menu */}
-      <div id="mobile-menu" hidden={!mobileMenuOpen} className="xl:hidden bg-gray-900 border-t border-gray-800">
+      <div id="mobile-menu" hidden={!mobileMenuOpen} className="border-t border-white/10 bg-navy xl:hidden">
         <nav aria-label="Mobilmeny">
           <ul className="flex flex-col py-4">
             {MAIN_NAV.map(({ href, label }) => {
@@ -152,8 +155,8 @@ export default function Header() {
                     aria-current={active ? "page" : undefined}
                     className={`block px-4 py-3 font-medium border-l-4 transition-colors ${
                       active
-                        ? "text-accent border-accent bg-gray-800/60"
-                        : "text-white border-transparent hover:bg-gray-800"
+                        ? "border-accent text-accent bg-white/5"
+                        : "border-transparent text-white hover:bg-white/5"
                     }`}
                   >
                     {label}
@@ -162,7 +165,7 @@ export default function Header() {
               );
             })}
             <li>
-              <a href={SITE.phoneHref} className="block px-4 py-3 font-medium text-white border-l-4 border-transparent hover:bg-gray-800">
+              <a href={SITE.phoneHref} className="block border-l-4 border-transparent px-4 py-3 font-medium text-white hover:bg-white/5">
                 Ring oss: {SITE.phone}
               </a>
             </li>

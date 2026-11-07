@@ -31,7 +31,7 @@ function ContactItem({ label, children }: { label: string; children: React.React
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-gray-300 border-t border-gray-800">
+    <footer className="bg-navy text-gray-300 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
@@ -67,7 +67,7 @@ export default function Footer() {
           <LinkColumn id="footer-info" title="Information" links={FOOTER_INFO_LINKS} />
         </div>
 
-        <div className="pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
+        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
           <p>© {new Date().getFullYear()} {SITE.copyrightHolder}. Alla rättigheter förbehållna.</p>
           <Link href={STAFF_LINK.href} className="text-gray-400 hover:text-white underline-offset-4 hover:underline">
             {STAFF_LINK.label}

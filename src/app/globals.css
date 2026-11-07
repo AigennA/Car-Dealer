@@ -97,11 +97,7 @@ footer :where(a, button):focus-visible {
   }
   .skip-link:focus { outline: 3px solid CanvasText; }
   [role="switch"] { border: 2px solid ButtonText; }
-  .logo-text-main,
-  .hero-h1-accent {
-    -webkit-text-fill-color: CanvasText;
-    background: none;
-  }
+  .hero-h1-accent { color: CanvasText; }
 }
 
 /* Global reduced-motion safety net */
@@ -127,202 +123,25 @@ h1, h2, h3, h4, h5, h6 {
   hyphens: auto;
 }
 
-/* Logo styling with unique display font */
-.logo-text {
-  font-family: var(--font-logo), sans-serif;
-  letter-spacing: 0.05em;
-  font-weight: 400;
-}
+/* ── Brand mark: flat and single-colour, so header, footer and buttons share one palette ── */
 
-/* Unique logo styling with distinctive font */
 .logo-text-main {
   font-family: var(--font-logo), sans-serif;
-  letter-spacing: 0.005em;
+  letter-spacing: 0.01em;
   font-weight: 800;
   text-transform: uppercase;
+  line-height: 1;
   color: #ffffff;
-  /* coral → white → azure tri-blend, clipped to the text */
-  background: linear-gradient(110deg, #ff6535 0%, #ffffff 48%, #16b6e8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 2px 7px rgba(0, 0, 0, 0.45));
-  transition: all 0.3s ease;
 }
 
 .logo-icon {
-  /* coral → azure chip, matching the coral favicon + the accent */
-  background: linear-gradient(135deg, #ff6535 0%, #0099cc 100%);
-  box-shadow: 0 4px 12px rgba(255, 101, 53, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  transition: all 0.3s ease;
+  background: var(--color-accent-dark);
+  transition: background-color 0.2s ease;
 }
 
-/* Group hover for interactive logo link */
 .group:hover .logo-icon,
 .group:focus-visible .logo-icon {
-  box-shadow: 0 6px 16px rgba(0, 153, 204, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transform: translateY(-1px);
-}
-
-.group:hover .logo-text-main,
-.group:focus-visible .logo-text-main {
-  filter: drop-shadow(0 3px 8px rgba(0, 153, 204, 0.6));
-  transform: scale(1.02);
-}
-
-/* ── 3-D logo chip (header only — footer logo-icon is intentionally flat) ── */
-
-/*
-  Technique:
-  1. logo-icon-wrap sets the CSS perspective (200px) so child transforms
-     produce genuine vanishing-point foreshortening at 40 px scale.
-  2. logo-icon uses transform-style:preserve-3d so its pseudo-elements live
-     in the same 3-D space.
-  3. ::before is the depth/edge face: same size, pushed back 4 px on Z and
-     offset +4 px on X/Y to simulate a bottom-right extrusion. Filled with
-     darker brand blue (#006a8e) and a slightly darker shadow so it reads as
-     the "side" of a thick chip.
-  4. ::after is the gloss sheen: a thin top-edge highlight (semi-transparent
-     white gradient, top 35 % of the face) that makes the surface look lit
-     from above — giving the impression of a convex, lacquered surface.
-  5. On hover the chip tilts rotateY(14deg) rotateX(-8deg) — this reveals
-     the edge face naturally and looks like a physical card being picked up.
-     Transition is 220 ms cubic-bezier, animating transform+opacity only.
-  6. All motion is disabled under prefers-reduced-motion; the static depth
-     face and sheen remain, so it still looks 3-D without moving.
-*/
-
-.logo-icon-wrap {
-  perspective: 200px;
-  /* Needs display so the perspective box wraps tightly around logo-icon */
-  display: inline-flex;
-}
-
-/* Upgrade logo-icon for 3-D */
-.logo-icon {
-  position: relative;
-  transform-style: preserve-3d;
-  /* Base translation so the extrusion extends outward, not inward */
-  transform: translateZ(0px);
-  transition: transform 220ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              box-shadow 220ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Depth / edge face — darker brand blue, offset bottom-right */
-.logo-icon::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;       /* matches rounded-lg */
-  background: linear-gradient(135deg, #b24420 0%, #006a8e 100%);
-  /* Push behind the front face and shift so it peeks out bottom-right */
-  transform: translateZ(-6px) translateX(5px) translateY(5px);
-  /* Slight shadow so the edge reads as a separate surface */
-  box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.5);
-  border-radius: 8px;
-}
-
-/* Gloss sheen — top ~35 % of the face, white highlight */
-.logo-icon::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.22) 0%,
-    rgba(255, 255, 255, 0.06) 35%,
-    transparent 36%
-  );
-  /* Sits just in front of the main face */
-  transform: translateZ(1px);
-  pointer-events: none;
-}
-
-/* Hover tilt — reveals the depth face on the right and bottom */
-.logo-icon-wrap:hover .logo-icon,
-.logo-icon-wrap:focus-within .logo-icon {
-  transform: rotateY(14deg) rotateX(-8deg) translateZ(2px);
-  box-shadow:
-    0 8px 20px rgba(0, 153, 204, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
-}
-
-/* Keep the existing group-level hover rules working alongside the 3-D tilt */
-.group:hover .logo-icon,
-.group:focus-visible .logo-icon {
-  box-shadow: 0 8px 20px rgba(0, 153, 204, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-}
-
-/* Reduced-motion: keep static 3-D look (depth face + sheen) — no movement */
-@media (prefers-reduced-motion: reduce) {
-  .logo-icon {
-    transition: none;
-  }
-  .logo-icon-wrap:hover .logo-icon,
-  .logo-icon-wrap:focus-within .logo-icon {
-    transform: translateZ(0px);  /* no tilt */
-  }
-}
-
-/* ── Car logo light animations ─────────────────────────────────────────── */
-
-@keyframes lightBlink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
-}
-
-.logo-headlight {
-  fill: #ffd27a;
-  filter: drop-shadow(0 0 3px #ffd27a) drop-shadow(0 0 7px rgba(255, 210, 122, 0.95));
-  animation: lightBlink 1s ease-in-out infinite;
-}
-
-.logo-taillight {
-  fill: #ff3b30;
-  filter: drop-shadow(0 0 3px #ff3b30) drop-shadow(0 0 7px rgba(255, 59, 48, 0.95));
-  /* Offset by half a cycle so front and rear alternate */
-  animation: lightBlink 1s ease-in-out infinite 0.5s;
-}
-
-/* Intensify glow on logo hover */
-.group:hover .logo-headlight,
-.group:focus-visible .logo-headlight {
-  filter: drop-shadow(0 0 3px #ffd27a) drop-shadow(0 0 7px rgba(255, 210, 122, 1));
-}
-
-.group:hover .logo-taillight,
-.group:focus-visible .logo-taillight {
-  filter: drop-shadow(0 0 3px #ff3b30) drop-shadow(0 0 7px rgba(255, 59, 48, 1));
-}
-
-/* Respect prefers-reduced-motion — keep lights steady/on, no blinking */
-@media (prefers-reduced-motion: reduce) {
-  .logo-headlight,
-  .logo-taillight {
-    animation: none;
-    opacity: 1;
-  }
-}
-
-/* ── Logo road-lane stripes (dashes flow like a moving road) ──────────────── */
-
-@keyframes roadFlow {
-  to { stroke-dashoffset: -20; }  /* multiple of dash(5)+gap(5) → seamless loop */
-}
-
-.logo-road line {
-  animation: roadFlow 0.9s linear infinite;
-}
-/* slight desync between the two lanes for an organic feel */
-.logo-road line:nth-child(2) {
-  animation-duration: 1.15s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .logo-road line {
-    animation: none;
-  }
+  background: var(--color-accent-darker);
 }
 
 /* ── Hero page-load reveal animations ─────────────────────────────────────── */
@@ -388,12 +207,11 @@ h1, h2, h3, h4, h5, h6 {
 */
 .hero-section {
   background:
-    radial-gradient(ellipse 55% 45% at 88%  8%, rgba(255, 101,  53, 0.14) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 70% at 78% 55%, rgba(  0, 191, 255, 0.12) 0%, transparent 65%),
-    radial-gradient(ellipse 80% 80% at 20% 60%, rgba(  0,  80, 125, 0.6) 0%, transparent 70%),
-    /* Deep azure: the brightest point (#0077a8) still gives white text 5:1.
-       Verified by tests/e2e/contrast.spec.ts (pixel-based, incl. gradients). */
-    linear-gradient(135deg, #00507a 0%, #005f8c 35%, #006b9c 60%, #0077a8 100%);
+    radial-gradient(ellipse 55% 45% at 88%  8%, rgba(255, 101,  53, 0.10) 0%, transparent 70%),
+    /* Navy at the top-left continues the header; the brightest point (#006b99)
+       still gives white text >= 5:1. Verified by tests/e2e/contrast.spec.ts
+       (pixel-based, incl. gradients). */
+    linear-gradient(135deg, #1a202c 0%, #0b3a56 38%, #005a84 70%, #006b99 100%);
   /*
     Stacked (single-col) layout on phones/tablets: content grows naturally,
     min-height just prevents a flash of empty gradient before content loads.
@@ -453,7 +271,7 @@ h1, h2, h3, h4, h5, h6 {
   right: 5%;
   width: 420px;
   height: 280px;
-  background: rgba(0, 191, 255, 0.14);
+  background: rgba(0, 119, 168, 0.18);
 }
 
 /* ── Hero car thumbnail marquee (slow auto-scroll) ───────────────────────── */
@@ -578,34 +396,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-h1-accent {
-  /* warm amber → cream shimmer. Coral (#ff6535) was only 1.5:1 on the blue
-     hero; these stops stay >= 3.5:1 (large text needs 3:1). */
-  background: linear-gradient(
-    100deg,
-    #ffd27a 0%,
-    #ffe2a3 28%,
-    #fff1cf 50%,
-    #ffe2a3 72%,
-    #ffd27a 100%
-  );
-  background-size: 220% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  animation: accentShimmer 3.5s ease-in-out infinite;
-}
-
-@keyframes accentShimmer {
-  0%   { background-position: 120% 0; }
-  100% { background-position: -120% 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-h1-accent {
-    animation: none;
-    background-position: 50% 0;  /* hold a stable gradient, no motion */
-  }
+  /* Light tint of the brand coral (pure coral is only 1.5:1 on the blue hero;
+     this stays >= 6:1). */
+  color: #ffb59a;
 }
 
 /* ── Hero lead paragraph ─────────────────────────────────────────────────── */
