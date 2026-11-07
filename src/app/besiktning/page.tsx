@@ -21,7 +21,7 @@ const STEPS = [
 export default function BesiktningPage() {
   return (
     <div className="bg-surface">
-      <section className="bg-linear-to-br from-[#00507a] to-primary text-white">
+      <section className="bg-brand text-white">
         <div className="mx-auto max-w-7xl px-4 py-14 md:py-20">
           <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em]">
             <ShieldCheckIcon className="h-5 w-5" /> Besiktning

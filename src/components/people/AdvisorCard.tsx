@@ -59,7 +59,7 @@ export default function AdvisorCard({ variant = "section", contactHref = "/konta
   return (
     <section aria-labelledby="advisor-heading" className="bg-white py-16">
       <div className="max-w-5xl mx-auto px-4">
-        <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-[#00507a] to-primary text-white p-8 md:p-12 shadow-xl">
+        <div className="relative overflow-hidden rounded-3xl bg-brand text-white p-8 md:p-12 shadow-xl">
           <div className="grid md:grid-cols-[auto_1fr] gap-8 md:gap-12 items-center">
             <div className="flex flex-col items-center text-center">
               <PersonPhoto src={ADVISOR.photo} name={ADVISOR.name} size={176} className="ring-white/80" />

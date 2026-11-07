@@ -7,7 +7,12 @@
   --font-body: var(--font-hanken), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-display: var(--font-sora), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-bebas: var(--font-unbounded), 'Trebuchet MS', system-ui, sans-serif; /* logo wordmark */
+  /* The one brand gradient: navy (continues the header) -> deep azure. Its brightest
+     point (#006b99) still gives white text >= 5:1 (tests/e2e/contrast.spec.ts). */
+  --gradient-brand: linear-gradient(135deg, #1a202c 0%, #0b3a56 38%, #005a84 70%, #006b99 100%);
 }
+
+.bg-brand { background: var(--gradient-brand); }
 
 @theme inline {
   --color-background: var(--background);
@@ -208,10 +213,7 @@ h1, h2, h3, h4, h5, h6 {
 .hero-section {
   background:
     radial-gradient(ellipse 55% 45% at 88%  8%, rgba(255, 101,  53, 0.10) 0%, transparent 70%),
-    /* Navy at the top-left continues the header; the brightest point (#006b99)
-       still gives white text >= 5:1. Verified by tests/e2e/contrast.spec.ts
-       (pixel-based, incl. gradients). */
-    linear-gradient(135deg, #1a202c 0%, #0b3a56 38%, #005a84 70%, #006b99 100%);
+    var(--gradient-brand);
   /*
     Stacked (single-col) layout on phones/tablets: content grows naturally,
     min-height just prevents a flash of empty gradient before content loads.

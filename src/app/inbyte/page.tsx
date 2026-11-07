@@ -68,7 +68,7 @@ export default function InbytePage() {
               <CheckList items={WHY_US} />
             </section>
 
-            <section aria-labelledby="call" className="bg-linear-to-br from-primary-dark to-primary rounded-xl p-8 text-white">
+            <section aria-labelledby="call" className="bg-brand rounded-xl p-8 text-white">
               <h2 id="call" className="text-xl font-bold mb-4">Vill du ha råd direkt?</h2>
               <p className="mb-6">Ring oss så hjälper vi dig med en snabb värdering över telefon</p>
               <p className="font-semibold flex items-center gap-2">

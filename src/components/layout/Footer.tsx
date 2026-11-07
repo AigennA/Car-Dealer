@@ -3,12 +3,12 @@ import { SITE } from "@/lib/site";
 import { FOOTER_INFO_LINKS, FOOTER_QUICK_LINKS, ROUTES, STAFF_LINK, type NavLink } from "@/config/navigation";
 import Logo from "./Logo";
 
-const LINK = "block py-1 hover:text-white hover:underline underline-offset-4 transition-colors";
+const LINK = "block py-1 [overflow-wrap:anywhere] hyphens-auto hover:text-white hover:underline underline-offset-4 transition-colors";
 
 function LinkColumn({ id, title, links }: { id: string; title: string; links: NavLink[] }) {
   return (
     <nav aria-labelledby={id}>
-      <h2 id={id} className="text-white font-semibold mb-4">{title}</h2>
+      <h2 id={id} className="text-white font-semibold mb-3">{title}</h2>
       <ul className="space-y-1 text-sm">
         {links.map((l) => (
           <li key={l.href}>
@@ -32,10 +32,15 @@ function ContactItem({ label, children }: { label: string; children: React.React
 export default function Footer() {
   return (
     <footer className="bg-navy text-gray-300 border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
-          <div>
-            <div className="flex items-center gap-2 mb-4">
+      <div className="max-w-7xl mx-auto px-4 py-10 md:py-12">
+        {/*
+          Phones: brand on top, the two link lists side by side, contact below.
+          Desktop: four columns. The DOM order is the visual order in both, so Tab
+          order matches what you see (WCAG 1.3.2 / 2.4.3).
+        */}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4 md:gap-8 mb-8">
+          <div className="col-span-2 md:col-span-1">
+            <div className="flex items-center gap-2 mb-3">
               <Logo variant="footer" />
             </div>
             <p className="text-sm">{SITE.tagline}</p>
@@ -43,9 +48,11 @@ export default function Footer() {
 
           <LinkColumn id="footer-quick" title="Snabblänkar" links={FOOTER_QUICK_LINKS} />
 
+          <LinkColumn id="footer-info" title="Information" links={FOOTER_INFO_LINKS} />
+
           {/* Contact — summary + clear route to the contact page */}
-          <div>
-            <h2 className="text-white font-semibold mb-4">Kontakt</h2>
+          <div className="col-span-2 md:col-span-1">
+            <h2 className="text-white font-semibold mb-3">Kontakt</h2>
             <address className="not-italic space-y-2 text-sm">
               <ContactItem label="Telefon">
                 <a href={SITE.phoneHref} className="underline underline-offset-4 hover:text-white">{SITE.phone}</a>
@@ -63,8 +70,6 @@ export default function Footer() {
               Kontakta oss <span aria-hidden="true">→</span>
             </Link>
           </div>
-
-          <LinkColumn id="footer-info" title="Information" links={FOOTER_INFO_LINKS} />
         </div>
 
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
