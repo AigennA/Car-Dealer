@@ -76,7 +76,7 @@ export default function OmOssPage() {
         </div>
 
         {/* CTA Section */}
-        <div className="bg-linear-to-br from-primary-dark to-primary rounded-xl p-8 text-white text-center">
+        <div className="bg-brand rounded-xl p-8 text-white text-center">
           <h2 className="text-2xl font-bold mb-4">
             Redo att hitta din nästa bil?
           </h2>

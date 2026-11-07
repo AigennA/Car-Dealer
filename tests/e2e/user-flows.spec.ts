@@ -84,7 +84,7 @@ test.describe("användarflöden", () => {
 
   test("ingen horisontell scroll vid 320 px (WCAG 1.4.10 Omflöde = 400 % zoom)", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 640 });
-    for (const path of ["/", "/bilar/", "/bilar/volvo-v90-d4-awd/", "/finansiering/", "/inbyte/", "/om-oss/", "/kontakt/"]) {
+    for (const path of ["/", "/bilar/", "/bilar/volvo-v90-d4-awd/", "/finansiering/", "/inbyte/", "/verkstad/", "/besiktning/", "/min-bokning/", "/om-oss/", "/kontakt/"]) {
       await page.goto(path);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       expect(overflow, path).toBeLessThanOrEqual(0);

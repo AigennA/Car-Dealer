@@ -102,7 +102,7 @@ export default function KontaktPage() {
             </div>
 
             {/* Quick Links */}
-            <div className="bg-linear-to-br from-primary-dark to-primary rounded-xl p-8 text-white">
+            <div className="bg-brand rounded-xl p-8 text-white">
               <h2 className="text-xl font-bold mb-4">Vill du veta mer?</h2>
               <p className="mb-6">
                 Besök vår showroom och låt våra experter guida dig till rätt bil
