@@ -74,7 +74,7 @@ export default function MiniCreditCalculator() {
   }, [price, downPayment, loanTerm]);
 
   return (
-    <div className="bg-linear-to-br from-accent/15 to-accent-dark/10 backdrop-blur-sm border border-accent/30 rounded-2xl shadow-md p-6 flex flex-col gap-5 w-full">
+    <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 flex flex-col gap-5 w-full">
 
       {/* Header */}
       <div className="flex items-center gap-2.5">

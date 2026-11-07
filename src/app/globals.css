@@ -97,10 +97,7 @@ footer :where(a, button):focus-visible {
   }
   .skip-link:focus { outline: 3px solid CanvasText; }
   [role="switch"] { border: 2px solid ButtonText; }
-  .hero-h1-accent {
-    -webkit-text-fill-color: CanvasText;
-    background: none;
-  }
+  .hero-h1-accent { color: CanvasText; }
 }
 
 /* Global reduced-motion safety net */
@@ -210,12 +207,11 @@ h1, h2, h3, h4, h5, h6 {
 */
 .hero-section {
   background:
-    radial-gradient(ellipse 55% 45% at 88%  8%, rgba(255, 101,  53, 0.14) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 70% at 78% 55%, rgba(  0, 191, 255, 0.12) 0%, transparent 65%),
-    radial-gradient(ellipse 80% 80% at 20% 60%, rgba(  0,  80, 125, 0.6) 0%, transparent 70%),
-    /* Deep azure: the brightest point (#0077a8) still gives white text 5:1.
-       Verified by tests/e2e/contrast.spec.ts (pixel-based, incl. gradients). */
-    linear-gradient(135deg, #00507a 0%, #005f8c 35%, #006b9c 60%, #0077a8 100%);
+    radial-gradient(ellipse 55% 45% at 88%  8%, rgba(255, 101,  53, 0.10) 0%, transparent 70%),
+    /* Navy at the top-left continues the header; the brightest point (#006b99)
+       still gives white text >= 5:1. Verified by tests/e2e/contrast.spec.ts
+       (pixel-based, incl. gradients). */
+    linear-gradient(135deg, #1a202c 0%, #0b3a56 38%, #005a84 70%, #006b99 100%);
   /*
     Stacked (single-col) layout on phones/tablets: content grows naturally,
     min-height just prevents a flash of empty gradient before content loads.
@@ -275,7 +271,7 @@ h1, h2, h3, h4, h5, h6 {
   right: 5%;
   width: 420px;
   height: 280px;
-  background: rgba(0, 191, 255, 0.14);
+  background: rgba(0, 119, 168, 0.18);
 }
 
 /* ── Hero car thumbnail marquee (slow auto-scroll) ───────────────────────── */
@@ -400,34 +396,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-h1-accent {
-  /* warm amber → cream shimmer. Coral (#ff6535) was only 1.5:1 on the blue
-     hero; these stops stay >= 3.5:1 (large text needs 3:1). */
-  background: linear-gradient(
-    100deg,
-    #ffd27a 0%,
-    #ffe2a3 28%,
-    #fff1cf 50%,
-    #ffe2a3 72%,
-    #ffd27a 100%
-  );
-  background-size: 220% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  animation: accentShimmer 3.5s ease-in-out infinite;
-}
-
-@keyframes accentShimmer {
-  0%   { background-position: 120% 0; }
-  100% { background-position: -120% 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-h1-accent {
-    animation: none;
-    background-position: 50% 0;  /* hold a stable gradient, no motion */
-  }
+  /* Light tint of the brand coral (pure coral is only 1.5:1 on the blue hero;
+     this stays >= 6:1). */
+  color: #ffb59a;
 }
 
 /* ── Hero lead paragraph ─────────────────────────────────────────────────── */
