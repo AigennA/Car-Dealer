@@ -416,3 +416,24 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261109201553_AddCarSoldAt'
+)
+BEGIN
+    ALTER TABLE [Cars] ADD [SoldAt] datetime2 NULL;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261109201553_AddCarSoldAt'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261109201553_AddCarSoldAt', N'10.0.14');
+END;
+
+COMMIT;
+GO
+

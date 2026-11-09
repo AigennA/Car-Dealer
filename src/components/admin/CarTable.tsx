@@ -5,6 +5,8 @@ import Link from "next/link";
 import type { Car } from "@/lib/cars";
 import { formatSek } from "@/config/business";
 import { ROUTES } from "@/config/navigation";
+import { statusOf } from "@/lib/carStatus";
+import CarStatusBadge from "@/components/ui/CarStatusBadge";
 
 type Props = {
   cars: Car[];
@@ -12,7 +14,7 @@ type Props = {
   onDelete: (car: Car) => void;
 };
 
-const COLUMNS = ["Bil", "År", "Miltal", "Pris", "Bränsle"] as const;
+const COLUMNS = ["Bil", "År", "Miltal", "Pris", "Bränsle", "Status"] as const;
 const TH = "px-6 py-4 text-left text-sm font-semibold text-gray-900";
 const TD = "px-6 py-4 text-sm text-gray-900";
 
@@ -45,6 +47,9 @@ export default function CarTable({ cars, onEdit, onDelete }: Props) {
                 <td className={TD}>{car.mileage.toLocaleString("sv-SE")} mil</td>
                 <td className={TD}>{formatSek(car.price)}</td>
                 <td className={TD}>{car.fuel}</td>
+                <td className={TD}>
+                  {statusOf(car) === "Available" ? "Tillgänglig" : <CarStatusBadge car={car} />}
+                </td>
                 <td className="px-6 py-4 text-right text-sm whitespace-nowrap">
                   <button type="button" onClick={() => onEdit(car)} aria-label={`Redigera ${car.title}`}
                     className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors font-medium mr-3">

@@ -17,4 +17,4 @@ public sealed record BusinessInfo(string Name, string LegalName, string Url, str
         ?? throw new InvalidOperationException($"Could not read {path}");
 }
 
-public sealed record BusinessPolicies(int WarrantyMonths, int OpenPurchaseDays, int ResponseHours);
+public sealed record BusinessPolicies(int WarrantyMonths, int OpenPurchaseDays, int ResponseHours, int SoldVisibleDays);

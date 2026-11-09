@@ -2,6 +2,7 @@ import { SITE } from "@/lib/site";
 import Link from "next/link";
 import Image from "next/image";
 import { cars, getUniqueMakes, getUniqueFuels, getUniqueBodyTypes } from "@/lib/cars";
+import { inStock } from "@/lib/carStatus";
 import CarCard from "@/components/ui/CarCard";
 
 import MiniCreditCalculator from "@/components/MiniCreditCalculator";
@@ -28,7 +29,9 @@ const WHY_US = [
 
 
 export default function HomePage() {
-  const featuredCars = cars.filter((car) => car.featured).slice(0, 3);
+  // Only cars the dealer still has count as "i lager" and can be featured.
+  const stock = inStock(cars);
+  const featuredCars = stock.filter((car) => car.featured).slice(0, 3);
   const makes = getUniqueMakes();
   const fuels = getUniqueFuels();
   const bodyTypes = getUniqueBodyTypes();
@@ -69,7 +72,7 @@ export default function HomePage() {
 
               {/* Lead paragraph */}
               <p className="hero-lead text-lg md:text-xl mb-6 max-w-md">
-                Bläddra bland {cars.length} handplockade, kvalitetskontrollerade bilar
+                Bläddra bland {stock.length} handplockade, kvalitetskontrollerade bilar
                 och hitta den som passar dig — med trygg finansiering och garanti.
               </p>
 
@@ -108,7 +111,7 @@ export default function HomePage() {
               {/* Trust facts — only claims the business can back up */}
               <dl className="hero-reveal hero-delay-4 hero-stats-row flex flex-wrap gap-6 mt-6 pt-6">
                 {[
-                  { value: String(cars.length), label: "Bilar i lager" },
+                  { value: String(stock.length), label: "Bilar i lager" },
                   { value: `${SITE.policies.warrantyMonths} mån`, label: "Garanti" },
                   { value: `${SITE.policies.openPurchaseDays} dagar`, label: "Öppet köp" },
                 ].map(({ value, label }) => (
@@ -185,7 +188,7 @@ export default function HomePage() {
               href={ROUTES.cars}
               className="inline-flex items-center gap-2 bg-primary text-white px-8 py-3 rounded-xl font-semibold hover:bg-primary-dark transition-colors"
             >
-              Visa alla {cars.length} bilar
+              Visa alla {stock.length} bilar
               <span aria-hidden="true">→</span>
             </Link>
           </div>

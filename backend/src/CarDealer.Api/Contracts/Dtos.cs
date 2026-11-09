@@ -11,13 +11,14 @@ namespace CarDealer.Api.Contracts;
 public record CarDto(
     string Id, string Slug, string Make, string Model, string Title, int Year, int Mileage,
     string Fuel, string Transmission, string Drivetrain, string BodyType, string Color, int Price,
-    string[] Images, bool Featured, string Description, string[] Features, string Status)
+    string[] Images, bool Featured, string Description, string[] Features, string Status, string? SoldAt)
 {
     public static CarDto From(Car c) => new(
         c.Id.ToString(), c.Slug, c.Make, c.Model, c.Title, c.Year, c.Mileage, c.Fuel, c.Transmission,
         c.Drivetrain, c.BodyType, c.Color, c.Price,
         c.Images.OrderBy(i => i.SortOrder).Select(i => i.Url).ToArray(),
-        c.Featured, c.Description, c.Features.Select(f => f.Name).ToArray(), c.Status.ToString());
+        c.Featured, c.Description, c.Features.Select(f => f.Name).ToArray(), c.Status.ToString(),
+        c.SoldAt?.ToString("yyyy-MM-dd"));
 }
 
 public record PagedResult<T>(IReadOnlyList<T> Items, int Total, int Page, int PageSize);

@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { cars } from "@/lib/cars";
+import { isSold } from "@/lib/carStatus";
 import { validateContact, type ContactErrors, type ContactInput } from "@/lib/validation";
 import { ErrorSummary, Field, RequiredHint, SELECT_CLASS, SuccessMessage, SUBMIT_CLASS } from "@/components/forms/FormKit";
 import { ROUTES } from "@/config/navigation";
@@ -27,9 +28,12 @@ export default function ContactForm({ carSlug = "", subject = "" }: Props) {
   const successRef = useRef<HTMLDivElement>(null);
 
   const defaultSubject = SUBJECTS.some((s) => s.value === subject) ? subject : car ? "kopa" : "";
-  const defaultMessage = car
-    ? `Hej! Jag är intresserad av ${car.title} (${car.year}). `
-    : "";
+  // From a sold car's page: ask for a similar car instead.
+  const defaultMessage = !car
+    ? ""
+    : isSold(car)
+      ? `Hej! ${car.title} (${car.year}) är såld. Kan ni hjälpa mig hitta en liknande bil? `
+      : `Hej! Jag är intresserad av ${car.title} (${car.year}). `;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

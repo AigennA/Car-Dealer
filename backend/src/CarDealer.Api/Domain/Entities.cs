@@ -1,6 +1,9 @@
 namespace CarDealer.Api.Domain;
 
-/// <summary>Where a car is in the sales process. Only Available/Reserved are public.</summary>
+/// <summary>
+/// Where a car is in the sales process. Available and Reserved are public; Sold stays public for
+/// <c>SoldVisibleDays</c> after the sale (then only its own page remains); Draft is never public.
+/// </summary>
 public enum CarStatus { Available, Reserved, Sold, Draft }
 
 /// <summary>Workflow state for incoming customer requests.</summary>
@@ -29,6 +32,8 @@ public class Car
     public bool Featured { get; set; }
     public string Description { get; set; } = "";
     public CarStatus Status { get; set; } = CarStatus.Available;
+    /// <summary>When the car was sold (UTC). Set when the status becomes Sold, cleared otherwise; decides how long it stays listed.</summary>
+    public DateTime? SoldAt { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 

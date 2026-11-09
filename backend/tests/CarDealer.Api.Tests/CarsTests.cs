@@ -118,17 +118,17 @@ public class CarsTests(ApiFactory factory) : IClassFixture<ApiFactory>
     }
 
     [Fact]
-    public async Task Sold_cars_are_hidden_from_the_public_but_visible_to_staff()
+    public async Task Draft_cars_are_hidden_from_the_public_but_visible_to_staff()
     {
         var admin = await factory.ClientAsAsync(ApiFactory.AdminEmail, ApiFactory.AdminPassword);
         var req = NewCar("Lancia", "Delta Integrale");
-        req.Status = Domain.CarStatus.Sold;
+        req.Status = Domain.CarStatus.Draft;
         var car = await (await admin.PostAsJsonAsync("/api/cars", req)).Content.ReadFromJsonAsync<CarDto>();
 
         Assert.Equal(HttpStatusCode.NotFound, (await _client.GetAsync($"/api/cars/{car!.Slug}")).StatusCode);
         Assert.Equal(HttpStatusCode.OK, (await admin.GetAsync($"/api/cars/{car.Slug}")).StatusCode);
         var all = await admin.GetFromJsonAsync<List<CarDto>>("/api/cars/all");
-        Assert.Contains(all!, c => c.Slug == car.Slug && c.Status == "Sold");
+        Assert.Contains(all!, c => c.Slug == car.Slug && c.Status == "Draft");
     }
 
     [Fact]

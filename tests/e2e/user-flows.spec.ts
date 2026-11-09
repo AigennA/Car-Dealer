@@ -13,6 +13,42 @@ test.describe("användarflöden", () => {
     await expect(page.getByRole("status").filter({ hasText: "hittades" })).toContainText(String(await cards.count()));
   });
 
+  test("sålda och reserverade bilar: etikett, sist i listan, inga bokningsknappar", async ({ page }) => {
+    await page.goto("/bilar/");
+    await expect(page.getByRole("status").filter({ hasText: "hittades" })).toContainText("23 bilar hittades · 1 nyligen såld");
+
+    const list = page.getByRole("list", { name: "Bilar" });
+    const items = list.locator(":scope > li"); // the cards themselves, not the lists inside them
+    await expect(items.last().getByRole("heading", { level: 2 })).toHaveText(/MINI Cooper SE Electric\s+– såld/);
+    await expect(items.last()).toContainText("Såld");
+    await expect(list.getByText("Reserverad", { exact: true })).toHaveCount(1);
+
+    // The sold car stays last whatever the sort order
+    await page.getByLabel("Sortera:").selectOption("price-asc");
+    await expect(items.last().getByRole("heading", { level: 2 })).toHaveText(/MINI Cooper SE Electric\s+– såld/);
+
+    // Sold: no test drive, a way to ask for a similar car, only cars in stock as suggestions
+    await page.goto("/bilar/mini-cooper-se/");
+    await expect(page.getByText("Den här bilen är såld.")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Boka provkörning" })).toHaveCount(0);
+    const similar = page.getByRole("region", { name: "Liknande bilar i lager" });
+    await expect(similar.getByRole("link").first()).toBeVisible();
+    await expect(similar.getByText("Såld", { exact: true })).toHaveCount(0);
+    await page.getByRole("link", { name: "Hitta en liknande bil åt mig" }).click();
+    await expect(page).toHaveURL(/\/kontakt\/?\?bil=mini-cooper-se&amne=kopa/);
+    await expect(page.getByLabel(/^Meddelande/)).toHaveValue(/är såld\. Kan ni hjälpa mig hitta en liknande bil/);
+
+    // Reserved: no test drive either, but the car can still be asked about
+    await page.goto("/bilar/mazda-mx-30-ev/");
+    await expect(page.getByText("Den här bilen är reserverad.")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Boka provkörning" })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: "Fråga om bilen" })).toBeVisible();
+
+    // A free car still has the test drive
+    await page.goto("/bilar/volvo-v90-d4-awd/");
+    await expect(page.getByRole("link", { name: "Boka provkörning" })).toBeVisible();
+  });
+
   test("filtrera, sortera, tomt resultat och återställ", async ({ page, isMobile }) => {
     await page.goto("/bilar/");
     const total = await page.getByRole("list", { name: "Bilar" }).getByRole("listitem").count();

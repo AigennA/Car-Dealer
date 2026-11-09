@@ -27,6 +27,12 @@ export const VEHICLE_OPTIONS = {
     { value: "Halvkombi", label: "Halvkombi" },
     { value: "Coupé", label: "Coupé" },
   ],
+  /** Where the car is in the sale; what staff pick in the form (values = the API's CarStatus). */
+  status: [
+    { value: "Available", label: "Tillgänglig" },
+    { value: "Reserved", label: "Reserverad" },
+    { value: "Sold", label: "Såld" },
+  ],
 } satisfies Record<string, Option[]>;
 
 export type VehicleOptionKey = keyof typeof VEHICLE_OPTIONS;

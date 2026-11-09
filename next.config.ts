@@ -11,7 +11,12 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   basePath,
   // Absolute links (QR code, calendar file) need the base path at runtime.
-  env: { NEXT_PUBLIC_BASE_PATH: basePath },
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+    // The static HTML is rendered on this date; the browser then switches to today's date
+    // (see src/lib/useToday.ts), so "sold N days ago" rules never cause a hydration mismatch.
+    NEXT_PUBLIC_BUILD_DATE: new Date().toISOString().slice(0, 10),
+  },
   images: {
     loader: "custom",
     loaderFile: "./src/lib/imageLoader.ts",

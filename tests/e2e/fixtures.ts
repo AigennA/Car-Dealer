@@ -25,6 +25,8 @@ export const PAGES = [
   { path: "/", h1: /HITTA DIN\s*NÄSTA\s*BIL/i },
   { path: "/bilar/", h1: "Våra bilar" },
   { path: "/bilar/volvo-v90-d4-awd/", h1: "Volvo V90 D4 AWD" },
+  { path: "/bilar/mini-cooper-se/", h1: /MINI Cooper SE Electric\s+– såld/ },      // sold (demo data)
+  { path: "/bilar/mazda-mx-30-ev/", h1: /Mazda MX-30 EV\s+– reserverad/ },        // reserved (demo data)
   { path: "/finansiering/", h1: "Våra Tjänster" },
   { path: "/inbyte/", h1: /inbyte/i },
   { path: "/verkstad/", h1: "Service och reparationer – boka tid online" },

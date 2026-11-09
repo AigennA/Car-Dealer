@@ -1,4 +1,5 @@
 import catalogJson from "../../data/workshop.json";
+import { addDaysIso } from "./dates";
 
 /**
  * Workshop ("Verkstad") & inspection ("Besiktning") catalogue and booking.
@@ -44,11 +45,7 @@ export function isoWeekday(date: string): number {
   return d === 0 ? 7 : d;
 }
 
-export function addDays(date: string, days: number): string {
-  const d = new Date(`${date}T12:00:00Z`);
-  d.setUTCDate(d.getUTCDate() + days);
-  return d.toISOString().slice(0, 10);
-}
+export const addDays = addDaysIso;
 
 /** Current date and minutes-since-midnight in the workshop's time zone. */
 export function zonedNow(now: Date = new Date(), timeZone = catalog.timeZone): { date: string; minutes: number } {
