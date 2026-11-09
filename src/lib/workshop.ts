@@ -72,7 +72,7 @@ export type Occupied = { start: string; minutes: number };
 
 /** Same rules as the API: opening hours, lead time, horizon, bay capacity. */
 export function freeStarts(
-  service: WorkshopService,
+  service: Pick<WorkshopService, "minutes">,
   date: string,
   now: Date = new Date(),
   taken: Occupied[] = [],

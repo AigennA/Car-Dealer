@@ -21,6 +21,7 @@ handlarens system bakom den.
 | **Inbytesförfrågningar** | `POST /api/tradeins` | Alla (rate-limit + honeypot) |
 | | `GET /api/tradeins` · `PATCH /api/tradeins/{id}/status` | Personal |
 | **Verkstad & besiktning** | `GET /api/workshop/services` · `GET /api/workshop/days?service=` · `GET /api/workshop/availability?service=&date=` · `POST /api/workshop/bookings` | Alla (rate-limit + honeypot) |
+| **Provkörning** | `GET /api/testdrive/days?car=` · `GET /api/testdrive/availability?car=&date=` · `POST /api/testdrive/bookings` | Alla (rate-limit + honeypot) |
 | **Min bokning** (kund, utan konto) | `POST /api/workshop/bookings/manage` · `…/manage/cancel` · `…/manage/reschedule` | Alla med bokningsnummer + länkhemlighet, e-post eller regnr (rate-limit) |
 | | `GET /api/workshop/bookings?from=&to=` · `PATCH /api/workshop/bookings/{id}/status` · `POST /api/workshop/bookings/check-in` | Personal |
 | **Översikt** | `GET /api/dashboard` – bilar i lager/reserverade/sålda, nya förfrågningar, lagervärde | Personal |
@@ -68,6 +69,19 @@ Tjänster, priser, öppettider och kapacitet ligger i [`data/workshop.json`](../
 - Högst så många bilar samtidigt som verkstaden har platser (`bays`: 2)
 - Den sista platsen kan inte dubbelbokas: tiden kontrolleras igen i en serialiserbar transaktion (409 om någon hann före)
 - Registreringsnummer valideras (ABC 123 / ABC 12D) och sparas normaliserat
+
+## Provkörning – "Boka provkörning" på bilsidan
+
+Samma bokningssystem som verkstaden (bokningsnummer, QR-kod, Min bokning), med egna regler:
+
+- **Tider:** showroomens öppettider (`showroomHours` i `data/business.json`, t.ex. lör 10–15), inte verkstadens.
+- **En bil åt gången:** en bil kan bara vara ute hos en kund i taget (`bays = 1`, räknas per bil). Två olika bilar kan provköras samtidigt.
+- **Inga krockar med verkstaden:** provkörningar och verkstadsbokningar räknas aldrig mot varandra.
+- **Bara bilar som är till salu:** sålda, reserverade och okända bilar kan inte bokas (409/404). En redan bokad provkörning kan avbokas men inte flyttas om bilen sedan blivit reserverad eller såld.
+- **Längd, steg, framförhållning och ändringsfönster** ligger i `testDrive` i `data/business.json` (30 min, 2 h, 14 dagar, 24 h).
+- Kunden anger namn, e-post och telefon, **inget registreringsnummer**. Bokningen hittas under Min bokning med bokningsnummer + e-post (inget regnr att matcha).
+- En provkörning känns igen på `ServiceCode = "provkorning"` (och `CarId`), så den förblir en provkörning även om bilen raderas. Raderas bilen finns bokningen kvar för personalen.
+- Personalens bokningslista visar bil (`carSlug`, `carTitle`). Check-in med QR fungerar som för verkstaden.
 
 ## Min bokning – kunden hanterar sin tid själv
 
@@ -129,7 +143,7 @@ API-dokumentation. Utvecklingskontot är `admin@cardealer.local` / `Dev-Password
 (finns bara i `appsettings.Development.json`).
 
 ```bash
-dotnet test        # 70 tester (integration, schemaläggning, domänregler) mot en riktig (temporär) databas
+dotnet test        # 81 tester (integration, schemaläggning, domänregler) mot en riktig (temporär) databas
 ```
 
 ## Köra mot SQL Server / Azure SQL

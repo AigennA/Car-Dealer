@@ -31,6 +31,7 @@ test.describe("användarflöden", () => {
     await page.goto("/bilar/mini-cooper-se/");
     await expect(page.getByText("Den här bilen är såld.")).toBeVisible();
     await expect(page.getByRole("link", { name: "Boka provkörning" })).toHaveCount(0);
+    await expect(page.getByRole("heading", { level: 2, name: "Boka provkörning" })).toHaveCount(0);
     const similar = page.getByRole("region", { name: "Liknande bilar i lager" });
     await expect(similar.getByRole("link").first()).toBeVisible();
     await expect(similar.getByText("Såld", { exact: true })).toHaveCount(0);
@@ -43,6 +44,7 @@ test.describe("användarflöden", () => {
     await expect(page.getByText("Den här bilen är reserverad.")).toBeVisible();
     await expect(page.getByRole("link", { name: "Boka provkörning" })).toHaveCount(0);
     await expect(page.getByRole("link", { name: "Fråga om bilen" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 2, name: "Boka provkörning" })).toHaveCount(0);
 
     // A free car still has the test drive
     await page.goto("/bilar/volvo-v90-d4-awd/");
@@ -69,7 +71,7 @@ test.describe("användarflöden", () => {
     await expect(page.getByRole("list", { name: "Bilar" }).getByRole("listitem")).toHaveCount(total);
   });
 
-  test("bildetalj → boka provkörning förifyller kontaktformuläret", async ({ page }) => {
+  test("bildetalj → ställ en fråga om bilen förifyller kontaktformuläret", async ({ page }) => {
     await page.goto("/bilar/");
     await page.getByRole("link", { name: /^Visa bil\s+BMW X5 xDrive30d$/ }).click();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("BMW X5 xDrive30d");
@@ -78,10 +80,10 @@ test.describe("användarflöden", () => {
     // live calculator updates without alert()
     await expect(page.getByText("Beräknad månadskostnad")).toBeVisible();
 
-    await page.getByRole("link", { name: "Boka provkörning" }).click();
-    await expect(page).toHaveURL(/kontakt\/?\?bil=bmw-x5-xdrive30d&amne=provkorning/);
+    await page.getByRole("link", { name: "Ställ en fråga om bilen" }).click();
+    await expect(page).toHaveURL(/kontakt\/?\?bil=bmw-x5-xdrive30d/);
     await expect(page.locator("form strong", { hasText: "BMW X5 xDrive30d (2019)" })).toBeVisible();
-    await expect(page.getByLabel("Ämne")).toHaveValue("provkorning");
+    await expect(page.getByLabel("Ämne")).toHaveValue("kopa");
   });
 
   test("kontaktformulär: felsammanfattning, länk till fält, lyckat skick", async ({ page }) => {

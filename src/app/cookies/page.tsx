@@ -4,7 +4,7 @@ import LegalPage, { Table } from "@/components/legal/LegalPage";
 import CookieSettings from "@/components/legal/CookieSettings";
 import { ROUTES } from "@/config/navigation";
 import { SITE } from "@/lib/site";
-import { DEMO_BOOKINGS_KEY } from "@/lib/booking/demoRepository";
+import { DEMO_BOOKINGS_KEY } from "@/lib/booking/storageKey";
 
 export const metadata: Metadata = {
   title: "Cookies och lagring",

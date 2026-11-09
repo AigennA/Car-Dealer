@@ -8,6 +8,13 @@
   "url": "https://aigenna.github.io/Car-Dealer",
   "manageBookingPath": "/min-bokning",
   "demoSite": true,
+  "testDrive": {
+    "durationMinutes": 30,
+    "slotMinutes": 30,
+    "minLeadMinutes": 120,
+    "bookingHorizonDays": 14,
+    "changeCutoffHours": 24
+  },
   "description": "Kvalitetskontrollerade begagnade bilar med garanti, finansiering och inbyte. Hitta din nästa bil hos Car Dealer i Stockholm.",
   "tagline": "Säkra och enkla bilaffärer med kvalitetskontrollerade fordon.",
   "contact": {

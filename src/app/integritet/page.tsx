@@ -60,9 +60,9 @@ export default function IntegritetPage() {
                   `${BUSINESS.dataRetention.leadMonths} månader efter sista kontakt`,
                 ],
                 [
-                  "Du bokar verkstads- eller besiktningstid",
-                  "Namn, e-post, telefon, registreringsnummer, ev. meddelande",
-                  "Utföra jobbet, skicka bekräftelse och låta dig hantera bokningen under Min bokning",
+                  "Du bokar verkstads-, besiktnings- eller provkörningstid",
+                  "Namn, e-post, telefon, ev. meddelande samt registreringsnummer (verkstad och besiktning) eller vilken bil du vill provköra",
+                  "Utföra jobbet eller provkörningen, skicka bekräftelse och låta dig hantera bokningen under Min bokning",
                   "Avtal (art. 6.1 b)",
                   `${BUSINESS.dataRetention.bookingMonths} månader efter besöket; kvitton enligt bokföringslagen`,
                 ],
