@@ -437,3 +437,40 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261109204436_AddTestDriveBookings'
+)
+BEGIN
+    ALTER TABLE [Bookings] ADD [CarId] int NULL;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261109204436_AddTestDriveBookings'
+)
+BEGIN
+    CREATE INDEX [IX_Bookings_CarId_Date] ON [Bookings] ([CarId], [Date]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261109204436_AddTestDriveBookings'
+)
+BEGIN
+    ALTER TABLE [Bookings] ADD CONSTRAINT [FK_Bookings_Cars_CarId] FOREIGN KEY ([CarId]) REFERENCES [Cars] ([Id]) ON DELETE SET NULL;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261109204436_AddTestDriveBookings'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261109204436_AddTestDriveBookings', N'10.0.14');
+END;
+
+COMMIT;
+GO
+

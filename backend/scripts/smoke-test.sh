@@ -53,4 +53,24 @@ curl -fs -X POST "$URL/api/workshop/bookings/manage" -H 'Content-Type: applicati
   -d "{\"reference\":\"$ref\",\"token\":\"$manage\"}" | grep -q "$ref" || { echo "min bokning lookup failed"; exit 1; }
 echo "POST /api/workshop/bookings/manage -> OK"
 rm -f booking.json
+
+# Test drive: a seeded car, the first free day and time -> book it -> the customer finds it again.
+read -r tday tslot < <(python3 - "$URL" <<'PY'
+import json, sys, urllib.request
+url = sys.argv[1]
+days = json.load(urllib.request.urlopen(f"{url}/api/testdrive/days?car=volvo-v90-d4-awd"))
+day = next(d["date"] for d in days if d["freeSlots"] > 0)
+slots = json.load(urllib.request.urlopen(f"{url}/api/testdrive/availability?car=volvo-v90-d4-awd&date={day}"))["slots"]
+print(day, slots[0])
+PY
+)
+code=$(curl -s -o testdrive.json -w '%{http_code}' -X POST "$URL/api/testdrive/bookings" -H 'Content-Type: application/json' \
+  -d "{\"carSlug\":\"volvo-v90-d4-awd\",\"date\":\"$tday\",\"time\":\"$tslot\",\"name\":\"CI\",\"email\":\"ci@example.se\",\"phone\":\"070-0000000\"}")
+echo "POST /api/testdrive/bookings ($tday $tslot) -> $code"
+[ "$code" = "201" ] || { cat testdrive.json; cat smoke.log; exit 1; }
+tref=$(python3 -c 'import json;print(json.load(open("testdrive.json"))["reference"])')
+curl -fs -X POST "$URL/api/workshop/bookings/manage" -H 'Content-Type: application/json' \
+  -d "{\"reference\":\"$tref\",\"contact\":\"ci@example.se\"}" | grep -q '"carSlug":"volvo-v90-d4-awd"' || { echo "test drive lookup failed"; exit 1; }
+echo "test drive found in Min bokning -> OK"
+rm -f testdrive.json
 echo "Smoke test OK"

@@ -19,6 +19,8 @@ export const BUSINESS = data as unknown as {
   manageBookingPath: string;
   /** Shows the "demo site" banner. Set to false when the site is used by a real dealer. */
   demoSite: boolean;
+  /** "Boka provkörning": short visits in the showroom's opening hours, one car at a time (the API reads the same values). */
+  testDrive: { durationMinutes: number; slotMinutes: number; minLeadMinutes: number; bookingHorizonDays: number; changeCutoffHours: number };
   description: string;
   tagline: string;
   contact: { phone: string; phoneE164: string; email: string };

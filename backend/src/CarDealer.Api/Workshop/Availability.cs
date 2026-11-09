@@ -37,6 +37,25 @@ public static class Availability
         return result;
     }
 
+    /// <summary>
+    /// Every open day from today to the booking horizon, with how many start times are still free.
+    /// <paramref name="taken"/> are the existing bookings (date + slot) that count against capacity.
+    /// </summary>
+    public static IReadOnlyList<(DateOnly Date, int FreeSlots)> OpenDays(
+        WorkshopCatalog catalog, WorkshopService service, DateTime utcNow, IReadOnlyList<(DateOnly Date, Occupied Slot)> taken)
+    {
+        var today = DateOnly.FromDateTime(TimeZoneInfo.ConvertTimeFromUtc(utcNow, catalog.Zone));
+        var last = today.AddDays(catalog.BookingHorizonDays);
+        var days = new List<(DateOnly, int)>();
+        for (var d = today; d <= last; d = d.AddDays(1))
+        {
+            if (catalog.HoursFor(d) is null) continue;
+            var onDay = taken.Where(t => t.Date == d).Select(t => t.Slot);
+            days.Add((d, FreeStarts(catalog, service, d, utcNow, onDay).Count));
+        }
+        return days;
+    }
+
     private static bool FitsCapacity(WorkshopCatalog catalog, TimeOnly start, int minutes, List<Occupied> busy)
     {
         // Check every slot the new job would occupy.

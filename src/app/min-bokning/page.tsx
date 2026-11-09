@@ -7,7 +7,7 @@ import { catalog } from "@/lib/workshop";
 
 export const metadata: Metadata = {
   title: "Min bokning",
-  description: `Se, flytta eller avboka din verkstads- eller besiktningstid hos ${SITE.name}.`,
+  description: `Se, flytta eller avboka din verkstads-, besiktnings- eller provkörningstid hos ${SITE.name}.`,
   // Personal page: nothing here for search engines.
   robots: { index: false, follow: true },
 };
@@ -21,7 +21,7 @@ export default function MinBokningPage() {
         <div>
           <h1 className="mb-3 text-4xl font-bold text-navy">Min bokning</h1>
           <p className="mb-8 max-w-2xl text-lg text-gray-700">
-            Här ser du din verkstads- eller besiktningstid. Du kan flytta eller avboka den fram till{" "}
+            Här ser du din verkstads-, besiktnings- eller provkörningstid. Du kan flytta eller avboka den fram till{" "}
             {catalog.changeCutoffHours} timmar före besöket – inget konto behövs.
           </p>
           <MyBooking />

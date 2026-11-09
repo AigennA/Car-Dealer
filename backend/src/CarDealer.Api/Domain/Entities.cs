@@ -103,11 +103,14 @@ public class Booking
     public required string Name { get; set; }
     public required string Email { get; set; }
     public required string Phone { get; set; }
-    /// <summary>Swedish registration number, normalised to upper case without spaces (ABC123 / ABC12D).</summary>
+    /// <summary>Swedish registration number, normalised to upper case without spaces (ABC123 / ABC12D). Empty for test drives.</summary>
     public required string RegNumber { get; set; }
     public string? Message { get; set; }
     public BookingStatus Status { get; set; } = BookingStatus.Booked;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    /// <summary>Set for test drives ("Boka provkörning"): the car being driven. Null for workshop and inspection bookings.</summary>
+    public int? CarId { get; set; }
+    public Car? Car { get; set; }
     /// <summary>
     /// SHA-256 (hex) of the secret in the customer's "Hantera bokning" link.
     /// Only the hash is stored, so a database leak does not expose working links.

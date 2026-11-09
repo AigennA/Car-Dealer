@@ -10,10 +10,18 @@ import ImageGallery from "@/components/ui/ImageGallery";
 import { CheckIcon } from "@/components/ui/icons";
 import { SITE } from "@/lib/site";
 import AdvisorCard from "@/components/people/AdvisorCard";
+import TestDriveWizard from "@/components/workshop/TestDriveWizard";
 import { ROUTES } from "@/config/navigation";
 import { inStock, isBookable, isReserved, isSold } from "@/lib/carStatus";
 import { similarCars as findSimilarCars } from "@/lib/similarCars";
 import CarStatusBadge, { StatusSrText } from "@/components/ui/CarStatusBadge";
+
+/** The booking section further down the page; the button in the price box scrolls to it. */
+const TEST_DRIVE_ANCHOR = "provkorning";
+const TEST_DRIVE_HEADING = "provkorning-rubrik";
+
+/** Scrolling alone leaves the keyboard focus on the button; move it to the section so Tab reaches the form next. */
+const focusTestDrive = () => requestAnimationFrame(() => document.getElementById(TEST_DRIVE_HEADING)?.focus());
 
 export default function CarDetailClient({ slug }: { slug: string }) {
   const cars = useCars();
@@ -107,7 +115,7 @@ export default function CarDetailClient({ slug }: { slug: string }) {
 
               <div className="mt-6 space-y-3">
                 {isBookable(car) ? (
-                  <PrimaryButtonLink href={`${contactHref}&amne=provkorning`}>
+                  <PrimaryButtonLink href={`#${TEST_DRIVE_ANCHOR}`} onClick={focusTestDrive}>
                     Boka provkörning
                   </PrimaryButtonLink>
                 ) : sold ? (
@@ -175,6 +183,13 @@ export default function CarDetailClient({ slug }: { slug: string }) {
             </ul>
           </div>
         </div>
+
+        {isBookable(car) && (
+          <section id={TEST_DRIVE_ANCHOR} aria-labelledby={TEST_DRIVE_HEADING} className="mt-10 rounded-2xl bg-white p-6 shadow-sm">
+            <h2 id={TEST_DRIVE_HEADING} tabIndex={-1} className="mb-4 text-xl font-bold text-navy focus:outline-none">Boka provkörning</h2>
+            <TestDriveWizard car={car} />
+          </section>
+        )}
 
         <div className={sold ? "mt-8 max-w-md" : "mt-8 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start"}>
           {!sold && <CarCreditCalculator key={car.id} carPrice={car.price} />}

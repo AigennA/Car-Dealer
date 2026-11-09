@@ -74,7 +74,7 @@ export function DayStep({ anchorId, error, days, value, onChange, legend = "2. V
 
 export const TimeStep = forwardRef<HTMLFieldSetElement, StepProps & {
   date: string;
-  service?: WorkshopService;
+  service?: Pick<WorkshopService, "name" | "minutes">;
   slots: string[] | null;
   value: string;
   onChange: (time: string) => void;
@@ -100,17 +100,34 @@ export const TimeStep = forwardRef<HTMLFieldSetElement, StepProps & {
   );
 });
 
-export function DetailsStep({ errors }: { errors: Partial<Record<"name" | "email" | "phone" | "regNumber", string>> }) {
+type DetailsErrors = Partial<Record<"name" | "email" | "phone" | "regNumber", string>>;
+
+/** Contact details. The workshop also needs the registration number; a test drive does not. */
+export function DetailsStep({
+  errors,
+  legend = "4. Dina uppgifter",
+  withRegNumber = true,
+  messageLabel = "Meddelande till verkstaden",
+  messageHint = "Beskriv gärna vad som behöver göras.",
+}: {
+  errors: DetailsErrors;
+  legend?: string;
+  withRegNumber?: boolean;
+  messageLabel?: string;
+  messageHint?: string;
+}) {
   return (
     <fieldset className={`${STEP} space-y-4`}>
-      <legend className={LEGEND}>4. Dina uppgifter</legend>
+      <legend className={LEGEND}>{legend}</legend>
       <div className="clear-both grid gap-4 sm:grid-cols-2">
         <Field name="name" label="Namn" required autoComplete="name" error={errors.name} />
         <Field name="phone" label="Telefon" type="tel" inputMode="tel" required autoComplete="tel" error={errors.phone} />
         <Field name="email" label="E-post" type="email" inputMode="email" required autoComplete="email" error={errors.email} />
-        <Field name="regNumber" label="Registreringsnummer" required autoCapitalize="characters" hint="T.ex. ABC 123" error={errors.regNumber} />
+        {withRegNumber && (
+          <Field name="regNumber" label="Registreringsnummer" required autoCapitalize="characters" hint="T.ex. ABC 123" error={errors.regNumber} />
+        )}
       </div>
-      <Field name="message" label="Meddelande till verkstaden" as="textarea" rows={3} hint="Beskriv gärna vad som behöver göras." />
+      <Field name="message" label={messageLabel} as="textarea" rows={3} hint={messageHint} />
     </fieldset>
   );
 }

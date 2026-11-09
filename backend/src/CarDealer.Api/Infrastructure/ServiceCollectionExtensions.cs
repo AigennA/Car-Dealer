@@ -132,6 +132,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITradeInService, TradeInService>();
         services.AddScoped<IBookingService, BookingService>();
         services.AddScoped<IBookingManagementService, BookingManagementService>();
+        services.AddScoped<BookingCreator>();
+        services.AddScoped<ITestDriveService, TestDriveService>();
+        services.AddSingleton<TestDriveSchedule>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IDashboardService, DashboardService>();
         services.AddScoped<INotificationService, LogNotificationService>();

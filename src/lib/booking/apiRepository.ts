@@ -1,5 +1,7 @@
 import { apiFetch } from "@/lib/api";
-import type { BookingAccess, BookingConfirmation, BookingRepository, BookingRequest, BookableDay, ManagedBooking } from "./types";
+import type {
+  BookingAccess, BookingConfirmation, BookingRepository, BookingRequest, BookableDay, ManagedBooking, TestDriveRequest,
+} from "./types";
 
 const json = (body: unknown): RequestInit => ({ method: "POST", body: JSON.stringify(body) });
 
@@ -17,8 +19,24 @@ export class ApiBookingRepository implements BookingRepository {
   }
 
   async create(request: BookingRequest): Promise<BookingConfirmation> {
-    const res = await apiFetch<Omit<BookingConfirmation, "demo">>("/api/workshop/bookings", json(request));
-    return { ...res, demo: false };
+    const res = await apiFetch<Omit<BookingConfirmation, "demo" | "kind">>("/api/workshop/bookings", json(request));
+    return { ...res, demo: false, kind: "service" };
+  }
+
+  loadTestDriveDays(carSlug: string) {
+    return apiFetch<BookableDay[]>(`/api/testdrive/days?car=${encodeURIComponent(carSlug)}`);
+  }
+
+  async loadTestDriveSlots(carSlug: string, date: string) {
+    const res = await apiFetch<{ slots: string[] }>(
+      `/api/testdrive/availability?car=${encodeURIComponent(carSlug)}&date=${date}`,
+    );
+    return res.slots;
+  }
+
+  async createTestDrive(request: TestDriveRequest): Promise<BookingConfirmation> {
+    const res = await apiFetch<Omit<BookingConfirmation, "demo" | "kind">>("/api/testdrive/bookings", json(request));
+    return { ...res, demo: false, kind: "testdrive" };
   }
 
   // POST, so the secret and contact details are never part of a URL.

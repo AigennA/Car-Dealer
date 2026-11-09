@@ -29,6 +29,15 @@ export const MESSAGES = {
     loadSlotsFailed: "Kunde inte hämta lediga tider. Ring oss gärna i stället.",
     sendFailed: "Bokningen kunde inte skickas. Försök igen eller ring oss.",
   },
+  /** "Boka provkörning" – same wording as backend Common/Messages.cs. */
+  testDrive: {
+    phoneRequired: "Fyll i ditt telefonnummer så att vi kan nå dig om något ändras.",
+    notBookable: "Bilen går inte att provköra just nu.",
+    notBookableDetail: "Bilen är såld eller reserverad. Kontakta oss så hittar vi en liknande bil åt dig.",
+    loadDaysFailed: "Kunde inte hämta lediga dagar. Ring oss gärna i stället.",
+    loadSlotsFailed: "Kunde inte hämta lediga tider. Ring oss gärna i stället.",
+    sendFailed: "Bokningen kunde inte skickas. Försök igen eller ring oss.",
+  },
   /** "Min bokning" – same wording as backend Common/Messages.cs. */
   myBooking: {
     referenceRequired: "Fyll i ditt bokningsnummer, t.ex. CD-7K3PQX.",

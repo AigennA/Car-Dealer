@@ -1,7 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { catalog, formatDay, formatDuration } from "@/lib/workshop";
+import { testDriveCatalog } from "@/lib/testDrive";
+import { ROUTES } from "@/config/navigation";
 import { manageUrl } from "@/lib/booking/links";
 import { STATUS_LABEL } from "@/lib/booking/rules";
 import type { ManagedBooking } from "@/lib/booking/repository";
@@ -30,6 +33,9 @@ export const BookingCard = forwardRef<HTMLHeadingElement, {
   const confirmRef = useRef<HTMLParagraphElement>(null);
   const url = manageUrl(b.reference, token);
   const active = b.status !== "Cancelled" && b.status !== "Completed";
+  const testDrive = Boolean(b.carSlug);
+  const cutoffHours = (testDrive ? testDriveCatalog : catalog).changeCutoffHours;
+  const calendarName = testDrive ? `${b.serviceName} – ${b.carTitle}` : b.serviceName;
 
   useEffect(() => {
     if (confirming) confirmRef.current?.focus();
@@ -51,13 +57,20 @@ export const BookingCard = forwardRef<HTMLHeadingElement, {
           <div><dt className="text-sm text-gray-700">Tid</dt><dd className="font-semibold text-navy">{formatDay(b.date)} kl. {b.time}</dd></div>
           <div><dt className="text-sm text-gray-700">Beräknad tid</dt><dd className="font-semibold text-navy">{formatDuration(b.durationMinutes)}</dd></div>
           <div><dt className="text-sm text-gray-700">Bokningsnummer</dt><dd className="font-semibold tracking-wider text-navy">{b.reference}</dd></div>
-          <div><dt className="text-sm text-gray-700">Bil</dt><dd className="font-semibold text-navy">{b.regNumber}</dd></div>
+          <div>
+            <dt className="text-sm text-gray-700">Bil</dt>
+            <dd className="font-semibold text-navy">
+              {testDrive ? (
+                <Link href={`${ROUTES.cars}/${b.carSlug}`} className="text-primary underline underline-offset-4">{b.carTitle}</Link>
+              ) : b.regNumber}
+            </dd>
+          </div>
           <div className="sm:col-span-2"><dt className="text-sm text-gray-700">Adress</dt><dd className="font-semibold text-navy">{SITE.address.street}, {SITE.address.city}</dd></div>
         </dl>
         {active && (
           <figure className="shrink-0 self-center text-center sm:self-start">
             <QrCode value={url} label={`QR-kod för bokning ${b.reference}`} size={140} />
-            <figcaption className="mt-1 max-w-[10rem] text-xs text-gray-700">Visa koden i verkstadsreceptionen</figcaption>
+            <figcaption className="mt-1 max-w-[10rem] text-xs text-gray-700">Visa koden i {testDrive ? "receptionen" : "verkstadsreceptionen"}</figcaption>
           </figure>
         )}
       </div>
@@ -65,7 +78,7 @@ export const BookingCard = forwardRef<HTMLHeadingElement, {
       {active && (
         <div className="mt-6 flex flex-wrap gap-3">
           <AddToCalendar className={SECONDARY_BUTTON}
-            event={{ reference: b.reference, serviceName: b.serviceName, date: b.date, time: b.time, durationMinutes: b.durationMinutes, url }} />
+            event={{ reference: b.reference, serviceName: calendarName, date: b.date, time: b.time, durationMinutes: b.durationMinutes, url }} />
           {b.canChange && !confirming && (
             <>
               <button type="button" onClick={onReschedule} className={SECONDARY_BUTTON}>Ändra tid</button>
@@ -77,7 +90,7 @@ export const BookingCard = forwardRef<HTMLHeadingElement, {
 
       {active && !b.canChange && (
         <p className="mt-4 rounded-lg bg-gray-100 px-4 py-3 text-gray-800">
-          Bokningen kan inte längre ändras på webben (senast {catalog.changeCutoffHours} timmar före besöket). Ring oss på{" "}
+          Bokningen kan inte längre ändras på webben (senast {cutoffHours} timmar före besöket). Ring oss på{" "}
           <a href={SITE.phoneHref} className="text-primary underline underline-offset-4">{SITE.phone}</a>, så hjälper vi dig.
         </p>
       )}

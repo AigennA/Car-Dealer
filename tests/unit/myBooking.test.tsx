@@ -94,7 +94,7 @@ describe("<BookingConfirmation>", () => {
     render(
       <BookingConfirmation onBookAnother={() => {}} confirmation={{
         reference: "CD-ABC234", manageToken: "secret", serviceName: "Däckbyte", date: "2026-11-10", time: "08:00",
-        durationMinutes: 30, demo: false,
+        durationMinutes: 30, demo: false, kind: "service",
       }} />,
     );
     const status = screen.getByRole("status");

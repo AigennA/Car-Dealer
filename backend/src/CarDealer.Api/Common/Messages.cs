@@ -41,6 +41,13 @@ public static class Messages
     public const string SlotTaken = "Tiden är inte längre ledig.";
     public const string SlotTakenDetail = "Någon hann boka tiden före dig. Välj en annan tid.";
 
+    // Test drive ("Boka provkörning")
+    public const string CarRequired = "Välj en bil.";
+    public const string PhoneRequiredForTestDrive = "Fyll i ditt telefonnummer så att vi kan nå dig om något ändras.";
+    public const string CarNotBookable = "Bilen går inte att provköra just nu.";
+    public const string CarNotBookableDetail = "Bilen är såld eller reserverad. Kontakta oss så hittar vi en liknande bil åt dig.";
+    public const string TestDriveThanks = "Tack! Din provkörning är bokad. Bokningsnummer {0}.";
+
     // Min bokning (customer self-service)
     public const string ReferenceRequired = "Fyll i ditt bokningsnummer, t.ex. CD-7K3PQX.";
     public const string BookingNotFound = "Vi hittade ingen bokning med de uppgifterna.";

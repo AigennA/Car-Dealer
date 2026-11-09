@@ -30,6 +30,9 @@ namespace CarDealer.Api.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CarId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -89,6 +92,8 @@ namespace CarDealer.Api.Data.Migrations
 
                     b.HasIndex("Reference")
                         .IsUnique();
+
+                    b.HasIndex("CarId", "Date");
 
                     b.HasIndex("Date", "Status");
 
@@ -537,6 +542,16 @@ namespace CarDealer.Api.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("CarDealer.Api.Domain.Booking", b =>
+                {
+                    b.HasOne("CarDealer.Api.Domain.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("CarDealer.Api.Domain.CarFeature", b =>

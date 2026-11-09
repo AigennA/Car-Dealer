@@ -159,12 +159,32 @@ public class RescheduleBookingRequest : BookingAccessRequest
 
 /// <summary>What the customer sees on "Min bokning". No e-mail or phone: the page may be opened on a shared screen.</summary>
 public record ManagedBookingDto(string Reference, string ServiceCode, string ServiceName, string Category, DateOnly Date, string Time,
-    int DurationMinutes, string RegNumber, string Status, bool CanChange, DateTime ChangeDeadlineUtc);
+    int DurationMinutes, string RegNumber, string Status, bool CanChange, DateTime ChangeDeadlineUtc,
+    string? CarSlug = null, string? CarTitle = null);
+
+/// <summary>"Boka provkörning" on a car's page: the car, a slot and the customer's contact details.</summary>
+public class CreateTestDriveRequest
+{
+    [Required(ErrorMessage = Messages.CarRequired)] public string CarSlug { get; set; } = "";
+    [Required(ErrorMessage = Messages.DateRequired)] public DateOnly? Date { get; set; }
+    [Required(ErrorMessage = Messages.TimeRequired), RegularExpression(Limits.TimePattern, ErrorMessage = Messages.TimeRequired)]
+    public string Time { get; set; } = "";
+    [Required(ErrorMessage = Messages.NameRequired), StringLength(100)] public string Name { get; set; } = "";
+    [Required(ErrorMessage = Messages.EmailRequired), EmailAddress(ErrorMessage = Messages.EmailInvalid), StringLength(254)]
+    public string Email { get; set; } = "";
+    [Required(ErrorMessage = Messages.PhoneRequiredForTestDrive),
+     RegularExpression(Limits.PhonePattern, ErrorMessage = Messages.PhoneInvalid), StringLength(30)]
+    public string Phone { get; set; } = "";
+    [StringLength(2000)] public string? Message { get; set; }
+    public string? Website { get; set; }
+}
 
 public record CheckInRequest([Required(ErrorMessage = Messages.ReferenceRequired)] string Reference);
 
+/// <param name="CarSlug">Set for test drives: the car being driven.</param>
 public record BookingDto(int Id, string Reference, string ServiceCode, string ServiceName, DateOnly Date, string Time,
-    int DurationMinutes, string Name, string Email, string Phone, string RegNumber, string? Message, string Status, DateTime CreatedAt);
+    int DurationMinutes, string Name, string Email, string Phone, string RegNumber, string? Message, string Status, DateTime CreatedAt,
+    string? CarSlug = null, string? CarTitle = null);
 
 public record UpdateBookingStatusRequest([Required] BookingStatus Status);
 

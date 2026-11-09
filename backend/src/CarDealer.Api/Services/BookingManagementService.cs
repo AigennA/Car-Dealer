@@ -22,7 +22,8 @@ public interface IBookingManagementService
     Task<Result<ManagedBookingDto>> CheckInAsync(string reference, CancellationToken ct);
 }
 
-public sealed class BookingManagementService(AppDbContext db, WorkshopCatalog catalog, TimeProvider clock, INotificationService notify)
+public sealed class BookingManagementService(
+    AppDbContext db, WorkshopCatalog catalog, TestDriveSchedule testDrive, TimeProvider clock, INotificationService notify)
     : IBookingManagementService
 {
     private static readonly BookingStatus[] Changeable = [BookingStatus.Booked, BookingStatus.Confirmed];
@@ -35,11 +36,11 @@ public sealed class BookingManagementService(AppDbContext db, WorkshopCatalog ca
     {
         if (await AuthorizeAsync(access, ct) is not { } b) return NotFound();
         if (b.Status == BookingStatus.Cancelled) return ToDto(b); // idempotent
-        if (!CanChange(b)) return Locked();
+        if (!CanChange(b)) return Locked(b);
 
         b.Status = BookingStatus.Cancelled;
         await db.SaveChangesAsync(ct);
-        await notify.BookingChangedAsync(b, ServiceName(b), ct);
+        await notify.BookingChangedAsync(b, DisplayName(b), ct);
         return ToDto(b);
     }
 
@@ -53,30 +54,35 @@ public sealed class BookingManagementService(AppDbContext db, WorkshopCatalog ca
         {
             await using var tx = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable, ct);
             if (await AuthorizeAsync(r, ct) is not { } b) return NotFound();
-            if (!CanChange(b)) return Locked();
-            if (catalog.Find(b.ServiceCode) is not { } svc)
+            if (!CanChange(b)) return Locked(b);
+            var (schedule, service) = ScheduleFor(b);
+            if (service is null)
                 return Result<ManagedBookingDto>.Failure(Error.NotFound(Messages.ServiceNotFound));
+            // A test drive can only be moved while the car is still for sale and not reserved.
+            if (TestDriveSchedule.IsTestDrive(b) && b.Car is not { Status: CarStatus.Available })
+                return Result<ManagedBookingDto>.Failure(Error.Conflict(Messages.CarNotBookable, Messages.CarNotBookableDetail));
 
             // The customer's own current slot does not block the new one.
-            var free = Workshop.Availability.FreeStarts(catalog, svc, date, UtcNow, await db.OccupiedAsync(date, date, ct, b.Id));
+            var free = Workshop.Availability.FreeStarts(schedule, service, date, UtcNow,
+                await db.OccupiedAsync(date, date, ct, b.Id, b.CarId));
             if (!free.Contains(start))
                 return Result<ManagedBookingDto>.Failure(Error.Conflict(Messages.SlotTaken, Messages.SlotTakenDetail));
 
             b.Date = date;
             b.StartTime = start;
-            b.DurationMinutes = svc.Minutes;
+            b.DurationMinutes = service.Minutes;
             await db.SaveChangesAsync(ct);
             await tx.CommitAsync(ct);
-            await notify.BookingChangedAsync(b, svc.Name, ct);
+            await notify.BookingChangedAsync(b, DisplayName(b), ct);
             return ToDto(b);
         });
     }
 
     public async Task<Result<ManagedBookingDto>> CheckInAsync(string reference, CancellationToken ct)
     {
-        var b = await db.Bookings.FirstOrDefaultAsync(x => x.Reference == Normalize(reference), ct);
+        var b = await db.Bookings.Include(x => x.Car).FirstOrDefaultAsync(x => x.Reference == Normalize(reference), ct);
         if (b is null) return Error.NotFound(Messages.BookingNotFound);
-        if (b.Status == BookingStatus.Cancelled) return Locked();
+        if (b.Status == BookingStatus.Cancelled) return Locked(b);
         b.Status = BookingStatus.Arrived;
         await db.SaveChangesAsync(ct);
         return ToDto(b);
@@ -88,7 +94,7 @@ public sealed class BookingManagementService(AppDbContext db, WorkshopCatalog ca
     /// </summary>
     private async Task<Booking?> AuthorizeAsync(BookingAccessRequest access, CancellationToken ct)
     {
-        var b = await db.Bookings.FirstOrDefaultAsync(x => x.Reference == Normalize(access.Reference), ct);
+        var b = await db.Bookings.Include(x => x.Car).FirstOrDefaultAsync(x => x.Reference == Normalize(access.Reference), ct);
         if (b is null) return null;
         if (ManageToken.Matches(access.Token, b.ManageTokenHash)) return b;
 
@@ -99,21 +105,32 @@ public sealed class BookingManagementService(AppDbContext db, WorkshopCatalog ca
         return emailMatches || regMatches ? b : null;
     }
 
-    private DateTime ChangeDeadline(Booking b) => catalog.ToUtc(b.Date, b.StartTime).AddHours(-catalog.ChangeCutoffHours);
+    /// <summary>Test drives follow the showroom's schedule, everything else the workshop's.</summary>
+    private (WorkshopCatalog Schedule, WorkshopService? Service) ScheduleFor(Booking b) =>
+        TestDriveSchedule.IsTestDrive(b) ? (testDrive.Catalog, testDrive.Service) : (catalog, catalog.Find(b.ServiceCode));
+
+    private DateTime ChangeDeadline(Booking b)
+    {
+        var schedule = ScheduleFor(b).Schedule;
+        return schedule.ToUtc(b.Date, b.StartTime).AddHours(-schedule.ChangeCutoffHours);
+    }
     private bool CanChange(Booking b) => Changeable.Contains(b.Status) && UtcNow <= ChangeDeadline(b);
-    private string ServiceName(Booking b) => catalog.Find(b.ServiceCode)?.Name ?? b.ServiceCode;
+    private string DisplayName(Booking b) => TestDriveSchedule.IsTestDrive(b)
+        ? $"{testDrive.Service.Name} – {b.Car?.Title}"
+        : catalog.Find(b.ServiceCode)?.Name ?? b.ServiceCode;
 
     private ManagedBookingDto ToDto(Booking b)
     {
-        var svc = catalog.Find(b.ServiceCode);
+        var (_, svc) = ScheduleFor(b);
         return new ManagedBookingDto(b.Reference, b.ServiceCode, svc?.Name ?? b.ServiceCode, svc?.Category ?? "", b.Date,
-            BookingQueries.Format(b.StartTime), b.DurationMinutes, b.RegNumber, b.Status.ToString(), CanChange(b), ChangeDeadline(b));
+            BookingQueries.Format(b.StartTime), b.DurationMinutes, b.RegNumber, b.Status.ToString(), CanChange(b), ChangeDeadline(b),
+            b.Car?.Slug, b.Car?.Title);
     }
 
     private static string Normalize(string reference) => reference.Trim().ToUpperInvariant().Replace(" ", "");
 
     private static Result<ManagedBookingDto> NotFound() => Error.NotFound(Messages.BookingNotFound, Messages.BookingNotFoundDetail);
 
-    private Result<ManagedBookingDto> Locked() =>
-        Error.Conflict(Messages.BookingLocked, string.Format(Messages.BookingLockedDetail, catalog.ChangeCutoffHours));
+    private Result<ManagedBookingDto> Locked(Booking b) =>
+        Error.Conflict(Messages.BookingLocked, string.Format(Messages.BookingLockedDetail, ScheduleFor(b).Schedule.ChangeCutoffHours));
 }

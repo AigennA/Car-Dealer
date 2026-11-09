@@ -75,3 +75,17 @@ export function validateBooking(selection: BookingSelection, details: BookingDet
   else if (!REG_NUMBER_RE.test(details.regNumber)) errors.regNumber = MESSAGES.booking.regInvalid;
   return errors;
 }
+
+export type TestDriveDetails = { name: string; email: string; phone: string; message: string };
+export type TestDriveSelection = { date: string; time: string };
+export type TestDriveErrors = Partial<Record<"date" | "time" | keyof TestDriveDetails, string>>;
+
+/** Test drive: a chosen slot plus contact details; no registration number, but a phone so we can reach the customer. */
+export function validateTestDrive(selection: TestDriveSelection, details: TestDriveDetails): TestDriveErrors {
+  const errors: TestDriveErrors = {};
+  if (!selection.date) errors.date = MESSAGES.booking.dateRequired;
+  if (!selection.time) errors.time = MESSAGES.booking.timeRequired;
+  Object.assign(errors, validateContactDetails(details));
+  if (!details.phone.trim()) errors.phone = MESSAGES.testDrive.phoneRequired;
+  return errors;
+}

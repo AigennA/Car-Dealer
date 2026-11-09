@@ -28,9 +28,9 @@ export const BookingConfirmation = forwardRef<HTMLDivElement, { confirmation: Co
               <dt className="text-sm">Bokningsnummer</dt>
               <dd className="font-heading text-2xl font-bold tracking-wider">{c.reference}</dd>
             </div>
-            <div><dt className="text-sm">Tjänst</dt><dd className="font-semibold">{c.serviceName}</dd></div>
+            <div><dt className="text-sm">{c.kind === "testdrive" ? "Bokning" : "Tjänst"}</dt><dd className="font-semibold">{c.serviceName}</dd></div>
             <div><dt className="text-sm">Tid</dt><dd className="font-semibold">{formatDay(c.date)} kl. {c.time}</dd></div>
-            <div><dt className="text-sm">Beräknad tid</dt><dd className="font-semibold">{formatDuration(c.durationMinutes)}</dd></div>
+            <div><dt className="text-sm">{c.kind === "testdrive" ? "Längd" : "Beräknad tid"}</dt><dd className="font-semibold">{formatDuration(c.durationMinutes)}</dd></div>
           </dl>
           <figure className="shrink-0 self-center text-center sm:self-start">
             <QrCode value={url} label={`QR-kod till din bokning ${c.reference}`} size={140} />
@@ -39,8 +39,11 @@ export const BookingConfirmation = forwardRef<HTMLDivElement, { confirmation: Co
         </div>
 
         <p className="mt-4 text-sm text-green-900">
-          Spara bokningsnumret. Med det och din e-postadress eller ditt registreringsnummer kan du alltid hitta, flytta eller
-          avboka tiden under <strong>Min bokning</strong>. Lämna bilen i verkstadsreceptionen och visa gärna QR-koden.
+          Spara bokningsnumret. Med det och din e-postadress{c.kind === "service" && " eller ditt registreringsnummer"} kan du alltid
+          hitta, flytta eller avboka tiden under <strong>Min bokning</strong>.{" "}
+          {c.kind === "testdrive"
+            ? "Kom till showroomen, ta med giltigt körkort och visa gärna QR-koden i receptionen."
+            : "Lämna bilen i verkstadsreceptionen och visa gärna QR-koden."}
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
           <Link href={manageHref(c.reference, c.manageToken)} className={SECONDARY_BUTTON}>Hantera bokningen</Link>

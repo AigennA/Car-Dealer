@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { findService, formatDay } from "@/lib/workshop";
+import { testDriveService } from "@/lib/testDrive";
 import type { BookableDay, BookingRepository, ManagedBooking } from "@/lib/booking/repository";
 import { SUBMIT_CLASS } from "@/components/forms/FormKit";
 import { DayStep, TimeStep } from "../booking/Steps";
@@ -25,16 +26,18 @@ export function RescheduleForm({ booking, repo, busy, onSave, onCancel }: {
   useEffect(() => {
     headingRef.current?.focus();
     let cancelled = false;
-    repo.loadDays(booking.serviceCode).then((d) => !cancelled && setDays(d), () => !cancelled && setDays([]));
+    const load = booking.carSlug ? repo.loadTestDriveDays(booking.carSlug) : repo.loadDays(booking.serviceCode);
+    load.then((d) => !cancelled && setDays(d), () => !cancelled && setDays([]));
     return () => { cancelled = true; };
-  }, [repo, booking.serviceCode]);
+  }, [repo, booking.serviceCode, booking.carSlug]);
 
   useEffect(() => {
     if (!date) return;
     let cancelled = false;
-    repo.loadSlots(booking.serviceCode, date).then((s) => !cancelled && setSlots(s), () => !cancelled && setSlots([]));
+    const load = booking.carSlug ? repo.loadTestDriveSlots(booking.carSlug, date) : repo.loadSlots(booking.serviceCode, date);
+    load.then((s) => !cancelled && setSlots(s), () => !cancelled && setSlots([]));
     return () => { cancelled = true; };
-  }, [repo, booking.serviceCode, date]);
+  }, [repo, booking.serviceCode, booking.carSlug, date]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,20 +49,21 @@ export function RescheduleForm({ booking, repo, busy, onSave, onCancel }: {
     if ((await onSave(date, time)) === "failed") {
       // Most likely someone took the time: show fresh slots.
       setTime("");
-      setSlots(await repo.loadSlots(booking.serviceCode, date).catch(() => []));
+      const fresh = booking.carSlug ? repo.loadTestDriveSlots(booking.carSlug, date) : repo.loadSlots(booking.serviceCode, date);
+      setSlots(await fresh.catch(() => []));
     }
   };
 
   return (
     <form onSubmit={submit} noValidate className="space-y-5" aria-labelledby="ny-tid">
       <h2 id="ny-tid" ref={headingRef} tabIndex={-1} className="font-heading text-2xl font-bold text-navy focus:outline-none">
-        Välj ny tid för {booking.serviceName}
+        Välj ny tid för {booking.serviceName}{booking.carTitle ? ` – ${booking.carTitle}` : ""}
       </h2>
       <p className="text-gray-700">Nuvarande tid: {formatDay(booking.date)} kl. {booking.time}.</p>
       <DayStep anchorId="ny-dag" legend="Välj dag" days={days} value={date}
         onChange={(d) => { setDate(d); setSlots(null); setTime(""); }} />
       {date && (
-        <TimeStep anchorId="ny-tid-val" legend="Välj tid" date={date} service={findService(booking.serviceCode)} slots={slots}
+        <TimeStep anchorId="ny-tid-val" legend="Välj tid" date={date} service={booking.carSlug ? testDriveService : findService(booking.serviceCode)} slots={slots}
           value={time} onChange={setTime} />
       )}
       {error && <p role="alert" className="text-red-700">{error}</p>}
