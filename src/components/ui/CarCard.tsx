@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Car } from "@/lib/cars";
 import { ROUTES } from "@/config/navigation";
+import { isSold } from "@/lib/carStatus";
+import CarStatusBadge, { StatusSrText } from "./CarStatusBadge";
 
 type Props = {
   car: Car;
@@ -112,6 +114,7 @@ export default function CarCard({ car, headingLevel = "h3", preload = false }: P
   const Heading = headingLevel;
   const href = `${ROUTES.cars}/${car.slug}`;
   const name = `${car.make} ${car.model}`;
+  const sold = isSold(car);
 
   return (
     <article className="group w-full bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-primary/30 shadow-sm hover:shadow-xl transition-[box-shadow,border-color] duration-300 flex flex-col">
@@ -129,15 +132,20 @@ export default function CarCard({ car, headingLevel = "h3", preload = false }: P
           alt=""
           fill
           sizes="(max-width: 640px) 92vw, (max-width: 1280px) 45vw, 380px"
-          className="object-cover transition-transform duration-500 motion-reduce:transition-none group-hover:scale-105"
+          className={`object-cover transition-transform duration-500 motion-reduce:transition-none group-hover:scale-105 ${
+            sold ? "grayscale opacity-70" : ""
+          }`}
           preload={preload}
         />
 
         {/* Subtle gradient overlay for readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
 
+        {/* Sold / reserved label (a sold car is never "Utvald") */}
+        <CarStatusBadge car={car} className="absolute top-3 left-3" />
+
         {/* "Utvald" badge — SVG icon only, no emoji */}
-        {car.featured && (
+        {car.featured && !sold && car.status !== "Reserved" && (
           <div className="absolute top-3 left-3 inline-flex items-center gap-1 bg-primary text-white text-[11px] font-semibold tracking-wide uppercase px-2.5 py-1 rounded-full shadow-md">
             <StarIcon />
             <span>Utvald</span>
@@ -155,6 +163,7 @@ export default function CarCard({ car, headingLevel = "h3", preload = false }: P
             className="cursor-pointer rounded-sm group-hover:text-primary transition-colors duration-200"
           >
             {name}
+            <StatusSrText car={car} />
           </Link>
         </Heading>
 

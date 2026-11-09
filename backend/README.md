@@ -45,6 +45,19 @@ byta från statisk data till API:t utan ändringar i gränssnittet.
 - [`sql/schema.sql`](sql/schema.sql) är samma schema som ett idempotent SQL-skript för den som vill köra det direkt i SQL Server.
 - Startdata: webbplatsens 24 bilar (`Data/seed-cars.json`, genereras med `npm run seed:export` i repots rot).
 
+## Bilstatus – tillgänglig, reserverad, såld
+
+| Status | Lista och sök | Egen sida | Provkörning / frågor |
+|---|---|---|---|
+| `Available` | ja | ja | ja |
+| `Reserved` | ja, märkt "Reserverad" | ja | bara frågor |
+| `Sold` | ja i `soldVisibleDays` dagar (14), märkt "Såld", alltid sist | ja, alltid (gamla länkar fungerar) | nej, förslag på liknande bilar |
+| `Draft` | nej | bara personal | – |
+
+- `soldVisibleDays` ligger i `data/business.json` (policies) och används av både webbplatsen och API:t.
+- Försäljningsdatumet (`SoldAt`) sätts en gång när bilen blir såld, behålls vid redigering och töms om bilen sätts tillbaka till till salu. Bilar som såldes innan datumet fanns saknar datum och visas inte i listan.
+- Filter-alternativen (märke, bränsle …) räknas bara på bilar som är till salu.
+
 ## Verkstadsbokning – regler
 
 Tjänster, priser, öppettider och kapacitet ligger i [`data/workshop.json`](../data/workshop.json), som
@@ -116,7 +129,7 @@ API-dokumentation. Utvecklingskontot är `admin@cardealer.local` / `Dev-Password
 (finns bara i `appsettings.Development.json`).
 
 ```bash
-dotnet test        # 64 tester (integration, schemaläggning, domänregler) mot en riktig (temporär) databas
+dotnet test        # 70 tester (integration, schemaläggning, domänregler) mot en riktig (temporär) databas
 ```
 
 ## Köra mot SQL Server / Azure SQL

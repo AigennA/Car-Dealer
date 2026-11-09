@@ -59,7 +59,7 @@ public static class ServiceCollectionExtensions
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
         // Configured lazily from JwtOptions so environment variables / test settings always apply.
         services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
-            .Configure<IOptions<JwtOptions>>((o, jwtOptions) =>
+            .Configure<IOptions<JwtOptions>, TimeProvider>((o, jwtOptions, clock) =>
             {
                 var jwt = jwtOptions.Value;
                 o.MapInboundClaims = false;
@@ -70,6 +70,14 @@ public static class ServiceCollectionExtensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key)),
                     RoleClaimType = ClaimTypes.Role,
                     ClockSkew = TimeSpan.FromSeconds(jwt.ClockSkewSeconds),
+                    // Tokens are issued with the injected clock (TokenService), so their lifetime must be
+                    // checked with the same one — otherwise a test clock makes every token look expired.
+                    LifetimeValidator = (notBefore, expires, _, parameters) =>
+                    {
+                        var now = clock.GetUtcNow().UtcDateTime;
+                        return expires is { } exp && exp >= now - parameters.ClockSkew
+                            && (notBefore is not { } nbf || nbf <= now + parameters.ClockSkew);
+                    },
                 };
             });
         services.AddAuthorization();

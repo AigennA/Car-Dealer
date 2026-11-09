@@ -52,7 +52,8 @@
     "warrantyMonths": 24,
     "openPurchaseDays": 14,
     "refundDays": 14,
-    "responseHours": 24
+    "responseHours": 24,
+    "soldVisibleDays": 14
   },
   "financing": {
     "annualRate": 0.0395,

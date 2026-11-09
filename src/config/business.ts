@@ -24,7 +24,9 @@ export const BUSINESS = data as unknown as {
   contact: { phone: string; phoneE164: string; email: string };
   address: { street: string; postalCode: string; city: string; country: string };
   showroomHours: WeekHours;
-  policies: { baseWarrantyMonths: number; warrantyMonths: number; openPurchaseDays: number; refundDays: number; responseHours: number };
+  policies: { baseWarrantyMonths: number; warrantyMonths: number; openPurchaseDays: number; refundDays: number; responseHours: number;
+    /** A sold car stays in the listing, marked "Såld", for this many days (the API reads the same value). */
+    soldVisibleDays: number };
   financing: { annualRate: number; loanTermsMonths: number[]; defaultTermMonths: number; defaultDownPaymentShare: number; leasingTermMonths: [number, number] };
   maps: { embedUrl: string };
   dataRetention: { leadMonths: number; bookingMonths: number; tradeInMonths: number; bookkeepingYears: number };

@@ -23,6 +23,24 @@ describe("<CarCard>", () => {
     expect(screen.getAllByRole("link")).toHaveLength(2);
   });
 
+  it("marks a sold or reserved car with text, also for screen readers; a free car has no label", () => {
+    const { unmount } = render(<CarCard car={{ ...car, status: "Sold", soldAt: "2026-11-09" }} headingLevel="h2" />);
+    expect(screen.getByText("Såld")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: `${car.make} ${car.model} – såld` })).toBeInTheDocument();
+    expect(screen.queryByText("Utvald")).not.toBeInTheDocument(); // a sold car is never "Utvald"
+    unmount();
+
+    const reserved = render(<CarCard car={{ ...car, status: "Reserved" }} headingLevel="h2" />);
+    expect(screen.getByText("Reserverad")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: `${car.make} ${car.model} – reserverad` })).toBeInTheDocument();
+    reserved.unmount();
+
+    render(<CarCard car={{ ...car, status: undefined }} headingLevel="h2" />);
+    expect(screen.queryByText("Såld")).not.toBeInTheDocument();
+    expect(screen.queryByText("Reserverad")).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: `${car.make} ${car.model}` })).toBeInTheDocument();
+  });
+
   it("formats price and mileage in Swedish", () => {
     render(<CarCard car={{ ...car, price: 249900, mileage: 12300 }} />);
     expect(screen.getByText(/249\s900/)).toBeInTheDocument();

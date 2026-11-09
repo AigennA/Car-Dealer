@@ -1,4 +1,5 @@
 using CarDealer.Api.Common;
+using CarDealer.Api.Configuration;
 using CarDealer.Api.Contracts;
 using CarDealer.Api.Data;
 using CarDealer.Api.Domain;
@@ -18,11 +19,25 @@ public interface ICarService
 }
 
 /// <summary>Inventory use cases: public search and staff management.</summary>
-public sealed class CarService(AppDbContext db, TimeProvider clock) : ICarService
+public sealed class CarService(AppDbContext db, TimeProvider clock, BusinessInfo business) : ICarService
 {
-    private static readonly CarStatus[] PublicStatuses = [CarStatus.Available, CarStatus.Reserved];
+    private static readonly CarStatus[] ForSaleStatuses = [CarStatus.Available, CarStatus.Reserved];
 
-    private IQueryable<Car> PublicCars => db.Cars.AsNoTracking().Where(c => PublicStatuses.Contains(c.Status));
+    private DateTime UtcNow => clock.GetUtcNow().UtcDateTime;
+
+    /// <summary>Cars the dealer still has: available or reserved.</summary>
+    private IQueryable<Car> ForSaleCars => db.Cars.AsNoTracking().Where(c => ForSaleStatuses.Contains(c.Status));
+
+    /// <summary>The public listing: cars for sale, plus cars sold within the last SoldVisibleDays days.</summary>
+    private IQueryable<Car> PublicCars
+    {
+        get
+        {
+            var cutoff = UtcNow.AddDays(-business.Policies.SoldVisibleDays);
+            return db.Cars.AsNoTracking().Where(c =>
+                ForSaleStatuses.Contains(c.Status) || (c.Status == CarStatus.Sold && c.SoldAt >= cutoff));
+        }
+    }
 
     public async Task<PagedResult<CarDto>> SearchAsync(CarQuery q, CancellationToken ct)
     {
@@ -41,11 +56,12 @@ public sealed class CarService(AppDbContext db, TimeProvider clock) : ICarServic
         await Distinct(c => c.BodyType, ct));
 
     private Task<List<string>> Distinct(System.Linq.Expressions.Expression<Func<Car, string>> field, CancellationToken ct) =>
-        PublicCars.Select(field).Distinct().OrderBy(x => x).ToListAsync(ct);
+        ForSaleCars.Select(field).Distinct().OrderBy(x => x).ToListAsync(ct);
 
     public async Task<Result<CarDto>> GetBySlugAsync(string slug, bool includeHidden, CancellationToken ct)
     {
-        var source = includeHidden ? db.Cars.AsNoTracking() : PublicCars;
+        // A car's own page stays reachable once it is sold (old links and search results), only drafts are hidden.
+        var source = includeHidden ? db.Cars.AsNoTracking() : db.Cars.AsNoTracking().Where(c => c.Status != CarStatus.Draft);
         var car = await source.Include(c => c.Images).Include(c => c.Features).FirstOrDefaultAsync(c => c.Slug == slug, ct);
         return car is null ? Error.NotFound(Messages.CarNotFound, Messages.CarMaybeSold) : CarDto.From(car);
     }
@@ -64,7 +80,7 @@ public sealed class CarService(AppDbContext db, TimeProvider clock) : ICarServic
             Make = r.Make, Model = r.Model, Fuel = r.Fuel, Transmission = r.Transmission,
             Drivetrain = r.Drivetrain, BodyType = r.BodyType, Color = r.Color, CreatedAt = now, UpdatedAt = now,
         };
-        Apply(car, r);
+        Apply(car, r, now);
         db.Cars.Add(car);
         await db.SaveChangesAsync(ct);
         return CarDto.From(car);
@@ -76,8 +92,9 @@ public sealed class CarService(AppDbContext db, TimeProvider clock) : ICarServic
         if (car is null) return Error.NotFound(Messages.CarNotFound);
         db.CarImages.RemoveRange(car.Images);
         db.CarFeatures.RemoveRange(car.Features);
-        Apply(car, r);
-        car.UpdatedAt = clock.GetUtcNow().UtcDateTime;
+        var now = UtcNow;
+        Apply(car, r, now);
+        car.UpdatedAt = now;
         await db.SaveChangesAsync(ct);
         return CarDto.From(car);
     }
@@ -91,12 +108,15 @@ public sealed class CarService(AppDbContext db, TimeProvider clock) : ICarServic
         return Result.Success();
     }
 
-    private static void Apply(Car car, CarUpsertRequest r)
+    private static void Apply(Car car, CarUpsertRequest r, DateTime now)
     {
+        var wasSold = car.Status == CarStatus.Sold;
         car.Make = r.Make.Trim(); car.Model = r.Model.Trim(); car.Year = r.Year; car.Mileage = r.Mileage;
         car.Fuel = r.Fuel; car.Transmission = r.Transmission; car.Drivetrain = r.Drivetrain;
         car.BodyType = r.BodyType; car.Color = r.Color.Trim(); car.Price = r.Price; car.Featured = r.Featured;
         car.Description = r.Description.Trim(); car.Status = r.Status;
+        // The sale date is set once, when the car becomes sold, and cleared if it is put back on sale.
+        car.SoldAt = r.Status == CarStatus.Sold ? (wasSold ? car.SoldAt ?? now : now) : null;
         car.Images = r.Images.Where(u => !string.IsNullOrWhiteSpace(u))
             .Select((u, i) => new CarImage { Url = u.Trim(), SortOrder = i }).ToList();
         car.Features = r.Features.Where(x => !string.IsNullOrWhiteSpace(x))
@@ -138,17 +158,22 @@ internal static class CarFilters
 /// <summary>Sort keys shared with the website (src/lib/filters.ts SORT_OPTIONS).</summary>
 internal static class CarSorting
 {
-    public static IQueryable<Car> Apply(IQueryable<Car> cars, string sort) => sort switch
+    /// <summary>Sold cars always come last, then the requested order.</summary>
+    public static IQueryable<Car> Apply(IQueryable<Car> cars, string sort)
     {
-        "price-asc" => cars.OrderBy(c => c.Price),
-        "price-desc" => cars.OrderByDescending(c => c.Price),
-        "year-desc" => cars.OrderByDescending(c => c.Year),
-        "year-asc" => cars.OrderBy(c => c.Year),
-        "mileage-asc" => cars.OrderBy(c => c.Mileage),
-        "mileage-desc" => cars.OrderByDescending(c => c.Mileage),
-        "name-asc" => cars.OrderBy(c => c.Make).ThenBy(c => c.Model),
-        "name-desc" => cars.OrderByDescending(c => c.Make).ThenByDescending(c => c.Model),
-        "newest" => cars.OrderByDescending(c => c.CreatedAt),
-        _ => cars.OrderByDescending(c => c.Featured).ThenBy(c => c.Id),
-    };
+        var soldLast = cars.OrderBy(c => c.Status == CarStatus.Sold ? 1 : 0);
+        return sort switch
+        {
+            "price-asc" => soldLast.ThenBy(c => c.Price),
+            "price-desc" => soldLast.ThenByDescending(c => c.Price),
+            "year-desc" => soldLast.ThenByDescending(c => c.Year),
+            "year-asc" => soldLast.ThenBy(c => c.Year),
+            "mileage-asc" => soldLast.ThenBy(c => c.Mileage),
+            "mileage-desc" => soldLast.ThenByDescending(c => c.Mileage),
+            "name-asc" => soldLast.ThenBy(c => c.Make).ThenBy(c => c.Model),
+            "name-desc" => soldLast.ThenByDescending(c => c.Make).ThenByDescending(c => c.Model),
+            "newest" => soldLast.ThenByDescending(c => c.CreatedAt),
+            _ => soldLast.ThenByDescending(c => c.Featured).ThenBy(c => c.Id),
+        };
+    }
 }

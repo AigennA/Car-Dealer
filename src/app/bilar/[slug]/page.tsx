@@ -2,12 +2,20 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cars } from "@/lib/cars";
 import { SITE } from "@/lib/site";
+import { statusOf } from "@/lib/carStatus";
 import { unsplashUrl } from "@/lib/imageLoader";
 import CarDetailClient from "./CarDetailClient";
 
 type Params = { params: Promise<{ slug: string }> };
 
 export const dynamicParams = false;
+
+/** schema.org availability per state, for the search engines' rich results. */
+const AVAILABILITY = {
+  Available: "https://schema.org/InStock",
+  Reserved: "https://schema.org/LimitedAvailability",
+  Sold: "https://schema.org/SoldOut",
+} as const;
 
 export function generateStaticParams() {
   return cars.map((car) => ({ slug: car.slug }));
@@ -28,7 +36,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const price = car.price.toLocaleString("sv-SE");
   const description = `${car.title}, ${car.year}, ${car.mileage.toLocaleString("sv-SE")} mil, ${car.fuel.toLowerCase()}, ${car.transmission.toLowerCase()}. Pris ${price} kr. ${car.description}`;
   return {
-    title: `${car.title} (${car.year}) – ${price} kr`,
+    title: `${car.title} (${car.year}) – ${price} kr${statusOf(car) === "Sold" ? " (såld)" : ""}`,
     description,
     alternates: { canonical: `./` },
     openGraph: {
@@ -65,7 +73,7 @@ export default async function CarDetailPage({ params }: Params) {
       "@type": "Offer",
       price: car.price,
       priceCurrency: "SEK",
-      availability: "https://schema.org/InStock",
+      availability: AVAILABILITY[statusOf(car)],
       itemCondition: "https://schema.org/UsedCondition",
       seller: { "@type": "AutoDealer", name: SITE.legalName },
     },

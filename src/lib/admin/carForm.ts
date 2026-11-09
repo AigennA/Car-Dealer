@@ -1,4 +1,5 @@
-import type { Car } from "@/lib/cars";
+import type { Car, CarStatus } from "@/lib/cars";
+import { todayIso } from "@/lib/dates";
 import { PLACEHOLDER_CAR_IMAGE, VEHICLE_DEFAULTS, VEHICLE_LIMITS } from "@/config/vehicle";
 import { slugify } from "@/lib/slug";
 import { MESSAGES } from "@/lib/messages";
@@ -7,7 +8,7 @@ import { MESSAGES } from "@/lib/messages";
 export type CarFormValues = {
   make: string; model: string; year: string; mileage: string; price: string; color: string;
   fuel: string; transmission: string; drivetrain: string; bodyType: string;
-  description: string; features: string; images: string; featured: boolean;
+  description: string; features: string; images: string; featured: boolean; status: CarStatus;
 };
 export type CarFormErrors = Partial<Record<keyof CarFormValues, string>>;
 
@@ -24,7 +25,7 @@ export function toFormValues(car: Car | null): CarFormValues {
     fuel: car?.fuel ?? VEHICLE_DEFAULTS.fuel, transmission: car?.transmission ?? VEHICLE_DEFAULTS.transmission,
     drivetrain: car?.drivetrain ?? VEHICLE_DEFAULTS.drivetrain, bodyType: car?.bodyType ?? VEHICLE_DEFAULTS.bodyType,
     description: car?.description ?? "", features: fromList(car?.features ?? []), images: fromList(car?.images ?? []),
-    featured: car?.featured ?? false,
+    featured: car?.featured ?? false, status: car?.status ?? "Available",
   };
 }
 
@@ -44,8 +45,11 @@ export function validateCarForm(v: CarFormValues): CarFormErrors {
   return e;
 }
 
-/** Builds the Car to save; keeps id and slug when editing. */
-export function toCar(v: CarFormValues, existing: Car | null, newId: () => string): Car {
+/**
+ * Builds the Car to save; keeps id and slug when editing. A car that becomes sold gets today's
+ * date as its sale date (kept if it was already sold); any other status clears it.
+ */
+export function toCar(v: CarFormValues, existing: Car | null, newId: () => string, today: string = todayIso()): Car {
   const make = v.make.trim();
   const model = v.model.trim();
   const images = toList(v.images);
@@ -58,6 +62,9 @@ export function toCar(v: CarFormValues, existing: Car | null, newId: () => strin
     description: v.description.trim(), features: toList(v.features),
     images: images.length > 0 ? images : [PLACEHOLDER_CAR_IMAGE],
     featured: v.featured,
+    // No status field = available, the same convention as the built-in cars and the API.
+    ...(v.status !== "Available" ? { status: v.status } : {}),
+    ...(v.status === "Sold" ? { soldAt: existing?.status === "Sold" && existing.soldAt ? existing.soldAt : today } : {}),
   };
 }
 

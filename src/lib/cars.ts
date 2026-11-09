@@ -1,3 +1,10 @@
+// ".ts" extensions: scripts/export-seed.mjs loads this file with plain Node.
+import { BUILD_DATE } from "./buildDate.ts";
+import { addDaysIso } from "./dates.ts";
+
+/** Same values as the API's CarStatus (Draft cars are never public, so the site does not know it). */
+export type CarStatus = "Available" | "Reserved" | "Sold";
+
 export type Car = {
   id: string;
   slug: string;
@@ -16,7 +23,14 @@ export type Car = {
   title: string;
   description: string;
   features: string[];
+  /** Left out = "Available". */
+  status?: CarStatus;
+  /** Date the car was sold (YYYY-MM-DD); decides how long it stays in the listing. */
+  soldAt?: string;
 };
+
+/** Demo data: the sale happened a couple of days before the site was built. */
+const DEMO_SOLD_AT = addDaysIso(BUILD_DATE, -2);
 
 export const cars: Car[] = [
   {
@@ -434,6 +448,7 @@ export const cars: Car[] = [
     price: 319900,
     images: ["https://images.unsplash.com/photo-1600712242805-5f78671b24da?w=800&h=600&fit=crop&q=85"],
     featured: false,
+    status: "Reserved",
     description: "Kompakt elektrisk crossover med unika freestyle-dörrar. Miljövänliga material och innovativ design.",
     features: ["7-tums infotainment", "BOSE", "Freestyle dörrar", "Kork interiör", "i-Activsense", "Head-up display"],
   },
@@ -472,6 +487,8 @@ export const cars: Car[] = [
     price: 279900,
     images: ["https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800&h=600&fit=crop&q=85"],
     featured: false,
+    status: "Sold",
+    soldAt: DEMO_SOLD_AT,
     description: "Elektrisk MINI med klassisk go-kart känsla. Perfekt stadsbil med 234 km räckvidd och snabbladdning.",
     features: ["MINI Connected", "LED-strålkastare", "Comfort Access", "Parkeringsassistent", "Navigationssystem", "Värme-/kylsäten"],
   },

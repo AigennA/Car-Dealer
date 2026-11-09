@@ -4,6 +4,8 @@ import { SITE } from "@/lib/site";
 import { useState, useMemo, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useCars } from "@/lib/clientStorage";
+import { useToday } from "@/lib/useToday";
+import { isSold, listedCars, soldLast } from "@/lib/carStatus";
 import {
   type Filters,
   initialFilters,
@@ -65,14 +67,18 @@ function CarsPageWithParams() {
 
 function CarsListing({ urlFilters }: { urlFilters: UrlFilters }) {
   const cars = useCars();
+  const today = useToday();
   const [filters, setFilters] = useState<Filters>(() => ({ ...initialFilters, ...urlFilters }));
   const [sortBy, setSortBy] = useState("relevant");
   const [filtersOpen, setFiltersOpen] = useState(false);
 
+  // Recently sold cars stay in the list, marked "Såld", after all the others (whatever the sort).
   const sortedCars = useMemo(
-    () => sortCars(filterCars(cars, filters), sortBy),
-    [cars, filters, sortBy],
+    () => soldLast(sortCars(filterCars(listedCars(cars, today), filters), sortBy)),
+    [cars, today, filters, sortBy],
   );
+  const soldCount = sortedCars.filter(isSold).length;
+  const forSaleCount = sortedCars.length - soldCount;
   const activeCount = countActiveFilters(filters);
 
   const handleReset = () => setFilters(initialFilters);
@@ -140,7 +146,7 @@ function CarsListing({ urlFilters }: { urlFilters: UrlFilters }) {
                 filters={filters}
                 onFilterChange={setFilters}
                 onReset={handleReset}
-                resultCount={sortedCars.length}
+                resultCount={forSaleCount}
               />
             </div>
           </aside>
@@ -149,8 +155,11 @@ function CarsListing({ urlFilters }: { urlFilters: UrlFilters }) {
             <div className="bg-white rounded-xl p-4 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
               {/* Polite live region: screen readers hear the new count when filters change (WCAG 4.1.3) */}
               <p className="text-sm text-gray-700" role="status" aria-live="polite">
-                <span className="font-semibold text-navy">{sortedCars.length}</span>{" "}
-                {sortedCars.length === 1 ? "bil" : "bilar"} hittades
+                <span className="font-semibold text-navy">{forSaleCount}</span>{" "}
+                {forSaleCount === 1 ? "bil" : "bilar"} hittades
+                {soldCount > 0 && (
+                  <span> · {soldCount} nyligen {soldCount === 1 ? "såld" : "sålda"}</span>
+                )}
               </p>
 
               <div className="flex items-center gap-2">

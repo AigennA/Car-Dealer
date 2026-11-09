@@ -29,6 +29,7 @@ const SELECT_FIELDS: { name: VehicleOptionKey; label: string }[] = [
   { name: "transmission", label: "Växellåda" },
   { name: "drivetrain", label: "Drivning" },
   { name: "bodyType", label: "Kaross" },
+  { name: "status", label: "Status" },
 ];
 const LIST_FIELDS: { name: "features" | "images"; label: string; hint: string }[] = [
   { name: "features", label: "Utrustning", hint: "Separera med kommatecken, t.ex. Navigation, Dragkrok" },

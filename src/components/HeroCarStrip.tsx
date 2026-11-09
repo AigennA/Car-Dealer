@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cars } from "@/lib/cars";
+import { inStock } from "@/lib/carStatus";
 import { unsplashUrl } from "@/lib/imageLoader";
 
 /*
@@ -11,7 +12,7 @@ import { unsplashUrl } from "@/lib/imageLoader";
   WCAG 2.2.2 (Pause, Stop, Hide): moving content that lasts > 5 s needs a
   control, so a pause/play button is provided. Stops under reduced motion.
 */
-const THUMBS = cars.slice(0, 12).map((c) => ({
+const THUMBS = inStock(cars).slice(0, 12).map((c) => ({
   id: c.id,
   src: c.images[0].startsWith("https://images.unsplash.com/")
     ? unsplashUrl(c.images[0].replace(/([?&]h=)\d+/, "$1300").replace(/([?&]w=)\d+/, "$1500"), 280, 55)

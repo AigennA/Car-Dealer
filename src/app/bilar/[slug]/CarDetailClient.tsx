@@ -11,6 +11,9 @@ import { CheckIcon } from "@/components/ui/icons";
 import { SITE } from "@/lib/site";
 import AdvisorCard from "@/components/people/AdvisorCard";
 import { ROUTES } from "@/config/navigation";
+import { inStock, isBookable, isReserved, isSold } from "@/lib/carStatus";
+import { similarCars as findSimilarCars } from "@/lib/similarCars";
+import CarStatusBadge, { StatusSrText } from "@/components/ui/CarStatusBadge";
 
 export default function CarDetailClient({ slug }: { slug: string }) {
   const cars = useCars();
@@ -32,9 +35,9 @@ export default function CarDetailClient({ slug }: { slug: string }) {
     );
   }
 
-  const similarCars = cars
-    .filter((c) => c.id !== car.id && (c.bodyType === car.bodyType || c.fuel === car.fuel))
-    .slice(0, 3);
+  const sold = isSold(car);
+  const reserved = isReserved(car);
+  const similarCars = findSimilarCars(car, inStock(cars));
   const contactHref = `${ROUTES.contact}?bil=${encodeURIComponent(car.slug)}`;
 
   return (
@@ -60,7 +63,23 @@ export default function CarDetailClient({ slug }: { slug: string }) {
 
           <aside className="lg:sticky lg:top-24 h-fit" aria-labelledby="car-title">
             <div className="bg-white rounded-2xl shadow-sm p-6">
-              <h1 id="car-title" className="text-2xl font-bold text-navy">{car.title}</h1>
+              <CarStatusBadge car={car} className="mb-3" />
+              <h1 id="car-title" className="text-2xl font-bold text-navy">
+                {car.title}
+                <StatusSrText car={car} />
+              </h1>
+
+              {sold && (
+                <p className="mt-3 rounded-lg bg-surface px-4 py-3 text-sm text-gray-800">
+                  <strong className="text-navy">Den här bilen är såld.</strong> Vi hittar gärna en liknande åt dig.
+                </p>
+              )}
+              {reserved && (
+                <p className="mt-3 rounded-lg bg-surface px-4 py-3 text-sm text-gray-800">
+                  <strong className="text-navy">Den här bilen är reserverad.</strong> Hör av dig om du vill veta om den
+                  blir ledig igen.
+                </p>
+              )}
 
               <p className="mt-4 flex items-baseline gap-2">
                 <span className="text-2xl font-bold text-primary tabular-nums">
@@ -87,9 +106,19 @@ export default function CarDetailClient({ slug }: { slug: string }) {
               </dl>
 
               <div className="mt-6 space-y-3">
-                <PrimaryButtonLink href={`${contactHref}&amne=provkorning`}>
-                  Boka provkörning
-                </PrimaryButtonLink>
+                {isBookable(car) ? (
+                  <PrimaryButtonLink href={`${contactHref}&amne=provkorning`}>
+                    Boka provkörning
+                  </PrimaryButtonLink>
+                ) : sold ? (
+                  <PrimaryButtonLink href={`${contactHref}&amne=kopa`}>
+                    Hitta en liknande bil åt mig
+                  </PrimaryButtonLink>
+                ) : (
+                  <PrimaryButtonLink href={`${contactHref}&amne=kopa`}>
+                    Fråga om bilen
+                  </PrimaryButtonLink>
+                )}
 
                 <a
                   href={SITE.phoneHref}
@@ -98,12 +127,21 @@ export default function CarDetailClient({ slug }: { slug: string }) {
                   Ring oss: {SITE.phone}
                 </a>
 
-                <Link
-                  href={contactHref}
-                  className="block text-center text-sm text-gray-700 underline underline-offset-4 hover:text-primary"
-                >
-                  Ställ en fråga om bilen
-                </Link>
+                {isBookable(car) ? (
+                  <Link
+                    href={contactHref}
+                    className="block text-center text-sm text-gray-700 underline underline-offset-4 hover:text-primary"
+                  >
+                    Ställ en fråga om bilen
+                  </Link>
+                ) : (
+                  <Link
+                    href={ROUTES.cars}
+                    className="block text-center text-sm text-gray-700 underline underline-offset-4 hover:text-primary"
+                  >
+                    Se alla bilar i lager
+                  </Link>
+                )}
               </div>
 
               <ul className="mt-6 flex flex-wrap gap-2" aria-label="Ingår vid köp">
@@ -138,14 +176,14 @@ export default function CarDetailClient({ slug }: { slug: string }) {
           </div>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start">
-          <CarCreditCalculator key={car.id} carPrice={car.price} />
+        <div className={sold ? "mt-8 max-w-md" : "mt-8 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start"}>
+          {!sold && <CarCreditCalculator key={car.id} carPrice={car.price} />}
           <AdvisorCard variant="compact" headingLevel="h2" />
         </div>
 
         {similarCars.length > 0 && (
           <section className="mt-12" aria-labelledby="similar-heading">
-            <h2 id="similar-heading" className="text-xl font-bold text-navy mb-4">Liknande bilar</h2>
+            <h2 id="similar-heading" className="text-xl font-bold text-navy mb-4">{sold ? "Liknande bilar i lager" : "Liknande bilar"}</h2>
             <ul className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
               {similarCars.map((c) => (
                 <li key={c.id} className="group bg-white rounded-2xl shadow-sm p-5">
@@ -165,9 +203,11 @@ export default function CarDetailClient({ slug }: { slug: string }) {
                   </Link>
 
                   <div className="mt-4">
+                    <CarStatusBadge car={c} className="mb-2" />
                     <h3 className="font-semibold text-navy">
                       <Link href={`${ROUTES.cars}/${c.slug}`} className="hover:text-primary transition-colors">
                         {c.title}
+                        <StatusSrText car={c} />
                       </Link>
                     </h3>
                     <p className="text-sm text-gray-600 mt-1">
