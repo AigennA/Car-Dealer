@@ -17,7 +17,7 @@ public class AuthTests(ApiFactory factory) : IClassFixture<ApiFactory>
         var login = await res.Content.ReadFromJsonAsync<LoginResponse>();
         Assert.Contains("Admin", login!.Roles);
         var jwt = new JwtSecurityTokenHandler().ReadJwtToken(login.AccessToken);
-        Assert.True(jwt.ValidTo > DateTime.UtcNow);
+        Assert.True(jwt.ValidTo > factory.Clock.GetUtcNow().UtcDateTime); // valid on the API's own clock
     }
 
     [Fact]
