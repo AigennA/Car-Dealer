@@ -10,7 +10,7 @@ export type ConsentKey = "maps";
 export type Consent = Record<ConsentKey, boolean>;
 
 export const CONSENT_KEY = "car_dealer_consent";
-const EVENT = "car-dealer:consent-changed";
+export const CONSENT_EVENT = "car-dealer:consent-changed";
 const NONE: Consent = { maps: false };
 
 export function readConsent(raw: string | null): Consent {
@@ -26,15 +26,15 @@ export function readConsent(raw: string | null): Consent {
 export function setConsent(key: ConsentKey, value: boolean): void {
   const next = { ...readConsent(localStorage.getItem(CONSENT_KEY)), [key]: value };
   localStorage.setItem(CONSENT_KEY, JSON.stringify({ ...next, updatedAt: new Date().toISOString() }));
-  window.dispatchEvent(new Event(EVENT));
+  window.dispatchEvent(new Event(CONSENT_EVENT));
 }
 
 function subscribe(cb: () => void) {
   window.addEventListener("storage", cb);
-  window.addEventListener(EVENT, cb);
+  window.addEventListener(CONSENT_EVENT, cb);
   return () => {
     window.removeEventListener("storage", cb);
-    window.removeEventListener(EVENT, cb);
+    window.removeEventListener(CONSENT_EVENT, cb);
   };
 }
 

@@ -17,7 +17,7 @@ export default function CookiesPage() {
   return (
     <LegalPage
       title="Cookies och lagring"
-      updated="2026-11-06"
+      updated="2026-11-20"
       intro={
         <p>
           Vi använder <strong>inga</strong> cookies för statistik, spårning eller marknadsföring. Därför
@@ -51,7 +51,7 @@ export default function CookiesPage() {
                   [
                     DEMO_BOOKINGS_KEY,
                     "localStorage",
-                    "Demobokningar (tjänst, tid, e-post och regnummer) så att Min bokning fungerar i demoläget",
+                    "Demobokningar (tjänst eller provkörning, tid, e-post och ev. regnummer) så att Min bokning fungerar i demoläget",
                     "Tills du rensar",
                   ],
                 ]}
@@ -63,29 +63,45 @@ export default function CookiesPage() {
           id: "tredje-part",
           title: "Tredjepartstjänster",
           content: (
-            <Table
-              caption="Tredjepartstjänster"
-              head={["Tjänst", "När", "Cookies", "Mer information"]}
-              rows={[
-                [
-                  "Google Maps",
-                  "Endast efter att du klickat på Visa karta",
-                  "Ja, t.ex. NID och AEC (Google)",
-                  <a key="g" className={a} href="https://policies.google.com/technologies/cookies?hl=sv">
-                    Googles cookiepolicy
-                  </a>,
-                ],
-                [
-                  "Unsplash (bilbilder)",
-                  "När bilder visas",
-                  "Nej – men din IP-adress når Unsplash",
-                  <a key="u" className={a} href="https://unsplash.com/privacy">
-                    Unsplash integritetspolicy
-                  </a>,
-                ],
-                ["Typsnitt", "Alltid", "Nej – typsnitten ligger på vår egen server", "–"],
-              ]}
-            />
+            <>
+              <Table
+                caption="Tredjepartstjänster"
+                head={["Tjänst", "När", "Cookies", "Mer information"]}
+                rows={[
+                  [
+                    "Google Maps",
+                    "Endast efter att du klickat på Visa karta",
+                    "Ja, se tabellen nedan",
+                    <a key="g" className={a} href="https://policies.google.com/technologies/cookies?hl=sv">
+                      Googles cookiepolicy
+                    </a>,
+                  ],
+                  [
+                    "Unsplash (bilbilder)",
+                    "När bilder visas",
+                    "Nej – men din IP-adress når Unsplash",
+                    <a key="u" className={a} href="https://unsplash.com/privacy">
+                      Unsplash integritetspolicy
+                    </a>,
+                  ],
+                  ["Typsnitt", "Alltid", "Nej – typsnitten ligger på vår egen server", "–"],
+                ]}
+              />
+              <h3 className="font-heading text-lg font-semibold text-navy">Cookies som Google kan sätta med kartan</h3>
+              <Table
+                caption="Cookies från Google Maps"
+                head={["Cookie", "Syfte", "Livslängd"]}
+                rows={[
+                  ["NID", "Googles inställningar, och annonsvisning för utloggade användare", "Cirka 6 månader efter senaste användning"],
+                  ["AEC", "Skydd mot skräp, bedrägeri och missbruk", "Cirka 6 månader"],
+                ]}
+              />
+              <p>
+                Uppgifterna kommer från{" "}
+                <a className={a} href="https://policies.google.com/technologies/types">Googles egen sida</a> och Google kan ändra
+                dem. Du kan när som helst återkalla ditt val ovan; cookies som redan sattes tar du bort i webbläsaren.
+              </p>
+            </>
           ),
         },
         {

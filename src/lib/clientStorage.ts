@@ -2,7 +2,7 @@ import { useSyncExternalStore } from "react";
 import { cars as staticCars, type Car } from "./cars";
 
 export const STORAGE_KEY = "car_dealer_custom_cars";
-const CHANGE_EVENT = "car-dealer:cars-changed";
+export const CARS_CHANGED_EVENT = "car-dealer:cars-changed";
 
 function readRaw(): string | null {
   if (typeof window === "undefined") return null;
@@ -30,7 +30,7 @@ function getCustomCars(): Car[] {
 function saveCustomCars(cars: Car[]): void {
   if (typeof window === "undefined") return;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(cars));
-  window.dispatchEvent(new Event(CHANGE_EVENT));
+  window.dispatchEvent(new Event(CARS_CHANGED_EVENT));
 }
 
 export function getAllCars(): Car[] {
@@ -69,10 +69,10 @@ export function deleteCar(id: string): boolean {
 
 function subscribe(onChange: () => void): () => void {
   window.addEventListener("storage", onChange);
-  window.addEventListener(CHANGE_EVENT, onChange);
+  window.addEventListener(CARS_CHANGED_EVENT, onChange);
   return () => {
     window.removeEventListener("storage", onChange);
-    window.removeEventListener(CHANGE_EVENT, onChange);
+    window.removeEventListener(CARS_CHANGED_EVENT, onChange);
   };
 }
 

@@ -10,7 +10,7 @@ export default function IntegritetPage() {
   return (
     <LegalPage
       title="Integritetspolicy"
-      updated="2026-11-06"
+      updated="2026-11-20"
       intro={
         <>
           <p>
@@ -55,7 +55,7 @@ export default function IntegritetPage() {
                 [
                   "Du använder kontaktformuläret eller ringer/mejlar",
                   "Namn, e-post, telefon (valfritt), meddelande, ev. vilken bil det gäller",
-                  "Svara på frågor, boka provkörning",
+                  "Svara på frågor och ge dig information om bilar",
                   "Berättigat intresse (art. 6.1 f) – att kunna svara dig",
                   `${BUSINESS.dataRetention.leadMonths} månader efter sista kontakt`,
                 ],
@@ -82,7 +82,7 @@ export default function IntegritetPage() {
                 ],
                 [
                   "Du besöker webbplatsen",
-                  "IP-adress och teknisk information i serverloggar hos vår webbhotell (GitHub Pages)",
+                  "IP-adress och teknisk information i serverloggar hos vårt webbhotell (GitHub Pages)",
                   "Leverera sidan, säkerhet",
                   "Berättigat intresse (art. 6.1 f)",
                   "Enligt GitHubs loggpolicy (normalt kort)",
@@ -105,6 +105,10 @@ export default function IntegritetPage() {
                 <li>inloggning och bilar som läggs till i personalens demo-admin,</li>
                 <li>bokningar som görs i demoläget, så att Min bokning går att prova.</li>
               </Ul>
+              <p>
+                QR-koden och kalenderfilen (.ics) för en bokning skapas i din webbläsare. Inget skickas till någon
+                extern tjänst för att göra dem.
+              </p>
               <p>
                 Du kan när som helst ta bort dem under <Link className={a} href={ROUTES.cookies}>Cookies och lagring</Link>{" "}
                 eller genom att rensa webbplatsdata i webbläsaren.
@@ -176,10 +180,17 @@ export default function IntegritetPage() {
           id: "sakerhet",
           title: "Säkerhet",
           content: (
-            <p>
-              Webbplatsen använder krypterad anslutning (HTTPS). Endast personal som behöver uppgifterna i sitt
-              arbete har tillgång till dem.
-            </p>
+            <>
+              <p>
+                Webbplatsen använder krypterad anslutning (HTTPS). Endast personal som behöver uppgifterna i sitt
+                arbete har tillgång till dem.
+              </p>
+              <p>
+                Din personliga bokningslänk (och QR-koden) innehåller en hemlig kod som ger tillgång till din bokning.
+                Dela den inte med andra. Hos oss sparas bara en kontrollsumma (hash) av koden, inte själva koden.
+                Utan länken hittar du bokningen med bokningsnummer och din e-postadress.
+              </p>
+            </>
           ),
         },
         {
