@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { setConsent, useConsent, CONSENT_KEY } from "@/lib/consent";
-import { STORAGE_KEY } from "@/lib/clientStorage";
+import { setConsent, useConsent } from "@/lib/consent";
+import { clearAllStoredData } from "@/lib/storedData";
 
 /** Lets visitors give or withdraw consent and clear locally stored data. */
 export default function CookieSettings() {
@@ -16,11 +16,7 @@ export default function CookieSettings() {
   };
 
   const clearAll = () => {
-    for (const key of [CONSENT_KEY, STORAGE_KEY, "car_dealer_accounts"]) localStorage.removeItem(key);
-    sessionStorage.removeItem("admin_auth");
-    sessionStorage.removeItem("admin_user");
-    window.dispatchEvent(new Event("car-dealer:consent-changed"));
-    window.dispatchEvent(new Event("car-dealer:cars-changed"));
+    clearAllStoredData();
     setStatus("All data som webbplatsen sparat i din webbläsare är borttagen.");
   };
 
